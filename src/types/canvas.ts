@@ -6,6 +6,7 @@ export type CanvasItemType =
   | "quote-card"
   | "utility-card"
   | "illustration-reel"
+  | "brand-card"
   | "folder";
 
 export interface CanvasPosition {
@@ -57,6 +58,7 @@ export interface TextCardItem extends CanvasItemBase {
   type: "text-card";
   title: string;
   body: string;
+  modalId?: string;
 }
 
 export interface QuoteCardItem extends CanvasItemBase {
@@ -86,6 +88,15 @@ export interface IllustrationSlide {
   caption?: string;
 }
 
+// Brand card — generic clickable card that opens a modal
+export interface BrandCardItem extends CanvasItemBase {
+  type: "brand-card";
+  title: string;
+  subtitle?: string;
+  modalId: string;
+  accentColor?: string;
+}
+
 export interface FolderItem extends CanvasItemBase {
   type: "folder";
   label: string;
@@ -100,4 +111,5 @@ export type CanvasItem =
   | QuoteCardItem
   | UtilityCardItem
   | IllustrationReelItem
+  | BrandCardItem
   | FolderItem;

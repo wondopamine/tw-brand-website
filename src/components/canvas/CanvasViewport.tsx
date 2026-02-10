@@ -6,32 +6,40 @@ import { useCanvasPan } from "@/hooks/useCanvasPan";
 import { useCursorPosition } from "@/hooks/useCursorPosition";
 import { canvasItems, CANVAS_WIDTH, CANVAS_HEIGHT } from "@/data/canvas-items";
 import { panelContents } from "@/data/panel-contents";
+import { modalContents } from "@/data/modal-contents";
 import CanvasLayout from "./CanvasLayout";
 import StackLayout from "./StackLayout";
 import EdgeVignette from "./EdgeVignette";
 import Minimap from "@/components/minimap/Minimap";
 import PanelDrawer from "@/components/panel/PanelDrawer";
+import CardModal from "@/components/cards/CardModal";
 import IllustrationPopup from "@/components/items/IllustrationPopup";
 import type { IllustrationSlide } from "@/types/canvas";
 import type { PanelContent } from "@/types/panel";
+import type { ModalContent } from "@/data/modal-contents";
+
+const GRID_PADDING = 2000;
 
 export default function CanvasViewport() {
   const isDesktop = useMediaQuery("(min-width: 1024px)");
   const canvasInnerRef = useRef<HTMLDivElement>(null);
 
   const [openPanel, setOpenPanel] = useState<PanelContent | null>(null);
+  const [openModal, setOpenModal] = useState<ModalContent | null>(null);
   const [illustrationPopup, setIllustrationPopup] = useState<{
     slides: IllustrationSlide[];
     initialIndex: number;
   } | null>(null);
 
-  const isOverlayOpen = openPanel !== null || illustrationPopup !== null;
+  const isOverlayOpen =
+    openPanel !== null || illustrationPopup !== null || openModal !== null;
 
   // 2D canvas panning
   const { offsetX, offsetY, isDragging, containerRef, panTo } = useCanvasPan({
     canvasWidth: CANVAS_WIDTH,
     canvasHeight: CANVAS_HEIGHT,
     disabled: isOverlayOpen || !isDesktop,
+    gridPadding: GRID_PADDING,
   });
 
   // Cursor tracking for grid highlight
@@ -52,6 +60,11 @@ export default function CanvasViewport() {
     if (content) setOpenPanel(content);
   }, []);
 
+  const handleCardClick = useCallback((modalId: string) => {
+    const content = modalContents[modalId];
+    if (content) setOpenModal(content);
+  }, []);
+
   const handleIllustrationClick = useCallback(
     (slides: IllustrationSlide[], index: number) => {
       setIllustrationPopup({ slides, initialIndex: index });
@@ -67,10 +80,15 @@ export default function CanvasViewport() {
           items={canvasItems}
           onFolderClick={handleFolderClick}
           onIllustrationClick={handleIllustrationClick}
+          onCardClick={handleCardClick}
         />
         <PanelDrawer
           content={openPanel}
           onClose={() => setOpenPanel(null)}
+        />
+        <CardModal
+          content={openModal}
+          onClose={() => setOpenModal(null)}
         />
         {illustrationPopup && (
           <IllustrationPopup
@@ -90,14 +108,16 @@ export default function CanvasViewport() {
       className="canvas-grid fixed inset-0 overflow-hidden"
       style={{ touchAction: "none" }}
     >
-      {/* Canvas inner — transformed by pan offsets */}
+      {/* Canvas inner — oversized so grid never ends visually.
+           Content is placed via absolute positioning within CANVAS_WIDTH × CANVAS_HEIGHT,
+           offset by the GRID_PADDING so it sits in the center of this larger div. */}
       <div
         ref={canvasInnerRef}
         className="canvas-inner illuminated absolute"
         style={{
-          width: CANVAS_WIDTH,
-          height: CANVAS_HEIGHT,
-          transform: `translate3d(${offsetX}px, ${offsetY}px, 0)`,
+          width: CANVAS_WIDTH + GRID_PADDING * 2,
+          height: CANVAS_HEIGHT + GRID_PADDING * 2,
+          transform: `translate3d(${offsetX - GRID_PADDING}px, ${offsetY - GRID_PADDING}px, 0)`,
           willChange: "transform",
         }}
       >
@@ -106,8 +126,10 @@ export default function CanvasViewport() {
           canvasWidth={CANVAS_WIDTH}
           canvasHeight={CANVAS_HEIGHT}
           isDragging={isDragging}
+          gridPadding={GRID_PADDING}
           onFolderClick={handleFolderClick}
           onIllustrationClick={handleIllustrationClick}
+          onCardClick={handleCardClick}
         />
       </div>
 
@@ -126,10 +148,16 @@ export default function CanvasViewport() {
         onNavigate={panTo}
       />
 
-      {/* Panel drawer */}
+      {/* Panel drawer (folders) */}
       <PanelDrawer
         content={openPanel}
         onClose={() => setOpenPanel(null)}
+      />
+
+      {/* Card modal */}
+      <CardModal
+        content={openModal}
+        onClose={() => setOpenModal(null)}
       />
 
       {/* Illustration popup */}

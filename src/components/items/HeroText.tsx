@@ -23,18 +23,21 @@ export default function HeroText({ title, subtitle }: HeroTextProps) {
         {title}
       </motion.h1>
       {subtitle && (
-        <motion.p
-          className="mt-4 text-xl md:text-2xl lg:text-3xl font-medium tracking-wide"
-          style={{
-            fontFamily: "var(--font-display, 'Sora', sans-serif)",
-            color: "var(--text-secondary)",
-          }}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
+        <motion.div
+          className="mt-6"
+          initial={{ opacity: 0, y: 20, scale: 0.95 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          transition={{ duration: 0.6, delay: 0.3, ease: "easeOut" }}
         >
-          {subtitle}
-        </motion.p>
+          <span
+            className="hero-badge"
+            style={{
+              fontFamily: "var(--font-display, 'Sora', sans-serif)",
+            }}
+          >
+            {subtitle}
+          </span>
+        </motion.div>
       )}
     </div>
   );
