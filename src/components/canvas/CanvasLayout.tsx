@@ -8,6 +8,7 @@ interface CanvasLayoutProps {
   items: CanvasItemType[];
   canvasWidth: number;
   canvasHeight: number;
+  isDragging: boolean;
   onFolderClick: (panelId: string) => void;
   onIllustrationClick: (slides: IllustrationSlide[], index: number) => void;
 }
@@ -16,15 +17,17 @@ export default function CanvasLayout({
   items,
   canvasWidth,
   canvasHeight,
+  isDragging,
   onFolderClick,
   onIllustrationClick,
 }: CanvasLayoutProps) {
   return (
     <div
-      className="relative mx-auto"
+      className="absolute top-0 left-0"
       style={{
         width: canvasWidth,
         height: canvasHeight,
+        pointerEvents: isDragging ? "none" : "auto",
       }}
     >
       {items.map((item) => (

@@ -23,51 +23,6 @@
   --minimap-viewport-border: rgba(0, 100, 255, 0.5);
 }
 
-/* ===== THEME: Dark ===== */
-[data-theme="dark"] {
-  --canvas-bg: #141210;
-  --canvas-grid: #1e1c1a;
-  --card-bg: #1c1a18;
-  --card-border: #2a2826;
-  --text-primary: #F5F0EB;
-  --text-secondary: #9E9890;
-  --accent: #0064FF;
-  --accent-light: #0A1A3F;
-  --accent-hover: #3385FF;
-  --quote-highlight: #FFE066;
-  --shadow-color: rgba(0, 0, 0, 0.4);
-  --shadow-lg: rgba(0, 0, 0, 0.6);
-  --overlay-bg: rgba(0, 0, 0, 0.7);
-  --folder-icon-bg: #0050CC;
-  --folder-icon-front: #0064FF;
-  --minimap-bg: rgba(255, 255, 255, 0.04);
-  --minimap-border: rgba(255, 255, 255, 0.08);
-  --minimap-viewport: rgba(0, 100, 255, 0.25);
-  --minimap-viewport-border: rgba(0, 100, 255, 0.6);
-}
-
-/* ===== THEME: Blue ===== */
-[data-theme="blue"] {
-  --canvas-bg: #0064FF;
-  --canvas-grid: #0058E0;
-  --card-bg: #1A73FF;
-  --card-border: #3385FF;
-  --text-primary: #FFFFFF;
-  --text-secondary: #CCE0FF;
-  --accent: #FFFFFF;
-  --accent-light: #1A73FF;
-  --accent-hover: #E6F0FF;
-  --quote-highlight: #FFE066;
-  --shadow-color: rgba(0, 0, 50, 0.2);
-  --shadow-lg: rgba(0, 0, 50, 0.35);
-  --overlay-bg: rgba(0, 30, 100, 0.7);
-  --folder-icon-bg: #FFFFFF;
-  --folder-icon-front: #E6F0FF;
-  --minimap-bg: rgba(255, 255, 255, 0.08);
-  --minimap-border: rgba(255, 255, 255, 0.15);
-  --minimap-viewport: rgba(255, 255, 255, 0.2);
-  --minimap-viewport-border: rgba(255, 255, 255, 0.5);
-}
 
 @theme inline {
   --color-canvas-bg: var(--canvas-bg);
@@ -89,35 +44,115 @@ body {
   background-color: var(--canvas-bg);
   color: var(--text-primary);
   font-family: var(--font-body, 'Inter', sans-serif);
-  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* Dot grid background pattern */
+/* Subtle static dot grid on viewport */
 .canvas-grid {
   background-color: var(--canvas-bg);
-  background-image: radial-gradient(circle, var(--canvas-grid) 1px, transparent 1px);
+  background-image: radial-gradient(circle, rgba(0, 0, 0, 0.03) 1px, transparent 1px);
   background-size: 24px 24px;
-  transition: background-color 0.3s ease;
 }
 
-/* Card base styles */
+/* Card base styles — border handled by GlowCard wrapper */
 .canvas-card {
   background-color: var(--card-bg);
-  border: 1px solid var(--card-border);
   border-radius: 16px;
-  box-shadow:
-    0 1px 3px var(--shadow-color),
-    0 4px 12px var(--shadow-color),
-    0 12px 28px var(--shadow-color);
-  transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
 }
 
-.canvas-card:hover {
-  box-shadow:
-    0 2px 6px var(--shadow-color),
-    0 8px 20px var(--shadow-lg),
-    0 20px 40px var(--shadow-lg);
-  transform: scale(1.02);
+/* ===== CURSOR GRID HIGHLIGHT ===== */
+.canvas-inner {
+  position: relative;
+}
+
+.canvas-inner::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(to right, rgba(0, 0, 0, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.04) 1px, transparent 1px),
+    linear-gradient(to right, rgba(0, 0, 0, 0.08) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.08) 1px, transparent 1px);
+  background-size:
+    32px 32px,
+    32px 32px,
+    128px 128px,
+    128px 128px;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  -webkit-mask-image: radial-gradient(
+    circle 400px at var(--cursor-x, -1000px) var(--cursor-y, -1000px),
+    white 0px,
+    transparent 400px
+  );
+  mask-image: radial-gradient(
+    circle 400px at var(--cursor-x, -1000px) var(--cursor-y, -1000px),
+    white 0px,
+    transparent 400px
+  );
+}
+
+.canvas-inner.illuminated::before {
+  opacity: 1;
+}
+
+/* Subtle blue glow at cursor position */
+.canvas-inner::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle 250px at var(--cursor-x, -1000px) var(--cursor-y, -1000px),
+    rgba(0, 100, 255, 0.035),
+    transparent 250px
+  );
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.canvas-inner.illuminated::after {
+  opacity: 1;
+}
+
+/* ===== GLOW CARD (Stripe-style cursor-tracking border) ===== */
+.glow-card-outer {
+  position: relative;
+  overflow: hidden;
+  background: var(--card-border);
+  border-radius: 16px;
+  padding: 1px;
+}
+
+.glow-card-outer::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+    rgba(0, 100, 255, 0.15),
+    transparent 40%
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 1;
+  border-radius: inherit;
+}
+
+.glow-card-outer:hover::before {
+  opacity: 1;
+}
+
+.glow-card-inner {
+  position: relative;
+  z-index: 2;
+  background: var(--card-bg);
+  border-radius: 15px;
+  height: 100%;
 }
 
 /* Scrollbar styling */

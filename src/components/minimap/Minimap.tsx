@@ -2,17 +2,18 @@
 
 import type { CanvasItem } from "@/types/canvas";
 
-const MINIMAP_WIDTH = 120;
-const MINIMAP_HEIGHT = 180;
+const MINIMAP_WIDTH = 160;
+const MINIMAP_HEIGHT = 107;
 
 interface MinimapProps {
   items: CanvasItem[];
   canvasWidth: number;
   canvasHeight: number;
-  scrollY: number;
-  scrollHeight: number;
-  clientHeight: number;
-  onNavigate: (y: number) => void;
+  offsetX: number;
+  offsetY: number;
+  viewportWidth: number;
+  viewportHeight: number;
+  onNavigate: (x: number, y: number) => void;
 }
 
 function getItemColor(type: string): string {
@@ -42,27 +43,34 @@ export default function Minimap({
   items,
   canvasWidth,
   canvasHeight,
-  scrollY,
-  scrollHeight,
-  clientHeight,
+  offsetX,
+  offsetY,
+  viewportWidth,
+  viewportHeight,
   onNavigate,
 }: MinimapProps) {
   const scaleX = MINIMAP_WIDTH / canvasWidth;
   const scaleY = MINIMAP_HEIGHT / canvasHeight;
 
-  const viewportHeight = scrollHeight > 0
-    ? (clientHeight / scrollHeight) * MINIMAP_HEIGHT
-    : MINIMAP_HEIGHT;
-  const viewportTop = scrollHeight > 0
-    ? (scrollY / scrollHeight) * MINIMAP_HEIGHT
-    : 0;
+  // Viewport indicator position (convert pan offset to minimap coordinates)
+  const vpLeft = (-offsetX) * scaleX;
+  const vpTop = (-offsetY) * scaleY;
+  const vpWidth = viewportWidth * scaleX;
+  const vpHeight = viewportHeight * scaleY;
 
   const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
     const rect = e.currentTarget.getBoundingClientRect();
+    const clickX = e.clientX - rect.left;
     const clickY = e.clientY - rect.top;
-    const ratio = clickY / MINIMAP_HEIGHT;
-    const targetScroll = ratio * scrollHeight - clientHeight / 2;
-    onNavigate(Math.max(0, targetScroll));
+
+    // Convert minimap click to canvas coordinates, center viewport on that point
+    const canvasX = clickX / scaleX;
+    const canvasY = clickY / scaleY;
+
+    onNavigate(
+      -(canvasX - viewportWidth / 2),
+      -(canvasY - viewportHeight / 2)
+    );
   };
 
   return (
@@ -71,9 +79,9 @@ export default function Minimap({
       style={{
         width: MINIMAP_WIDTH,
         height: MINIMAP_HEIGHT,
-        backgroundColor: "var(--minimap-bg)",
-        border: "1px solid var(--minimap-border)",
-        backdropFilter: "blur(8px)",
+        backgroundColor: "rgba(0, 0, 0, 0.04)",
+        border: "1px solid rgba(0, 0, 0, 0.08)",
+        backdropFilter: "blur(10px)",
       }}
       onClick={handleClick}
       role="navigation"
@@ -95,14 +103,16 @@ export default function Minimap({
         />
       ))}
 
-      {/* Viewport indicator */}
+      {/* 2D Viewport indicator */}
       <div
-        className="absolute left-0 right-0 rounded-sm transition-[top] duration-100"
+        className="absolute rounded-sm transition-all duration-100"
         style={{
-          top: viewportTop,
-          height: Math.max(viewportHeight, 8),
-          backgroundColor: "var(--minimap-viewport)",
-          border: "1px solid var(--minimap-viewport-border)",
+          left: vpLeft,
+          top: vpTop,
+          width: Math.max(vpWidth, 8),
+          height: Math.max(vpHeight, 6),
+          backgroundColor: "rgba(0, 100, 255, 0.12)",
+          border: "1px solid rgba(0, 100, 255, 0.4)",
         }}
       />
     </div>

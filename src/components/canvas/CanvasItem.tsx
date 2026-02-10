@@ -1,7 +1,11 @@
 "use client";
 
 import { motion } from "motion/react";
-import type { CanvasItem as CanvasItemType, IllustrationSlide } from "@/types/canvas";
+import type {
+  CanvasItem as CanvasItemType,
+  IllustrationSlide,
+} from "@/types/canvas";
+import GlowCard from "@/components/cards/GlowCard";
 import HeroText from "@/components/items/HeroText";
 import ManifestoCard from "@/components/items/ManifestoCard";
 import PillarCard from "@/components/items/PillarCard";
@@ -16,6 +20,15 @@ interface CanvasItemProps {
   onFolderClick: (panelId: string) => void;
   onIllustrationClick: (slides: IllustrationSlide[], index: number) => void;
 }
+
+const GLOW_CARD_TYPES = new Set([
+  "manifesto-card",
+  "pillar-card",
+  "text-card",
+  "quote-card",
+  "utility-card",
+  "illustration-reel",
+]);
 
 export default function CanvasItem({
   item,
@@ -81,6 +94,12 @@ export default function CanvasItem({
     }
   })();
 
+  const wrapped = GLOW_CARD_TYPES.has(item.type) ? (
+    <GlowCard>{content}</GlowCard>
+  ) : (
+    content
+  );
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -89,7 +108,7 @@ export default function CanvasItem({
       transition={{ duration: 0.5, ease: "easeOut" }}
       className="h-full"
     >
-      {content}
+      {wrapped}
     </motion.div>
   );
 }

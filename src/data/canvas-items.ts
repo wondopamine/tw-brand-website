@@ -1,13 +1,14 @@
 import type { CanvasItem } from "@/types/canvas";
 
-export const CANVAS_WIDTH = 1400;
+export const CANVAS_WIDTH = 3600;
+export const CANVAS_HEIGHT = 2400;
 
 export const canvasItems: CanvasItem[] = [
-  // ===== HERO =====
+  // ===== HERO (center-top) =====
   {
     id: "hero",
     type: "hero-text",
-    position: { x: 200, y: 80 },
+    position: { x: 1200, y: 150 },
     size: { width: 1000, height: 280 },
     title: "Teacher Workspace",
     subtitle: "Brand Guidelines",
@@ -15,11 +16,11 @@ export const canvasItems: CanvasItem[] = [
     mobileOrder: 0,
   },
 
-  // ===== MANIFESTO =====
+  // ===== MANIFESTO (left region) =====
   {
     id: "manifesto",
     type: "manifesto-card",
-    position: { x: 60, y: 440 },
+    position: { x: 150, y: 550 },
     size: { width: 620, height: 420 },
     tagline: "Kind Utility",
     description:
@@ -33,11 +34,11 @@ export const canvasItems: CanvasItem[] = [
     mobileOrder: 1,
   },
 
-  // ===== PILLARS =====
+  // ===== PILLARS (center, 2×2) =====
   {
     id: "pillar-clarity",
     type: "pillar-card",
-    position: { x: 740, y: 440 },
+    position: { x: 860, y: 550 },
     size: { width: 280, height: 180 },
     number: "01",
     title: "Clarity",
@@ -49,7 +50,7 @@ export const canvasItems: CanvasItem[] = [
   {
     id: "pillar-action",
     type: "pillar-card",
-    position: { x: 1060, y: 460 },
+    position: { x: 1180, y: 570 },
     size: { width: 280, height: 180 },
     number: "02",
     title: "Action Oriented",
@@ -61,7 +62,7 @@ export const canvasItems: CanvasItem[] = [
   {
     id: "pillar-kindness",
     type: "pillar-card",
-    position: { x: 740, y: 660 },
+    position: { x: 860, y: 780 },
     size: { width: 280, height: 180 },
     number: "03",
     title: "Kindness & Humanity",
@@ -73,7 +74,7 @@ export const canvasItems: CanvasItem[] = [
   {
     id: "pillar-delight",
     type: "pillar-card",
-    position: { x: 1060, y: 680 },
+    position: { x: 1180, y: 800 },
     size: { width: 280, height: 180 },
     number: "04",
     title: "Delight",
@@ -83,22 +84,22 @@ export const canvasItems: CanvasItem[] = [
     mobileOrder: 5,
   },
 
-  // ===== WHY AESTHETICS MATTER =====
+  // ===== WHY AESTHETICS MATTER (right of center) =====
   {
     id: "aesthetics",
     type: "text-card",
-    position: { x: 80, y: 940 },
+    position: { x: 1560, y: 560 },
     size: { width: 520, height: 260 },
     title: "Why Aesthetics Matter",
     body: "Good design builds trust. When teachers open a tool that looks thoughtful and polished, they feel confident it was built with the same care applied to its functionality. Visual quality signals reliability \u2014 the difference between a tool teachers tolerate and one they love.",
     mobileOrder: 6,
   },
 
-  // ===== TEACHER QUOTES =====
+  // ===== TEACHER QUOTES (far right, scattered) =====
   {
     id: "quote-1",
     type: "quote-card",
-    position: { x: 660, y: 960 },
+    position: { x: 2300, y: 200 },
     size: { width: 340, height: 200 },
     quote:
       "I need something that just works. I don\u2019t have time to figure out complicated software.",
@@ -110,7 +111,7 @@ export const canvasItems: CanvasItem[] = [
   {
     id: "quote-2",
     type: "quote-card",
-    position: { x: 1040, y: 920 },
+    position: { x: 2600, y: 480 },
     size: { width: 320, height: 200 },
     quote:
       "The best tools feel like they were made by someone who understands what my day actually looks like.",
@@ -122,7 +123,7 @@ export const canvasItems: CanvasItem[] = [
   {
     id: "quote-3",
     type: "quote-card",
-    position: { x: 160, y: 1260 },
+    position: { x: 2400, y: 780 },
     size: { width: 360, height: 180 },
     quote:
       "I want to feel safe trying new features. If I make a mistake, I need to know I can undo it easily.",
@@ -132,12 +133,12 @@ export const canvasItems: CanvasItem[] = [
     mobileOrder: 9,
   },
 
-  // ===== 4 UTILITIES =====
+  // ===== 4 UTILITIES (lower-left, 2×2) =====
   {
     id: "utility-approachable",
     type: "utility-card",
-    position: { x: 580, y: 1260 },
-    size: { width: 240, height: 220 },
+    position: { x: 200, y: 1350 },
+    size: { width: 260, height: 220 },
     title: "Approachable",
     description:
       "First impressions that welcome rather than overwhelm. Low barrier to entry.",
@@ -147,8 +148,8 @@ export const canvasItems: CanvasItem[] = [
   {
     id: "utility-frictionless",
     type: "utility-card",
-    position: { x: 860, y: 1240 },
-    size: { width: 240, height: 220 },
+    position: { x: 510, y: 1330 },
+    size: { width: 260, height: 220 },
     title: "Frictionless",
     description:
       "Smooth, intuitive flows that respect teachers\u2019 limited time and cognitive load.",
@@ -158,8 +159,8 @@ export const canvasItems: CanvasItem[] = [
   {
     id: "utility-safe",
     type: "utility-card",
-    position: { x: 580, y: 1520 },
-    size: { width: 240, height: 220 },
+    position: { x: 200, y: 1620 },
+    size: { width: 260, height: 220 },
     title: "Safe",
     description:
       "Confidence to explore without fear. Forgiving interfaces with easy undo and clear consequences.",
@@ -169,8 +170,8 @@ export const canvasItems: CanvasItem[] = [
   {
     id: "utility-reliable",
     type: "utility-card",
-    position: { x: 860, y: 1500 },
-    size: { width: 240, height: 220 },
+    position: { x: 510, y: 1600 },
+    size: { width: 260, height: 220 },
     title: "Reliable",
     description:
       "Consistent behavior that builds trust over time. Teachers can depend on it every day.",
@@ -178,12 +179,12 @@ export const canvasItems: CanvasItem[] = [
     mobileOrder: 13,
   },
 
-  // ===== ILLUSTRATION REEL =====
+  // ===== ILLUSTRATION REEL (lower-center) =====
   {
     id: "illustration-reel",
     type: "illustration-reel",
-    position: { x: 1140, y: 1260 },
-    size: { width: 220, height: 280 },
+    position: { x: 1550, y: 1300 },
+    size: { width: 280, height: 320 },
     thumbnailSrc: "/images/illustration-thumb.svg",
     thumbnailAlt: "Illustrations",
     illustrations: [
@@ -207,11 +208,11 @@ export const canvasItems: CanvasItem[] = [
     mobileOrder: 14,
   },
 
-  // ===== FOLDERS =====
+  // ===== FOLDERS (lower-right) =====
   {
     id: "folder-imagery",
     type: "folder",
-    position: { x: 120, y: 1560 },
+    position: { x: 2500, y: 1400 },
     size: { width: 140, height: 160 },
     label: "IMAGERY",
     panelId: "imagery",
@@ -220,19 +221,10 @@ export const canvasItems: CanvasItem[] = [
   {
     id: "folder-downloads",
     type: "folder",
-    position: { x: 320, y: 1540 },
+    position: { x: 2760, y: 1380 },
     size: { width: 140, height: 160 },
     label: "DOWNLOADS",
     panelId: "downloads",
     mobileOrder: 16,
   },
 ];
-
-export function getCanvasHeight(): number {
-  let maxY = 0;
-  for (const item of canvasItems) {
-    const bottom = item.position.y + item.size.height;
-    if (bottom > maxY) maxY = bottom;
-  }
-  return maxY + 120; // bottom padding
-}

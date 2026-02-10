@@ -1,6 +1,5 @@
 "use client";
 
-import { motion } from "motion/react";
 import type { IllustrationSlide } from "@/types/canvas";
 
 interface IllustrationReelProps {
@@ -16,11 +15,9 @@ export default function IllustrationReel({
   onOpen,
 }: IllustrationReelProps) {
   return (
-    <motion.button
+    <button
       onClick={() => onOpen(0)}
       className="canvas-card w-full h-full overflow-hidden cursor-pointer flex flex-col items-center justify-center p-6 gap-4"
-      whileHover={{ scale: 1.03 }}
-      whileTap={{ scale: 0.98 }}
       aria-label={`View ${thumbnailAlt}`}
     >
       {/* Stacked cards preview */}
@@ -74,6 +71,6 @@ export default function IllustrationReel({
           {illustrations.length} images &middot; Click to view
         </span>
       </div>
-    </motion.button>
+    </button>
   );
 }
