@@ -1,26 +1,139 @@
 @import "tailwindcss";
 
+/* ===== THEME: Light (default) ===== */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --canvas-bg: #FCFCFD;
+  --canvas-grid: #F1F1F3;
+  --card-bg: #FFFFFF;
+  --card-border: #E5E5E9;
+  --text-primary: #1a1a1a;
+  --text-secondary: #6B6B73;
+  --accent: #0064FF;
+  --accent-light: #E6F0FF;
+  --accent-hover: #0050CC;
+  --quote-highlight: #FFE066;
+  --shadow-color: rgba(0, 0, 0, 0.06);
+  --shadow-lg: rgba(0, 0, 0, 0.1);
+  --overlay-bg: rgba(0, 0, 0, 0.5);
+  --folder-icon-bg: #0064FF;
+  --folder-icon-front: #3385FF;
+  --minimap-bg: rgba(0, 0, 0, 0.04);
+  --minimap-border: rgba(0, 0, 0, 0.08);
+  --minimap-viewport: rgba(0, 100, 255, 0.2);
+  --minimap-viewport-border: rgba(0, 100, 255, 0.5);
+}
+
+/* ===== THEME: Dark ===== */
+[data-theme="dark"] {
+  --canvas-bg: #141210;
+  --canvas-grid: #1e1c1a;
+  --card-bg: #1c1a18;
+  --card-border: #2a2826;
+  --text-primary: #F5F0EB;
+  --text-secondary: #9E9890;
+  --accent: #0064FF;
+  --accent-light: #0A1A3F;
+  --accent-hover: #3385FF;
+  --quote-highlight: #FFE066;
+  --shadow-color: rgba(0, 0, 0, 0.4);
+  --shadow-lg: rgba(0, 0, 0, 0.6);
+  --overlay-bg: rgba(0, 0, 0, 0.7);
+  --folder-icon-bg: #0050CC;
+  --folder-icon-front: #0064FF;
+  --minimap-bg: rgba(255, 255, 255, 0.04);
+  --minimap-border: rgba(255, 255, 255, 0.08);
+  --minimap-viewport: rgba(0, 100, 255, 0.25);
+  --minimap-viewport-border: rgba(0, 100, 255, 0.6);
+}
+
+/* ===== THEME: Blue ===== */
+[data-theme="blue"] {
+  --canvas-bg: #0064FF;
+  --canvas-grid: #0058E0;
+  --card-bg: #1A73FF;
+  --card-border: #3385FF;
+  --text-primary: #FFFFFF;
+  --text-secondary: #CCE0FF;
+  --accent: #FFFFFF;
+  --accent-light: #1A73FF;
+  --accent-hover: #E6F0FF;
+  --quote-highlight: #FFE066;
+  --shadow-color: rgba(0, 0, 50, 0.2);
+  --shadow-lg: rgba(0, 0, 50, 0.35);
+  --overlay-bg: rgba(0, 30, 100, 0.7);
+  --folder-icon-bg: #FFFFFF;
+  --folder-icon-front: #E6F0FF;
+  --minimap-bg: rgba(255, 255, 255, 0.08);
+  --minimap-border: rgba(255, 255, 255, 0.15);
+  --minimap-viewport: rgba(255, 255, 255, 0.2);
+  --minimap-viewport-border: rgba(255, 255, 255, 0.5);
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-canvas-bg: var(--canvas-bg);
+  --color-canvas-grid: var(--canvas-grid);
+  --color-card-bg: var(--card-bg);
+  --color-card-border: var(--card-border);
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-accent: var(--accent);
+  --color-accent-light: var(--accent-light);
+  --color-accent-hover: var(--accent-hover);
+  --color-quote-highlight: var(--quote-highlight);
+  --font-display: var(--font-sora);
+  --font-body: var(--font-inter);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
+/* ===== BASE STYLES ===== */
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--canvas-bg);
+  color: var(--text-primary);
+  font-family: var(--font-body, 'Inter', sans-serif);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Dot grid background pattern */
+.canvas-grid {
+  background-color: var(--canvas-bg);
+  background-image: radial-gradient(circle, var(--canvas-grid) 1px, transparent 1px);
+  background-size: 24px 24px;
+  transition: background-color 0.3s ease;
+}
+
+/* Card base styles */
+.canvas-card {
+  background-color: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 16px;
+  box-shadow:
+    0 1px 3px var(--shadow-color),
+    0 4px 12px var(--shadow-color),
+    0 12px 28px var(--shadow-color);
+  transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
+}
+
+.canvas-card:hover {
+  box-shadow:
+    0 2px 6px var(--shadow-color),
+    0 8px 20px var(--shadow-lg),
+    0 20px 40px var(--shadow-lg);
+  transform: scale(1.02);
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--card-border);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-secondary);
 }
