@@ -12,8 +12,9 @@ export function useCursorPosition(
     if (!canvas) return;
 
     const handleMouseMove = (e: MouseEvent) => {
-      const canvasX = e.clientX - offsetX;
-      const canvasY = e.clientY - offsetY;
+      // +2000 accounts for grid padding offset on canvas-inner
+      const canvasX = e.clientX - offsetX + 2000;
+      const canvasY = e.clientY - offsetY + 2000;
       canvas.style.setProperty("--cursor-x", `${canvasX}px`);
       canvas.style.setProperty("--cursor-y", `${canvasY}px`);
     };

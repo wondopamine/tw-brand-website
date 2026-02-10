@@ -8,12 +8,14 @@ interface StackLayoutProps {
   items: CanvasItemType[];
   onFolderClick: (panelId: string) => void;
   onIllustrationClick: (slides: IllustrationSlide[], index: number) => void;
+  onCardClick: (modalId: string) => void;
 }
 
 export default function StackLayout({
   items,
   onFolderClick,
   onIllustrationClick,
+  onCardClick,
 }: StackLayoutProps) {
   const sorted = [...items].sort(
     (a, b) => (a.mobileOrder ?? 999) - (b.mobileOrder ?? 999)
@@ -27,6 +29,7 @@ export default function StackLayout({
             item={item}
             onFolderClick={onFolderClick}
             onIllustrationClick={onIllustrationClick}
+            onCardClick={onCardClick}
           />
         </div>
       ))}

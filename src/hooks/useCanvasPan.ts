@@ -10,6 +10,8 @@ interface CanvasPanConfig {
   initialOffsetY?: number;
   momentumDecay?: number;
   disabled?: boolean;
+  /** Extra padding added to canvas-inner for infinite grid effect */
+  gridPadding?: number;
 }
 
 interface CanvasPanResult {
@@ -33,6 +35,7 @@ export function useCanvasPan({
   initialOffsetY,
   momentumDecay = 0.95,
   disabled = false,
+  gridPadding = 0,
 }: CanvasPanConfig): CanvasPanResult {
   const containerRef = useRef<HTMLDivElement | null>(null);
 
@@ -81,12 +84,13 @@ export function useCanvasPan({
       offsetXRef.current = clamped.x;
       offsetYRef.current = clamped.y;
 
-      // Apply transform directly for immediate visual feedback
+      // Apply transform directly for immediate visual feedback.
+      // Must include gridPadding offset to match the React-rendered transform.
       const container = containerRef.current;
       if (container) {
         const canvas = container.firstElementChild as HTMLElement | null;
         if (canvas) {
-          canvas.style.transform = `translate3d(${clamped.x}px, ${clamped.y}px, 0)`;
+          canvas.style.transform = `translate3d(${clamped.x - gridPadding}px, ${clamped.y - gridPadding}px, 0)`;
         }
       }
 
@@ -192,6 +196,7 @@ export function useCanvasPan({
       };
 
       container.style.cursor = "grabbing";
+      container.classList.add("is-dragging");
       e.preventDefault();
     };
 
@@ -221,7 +226,8 @@ export function useCanvasPan({
 
       isDraggingRef.current = false;
       setIsDragging(false);
-      container.style.cursor = "grab";
+      container.style.cursor = "";
+      container.classList.remove("is-dragging");
 
       // Calculate velocity for momentum
       const history = mouseHistoryRef.current;
@@ -319,8 +325,8 @@ export function useCanvasPan({
     container.addEventListener("touchmove", handleTouchMove, { passive: false });
     container.addEventListener("touchend", handleTouchEnd);
 
-    // Set initial cursor
-    container.style.cursor = "grab";
+    // Default cursor — cards/folders handle their own pointer cursor
+    container.style.cursor = "default";
 
     return () => {
       container.removeEventListener("mousedown", handleMouseDown);
@@ -336,12 +342,13 @@ export function useCanvasPan({
     };
   }, [disabled, applyOffset, startMomentum, stopMomentum]);
 
-  // Set initial offset on mount
+  // Set initial offset on mount — center the canvas content in the viewport
   useEffect(() => {
     if (typeof window === "undefined") return;
     const vw = window.innerWidth;
+    const vh = window.innerHeight;
     const x = initialOffsetX ?? (vw - canvasWidth) / 2;
-    const y = initialOffsetY ?? 100;
+    const y = initialOffsetY ?? (vh - canvasHeight) / 2;
     applyOffset(x, y);
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 

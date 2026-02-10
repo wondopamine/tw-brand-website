@@ -44,6 +44,7 @@ body {
   background-color: var(--canvas-bg);
   color: var(--text-primary);
   font-family: var(--font-body, 'Inter', sans-serif);
+  cursor: default;
 }
 
 /* Subtle static dot grid on viewport */
@@ -51,6 +52,7 @@ body {
   background-color: var(--canvas-bg);
   background-image: radial-gradient(circle, rgba(0, 0, 0, 0.03) 1px, transparent 1px);
   background-size: 24px 24px;
+  cursor: default;
 }
 
 /* Card base styles — border handled by GlowCard wrapper */
@@ -63,6 +65,7 @@ body {
 /* ===== CURSOR GRID HIGHLIGHT ===== */
 .canvas-inner {
   position: relative;
+  cursor: default;
 }
 
 .canvas-inner::before {
@@ -119,31 +122,36 @@ body {
   opacity: 1;
 }
 
-/* ===== GLOW CARD (Stripe-style cursor-tracking border) ===== */
+/* ===== GLOW CARD (Stripe-style subtle blob-tracking border glow) ===== */
 .glow-card-outer {
   position: relative;
   overflow: hidden;
   background: var(--card-border);
   border-radius: 16px;
   padding: 1px;
+  cursor: pointer;
 }
 
-.glow-card-outer::before {
-  content: '';
+/* The blob — a blurred circle that tracks the cursor behind the card surface.
+   Sits between the outer background and the inner card,
+   creating a subtle glowing border where the cursor is. */
+.glow-blob {
   position: absolute;
-  inset: 0;
-  background: radial-gradient(
-    600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
-    rgba(0, 100, 255, 0.15),
-    transparent 40%
-  );
-  opacity: 0;
-  transition: opacity 0.3s ease;
   z-index: 1;
-  border-radius: inherit;
+  top: 0;
+  left: 0;
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  background: rgba(0, 100, 255, 0.35);
+  filter: blur(60px);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+  transform: translate(-150px, -150px);
 }
 
-.glow-card-outer:hover::before {
+.glow-card-outer:hover .glow-blob {
   opacity: 1;
 }
 
@@ -153,6 +161,36 @@ body {
   background: var(--card-bg);
   border-radius: 15px;
   height: 100%;
+}
+
+/* ===== HERO BADGE / TAG ===== */
+.hero-badge {
+  display: inline-block;
+  padding: 12px 36px;
+  font-size: 28px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  color: var(--accent);
+  background: var(--accent-light);
+  border: 1px solid rgba(0, 100, 255, 0.15);
+  border-radius: 999px;
+  user-select: none;
+}
+
+/* ===== CANVAS LOADING SPINNER ===== */
+.canvas-spinner {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 3px solid var(--card-border);
+  border-top-color: var(--accent);
+  animation: canvas-spin 0.8s linear infinite;
+}
+
+@keyframes canvas-spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* Scrollbar styling */

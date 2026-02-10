@@ -9,7 +9,9 @@ export type PanelContentItem =
   | PanelTextItem
   | PanelImageItem
   | PanelGuidelineItem
-  | PanelDividerItem;
+  | PanelDividerItem
+  | PanelColorSwatchItem
+  | PanelAssetListItem;
 
 export interface PanelTextItem {
   type: "text";
@@ -33,4 +35,30 @@ export interface PanelGuidelineItem {
 
 export interface PanelDividerItem {
   type: "divider";
+}
+
+export interface PanelColorSwatchItem {
+  type: "color-swatch";
+  title?: string;
+  colors: ColorEntry[];
+}
+
+export interface ColorEntry {
+  name: string;
+  hex: string;
+  isPrimary?: boolean;
+}
+
+export interface PanelAssetListItem {
+  type: "asset-list";
+  title?: string;
+  assets: AssetEntry[];
+}
+
+export interface AssetEntry {
+  name: string;
+  thumbnailSrc?: string;
+  thumbnailColor?: string;
+  link?: string;
+  description?: string;
 }

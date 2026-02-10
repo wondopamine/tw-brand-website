@@ -11,7 +11,8 @@ export default function FolderIcon({ label, onClick }: FolderIconProps) {
   return (
     <motion.button
       onClick={onClick}
-      className="flex flex-col items-center gap-2 cursor-pointer w-full h-full justify-center"
+      className="flex flex-col items-center gap-2 w-full h-full justify-center"
+      style={{ cursor: "pointer" }}
       whileHover={{ scale: 1.08 }}
       whileTap={{ scale: 0.95 }}
       aria-label={`Open ${label} folder`}

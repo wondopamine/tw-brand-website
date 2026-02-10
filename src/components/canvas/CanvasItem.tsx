@@ -1,6 +1,5 @@
 "use client";
 
-import { motion } from "motion/react";
 import type {
   CanvasItem as CanvasItemType,
   IllustrationSlide,
@@ -13,12 +12,14 @@ import TextCard from "@/components/items/TextCard";
 import QuoteCard from "@/components/items/QuoteCard";
 import UtilityCard from "@/components/items/UtilityCard";
 import IllustrationReel from "@/components/items/IllustrationReel";
+import BrandCard from "@/components/items/BrandCard";
 import FolderIcon from "@/components/items/FolderIcon";
 
 interface CanvasItemProps {
   item: CanvasItemType;
   onFolderClick: (panelId: string) => void;
   onIllustrationClick: (slides: IllustrationSlide[], index: number) => void;
+  onCardClick: (modalId: string) => void;
 }
 
 const GLOW_CARD_TYPES = new Set([
@@ -28,12 +29,14 @@ const GLOW_CARD_TYPES = new Set([
   "quote-card",
   "utility-card",
   "illustration-reel",
+  "brand-card",
 ]);
 
 export default function CanvasItem({
   item,
   onFolderClick,
   onIllustrationClick,
+  onCardClick,
 }: CanvasItemProps) {
   const content = (() => {
     switch (item.type) {
@@ -82,6 +85,15 @@ export default function CanvasItem({
             onOpen={(index) => onIllustrationClick(item.illustrations, index)}
           />
         );
+      case "brand-card":
+        return (
+          <BrandCard
+            title={item.title}
+            subtitle={item.subtitle}
+            accentColor={item.accentColor}
+            onClick={() => onCardClick(item.modalId)}
+          />
+        );
       case "folder":
         return (
           <FolderIcon
@@ -101,14 +113,8 @@ export default function CanvasItem({
   );
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-50px" }}
-      transition={{ duration: 0.5, ease: "easeOut" }}
-      className="h-full"
-    >
+    <div className="h-full">
       {wrapped}
-    </motion.div>
+    </div>
   );
 }

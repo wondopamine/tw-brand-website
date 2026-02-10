@@ -1,14 +1,18 @@
 import type { CanvasItem } from "@/types/canvas";
 
-export const CANVAS_WIDTH = 3600;
-export const CANVAS_HEIGHT = 2400;
+export const CANVAS_WIDTH = 3200;
+export const CANVAS_HEIGHT = 2000;
+
+// Center of canvas
+const CX = CANVAS_WIDTH / 2; // 1600
+const CY = CANVAS_HEIGHT / 2; // 1000
 
 export const canvasItems: CanvasItem[] = [
-  // ===== HERO (center-top) =====
+  // ===== HERO (dead center) =====
   {
     id: "hero",
     type: "hero-text",
-    position: { x: 1200, y: 150 },
+    position: { x: CX - 500, y: CY - 140 },
     size: { width: 1000, height: 280 },
     title: "Teacher Workspace",
     subtitle: "Brand Guidelines",
@@ -16,175 +20,65 @@ export const canvasItems: CanvasItem[] = [
     mobileOrder: 0,
   },
 
-  // ===== MANIFESTO (left region) =====
+  // ===== CARDS — surrounding the hero in a ring =====
+
+  // Top row (3 cards above hero)
+  // 1. Why Aesthetic Matters? — top-left
   {
-    id: "manifesto",
-    type: "manifesto-card",
-    position: { x: 150, y: 550 },
-    size: { width: 620, height: 420 },
-    tagline: "Kind Utility",
-    description:
-      "Teacher Workspace sits at the intersection of high utility and high warmth. We call this Kind Utility \u2014 tools that are powerful yet feel personal, efficient yet humane.",
-    quadrantLabels: {
-      topLeft: "High Warmth\nLow Utility",
-      topRight: "High Warmth\nHigh Utility",
-      bottomLeft: "Low Warmth\nLow Utility",
-      bottomRight: "Low Warmth\nHigh Utility",
-    },
+    id: "card-aesthetics",
+    type: "brand-card",
+    position: { x: CX - 800, y: CY - 470 },
+    size: { width: 380, height: 240 },
+    title: "Why Aesthetic Matters?",
+    subtitle: "Good design builds trust and signals reliability.",
+    modalId: "aesthetics",
     mobileOrder: 1,
   },
 
-  // ===== PILLARS (center, 2×2) =====
+  // 2. About TW Brand Guidelines — top-center
   {
-    id: "pillar-clarity",
-    type: "pillar-card",
-    position: { x: 860, y: 550 },
-    size: { width: 280, height: 180 },
-    number: "01",
-    title: "Clarity",
-    description:
-      "Every element should communicate its purpose immediately. No ambiguity, no guessing.",
-    rotation: -1,
+    id: "card-about",
+    type: "brand-card",
+    position: { x: CX - 190, y: CY - 490 },
+    size: { width: 380, height: 240 },
+    title: "About TW Brand Guidelines",
+    subtitle: "What this document is — and what it isn't.",
+    modalId: "about-guidelines",
     mobileOrder: 2,
   },
+
+  // 3. Manifesto — top-right
   {
-    id: "pillar-action",
-    type: "pillar-card",
-    position: { x: 1180, y: 570 },
-    size: { width: 280, height: 180 },
-    number: "02",
-    title: "Action Oriented",
-    description:
-      "Design that drives action. Teachers are busy \u2014 every interaction should move them forward.",
-    rotation: 1.5,
+    id: "card-manifesto",
+    type: "brand-card",
+    position: { x: CX + 420, y: CY - 470 },
+    size: { width: 380, height: 260 },
+    title: "Manifesto",
+    subtitle: "Pillars of Kind Utility — our brand philosophy.",
+    modalId: "manifesto",
+    accentColor: "var(--accent)",
     mobileOrder: 3,
   },
+
+  // Side cards (flanking hero)
+  // 4. Always From Teachers — left of hero
   {
-    id: "pillar-kindness",
-    type: "pillar-card",
-    position: { x: 860, y: 780 },
-    size: { width: 280, height: 180 },
-    number: "03",
-    title: "Kindness & Humanity",
-    description:
-      "Technology that feels human. Warm, approachable, and respectful of the people who use it.",
-    rotation: 0.5,
+    id: "card-teachers",
+    type: "brand-card",
+    position: { x: CX - 920, y: CY - 120 },
+    size: { width: 360, height: 240 },
+    title: "Always From Teachers",
+    subtitle: "Designed with teachers, for teachers.",
+    modalId: "always-from-teachers",
     mobileOrder: 4,
   },
-  {
-    id: "pillar-delight",
-    type: "pillar-card",
-    position: { x: 1180, y: 800 },
-    size: { width: 280, height: 180 },
-    number: "04",
-    title: "Delight",
-    description:
-      "Moments of unexpected joy. Small touches that make the experience feel crafted with care.",
-    rotation: -0.8,
-    mobileOrder: 5,
-  },
 
-  // ===== WHY AESTHETICS MATTER (right of center) =====
-  {
-    id: "aesthetics",
-    type: "text-card",
-    position: { x: 1560, y: 560 },
-    size: { width: 520, height: 260 },
-    title: "Why Aesthetics Matter",
-    body: "Good design builds trust. When teachers open a tool that looks thoughtful and polished, they feel confident it was built with the same care applied to its functionality. Visual quality signals reliability \u2014 the difference between a tool teachers tolerate and one they love.",
-    mobileOrder: 6,
-  },
-
-  // ===== TEACHER QUOTES (far right, scattered) =====
-  {
-    id: "quote-1",
-    type: "quote-card",
-    position: { x: 2300, y: 200 },
-    size: { width: 340, height: 200 },
-    quote:
-      "I need something that just works. I don\u2019t have time to figure out complicated software.",
-    highlight: "just works",
-    attribution: "Middle school teacher",
-    rotation: 1.2,
-    mobileOrder: 7,
-  },
-  {
-    id: "quote-2",
-    type: "quote-card",
-    position: { x: 2600, y: 480 },
-    size: { width: 320, height: 200 },
-    quote:
-      "The best tools feel like they were made by someone who understands what my day actually looks like.",
-    highlight: "understands what my day actually looks like",
-    attribution: "High school teacher",
-    rotation: -1.5,
-    mobileOrder: 8,
-  },
-  {
-    id: "quote-3",
-    type: "quote-card",
-    position: { x: 2400, y: 780 },
-    size: { width: 360, height: 180 },
-    quote:
-      "I want to feel safe trying new features. If I make a mistake, I need to know I can undo it easily.",
-    highlight: "feel safe",
-    attribution: "Elementary school teacher",
-    rotation: -0.8,
-    mobileOrder: 9,
-  },
-
-  // ===== 4 UTILITIES (lower-left, 2×2) =====
-  {
-    id: "utility-approachable",
-    type: "utility-card",
-    position: { x: 200, y: 1350 },
-    size: { width: 260, height: 220 },
-    title: "Approachable",
-    description:
-      "First impressions that welcome rather than overwhelm. Low barrier to entry.",
-    icon: "\u{1F44B}",
-    mobileOrder: 10,
-  },
-  {
-    id: "utility-frictionless",
-    type: "utility-card",
-    position: { x: 510, y: 1330 },
-    size: { width: 260, height: 220 },
-    title: "Frictionless",
-    description:
-      "Smooth, intuitive flows that respect teachers\u2019 limited time and cognitive load.",
-    icon: "\u26A1",
-    mobileOrder: 11,
-  },
-  {
-    id: "utility-safe",
-    type: "utility-card",
-    position: { x: 200, y: 1620 },
-    size: { width: 260, height: 220 },
-    title: "Safe",
-    description:
-      "Confidence to explore without fear. Forgiving interfaces with easy undo and clear consequences.",
-    icon: "\u{1F6E1}\uFE0F",
-    mobileOrder: 12,
-  },
-  {
-    id: "utility-reliable",
-    type: "utility-card",
-    position: { x: 510, y: 1600 },
-    size: { width: 260, height: 220 },
-    title: "Reliable",
-    description:
-      "Consistent behavior that builds trust over time. Teachers can depend on it every day.",
-    icon: "\u2705",
-    mobileOrder: 13,
-  },
-
-  // ===== ILLUSTRATION REEL (lower-center) =====
+  // 5. Illustrations — right of hero
   {
     id: "illustration-reel",
     type: "illustration-reel",
-    position: { x: 1550, y: 1300 },
-    size: { width: 280, height: 320 },
+    position: { x: CX + 560, y: CY - 140 },
+    size: { width: 280, height: 300 },
     thumbnailSrc: "/images/illustration-thumb.svg",
     thumbnailAlt: "Illustrations",
     illustrations: [
@@ -205,26 +99,79 @@ export const canvasItems: CanvasItem[] = [
       },
     ],
     rotation: 2,
-    mobileOrder: 14,
+    mobileOrder: 5,
   },
 
-  // ===== FOLDERS (lower-right) =====
+  // Bottom row (2 cards below hero)
+  // 6. Voice & Tone — bottom-left
+  {
+    id: "card-voice-tone",
+    type: "brand-card",
+    position: { x: CX - 760, y: CY + 240 },
+    size: { width: 380, height: 240 },
+    title: "Voice & Tone",
+    subtitle: "How we communicate — warm, clear, human.",
+    modalId: "voice-tone",
+    mobileOrder: 6,
+  },
+
+  // 7. Brand Principles — bottom-right
+  {
+    id: "card-brand-principles",
+    type: "brand-card",
+    position: { x: CX + 380, y: CY + 240 },
+    size: { width: 400, height: 260 },
+    title: "Brand Principles",
+    subtitle: "Utility by Default, Kind at Surface, Calm Guidance, Light Weight.",
+    modalId: "brand-principles",
+    accentColor: "var(--accent)",
+    mobileOrder: 7,
+  },
+
+  // ===== 5 FOLDERS — centered row below cards =====
+  {
+    id: "folder-colours",
+    type: "folder",
+    position: { x: CX - 460, y: CY + 560 },
+    size: { width: 140, height: 160 },
+    label: "COLOURS",
+    panelId: "colours",
+    mobileOrder: 8,
+  },
   {
     id: "folder-imagery",
     type: "folder",
-    position: { x: 2500, y: 1400 },
+    position: { x: CX - 230, y: CY + 560 },
     size: { width: 140, height: 160 },
     label: "IMAGERY",
     panelId: "imagery",
-    mobileOrder: 15,
+    mobileOrder: 9,
   },
   {
-    id: "folder-downloads",
+    id: "folder-illustrations",
     type: "folder",
-    position: { x: 2760, y: 1380 },
+    position: { x: CX - 0, y: CY + 560 },
     size: { width: 140, height: 160 },
-    label: "DOWNLOADS",
-    panelId: "downloads",
-    mobileOrder: 16,
+    label: "ILLUSTRATIONS",
+    panelId: "illustrations",
+    mobileOrder: 10,
+  },
+  {
+    id: "folder-typography",
+    type: "folder",
+    position: { x: CX + 230, y: CY + 560 },
+    size: { width: 140, height: 160 },
+    label: "TYPOGRAPHY",
+    panelId: "typography",
+    mobileOrder: 11,
+  },
+  {
+    id: "folder-use-cases",
+    type: "folder",
+    position: { x: CX + 460, y: CY + 560 },
+    size: { width: 140, height: 160 },
+    label: "USE CASES",
+    panelId: "use-cases",
+    mobileOrder: 12,
   },
 ];

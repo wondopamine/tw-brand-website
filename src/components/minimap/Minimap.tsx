@@ -32,6 +32,8 @@ function getItemColor(type: string): string {
       return "var(--accent)";
     case "illustration-reel":
       return "var(--accent)";
+    case "brand-card":
+      return "var(--accent)";
     case "folder":
       return "var(--folder-icon-bg)";
     default:
