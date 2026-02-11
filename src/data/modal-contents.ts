@@ -125,8 +125,71 @@ export const modalContents: Record<string, ModalContent> = {
   manifesto: {
     id: "manifesto",
     title: "Manifesto",
-    subtitle: "Pillars of Kind Utility",
+    subtitle: "Utility-first at its core. Human-first at the surface.",
     sections: [
+      {
+        type: "paragraph",
+        content:
+          "Teachers across Singapore navigate dozens of platforms, relearn seasonal workflows, and chase fragmented information \u2014 all before they can do what they actually came to do: teach. Their tools weren\u2019t built for how they actually work.",
+      },
+      {
+        type: "paragraph",
+        content:
+          "So we asked: what if the tool got out of the way?",
+      },
+      {
+        type: "paragraph",
+        content:
+          "Teacher Workspace is utility-first at its core, human-first at the surface. Teachers move through tasks quickly and confidently \u2014 supported by a design that stays out of the way and simply works.",
+      },
+      {
+        type: "paragraph",
+        content:
+          "Brand matters here because how something looks is how it\u2019s understood before anyone reads a word. A teacher opening a new platform \u2014 already tired, already behind \u2014 makes a split-second judgment: is this for me? That judgment lives in the typeface, the whitespace, the tone. An approachable aesthetic reduces intimidation. Visual calm reduces cognitive load. Consistency builds trust. Brand is how we make the invisible promise visible: this was made with you in mind.",
+      },
+      { type: "divider" },
+      {
+        type: "heading",
+        title: "Four Principles Guide Every Decision",
+      },
+      {
+        type: "highlight-box",
+        title: "Utility by Default",
+        content:
+          "Function before form. Everything we build must be useful first. If it doesn\u2019t help a teacher do their job better, it doesn\u2019t ship.",
+        variant: "accent",
+      },
+      {
+        type: "highlight-box",
+        title: "Kind at Surface",
+        content:
+          "Familiar, gentle, never intimidating. The surface layer \u2014 what teachers see and touch first \u2014 must always communicate warmth, care, and respect.",
+        variant: "accent",
+      },
+      {
+        type: "highlight-box",
+        title: "Calm Guidance",
+        content:
+          "Elevate support when stakes are high. Like a calm, knowledgeable colleague, we surface the right information at the right time.",
+        variant: "accent",
+      },
+      {
+        type: "highlight-box",
+        title: "Light Weight",
+        content:
+          "Responsive, never sluggish. Both in feel and in load. Every added element must justify its existence.",
+        variant: "accent",
+      },
+      {
+        type: "paragraph",
+        content:
+          "One test: Does this help teachers work faster with less stress? If not \u2014 we don\u2019t build it.",
+      },
+      { type: "divider" },
+      {
+        type: "heading",
+        title: "Kind Utility in Action",
+      },
       {
         type: "paragraph",
         content:
@@ -142,44 +205,6 @@ export const modalContents: Record<string, ModalContent> = {
           xAxis: "Utility",
           yAxis: "Warmth",
         },
-      },
-      { type: "divider" },
-      {
-        type: "heading",
-        title: "The Four Pillars",
-      },
-      {
-        type: "highlight-box",
-        title: "01 \u2014 Clarity",
-        content:
-          "Every element should communicate its purpose immediately. No ambiguity, no guessing. Teachers should know exactly what they\u2019re looking at and what to do next.",
-        variant: "accent",
-      },
-      {
-        type: "highlight-box",
-        title: "02 \u2014 Action Oriented",
-        content:
-          "Design that drives action. Teachers are busy \u2014 every interaction should move them forward. Reduce friction, surface next steps, and respect their time.",
-        variant: "accent",
-      },
-      {
-        type: "highlight-box",
-        title: "03 \u2014 Kindness & Humanity",
-        content:
-          "Technology that feels human. Warm, approachable, and respectful of the people who use it. Our product should feel like a helpful colleague, not a cold machine.",
-        variant: "accent",
-      },
-      {
-        type: "highlight-box",
-        title: "04 \u2014 Delight",
-        content:
-          "Moments of unexpected joy. Small touches that make the experience feel crafted with care. Delight is the cherry on top of a solid, trustworthy foundation.",
-        variant: "accent",
-      },
-      { type: "divider" },
-      {
-        type: "heading",
-        title: "Kind Utility in Action",
       },
       {
         type: "two-column",

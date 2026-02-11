@@ -5,8 +5,21 @@ export const panelContents: Record<string, PanelContent> = {
     id: "colours",
     title: "Colours",
     description:
-      "The TW colour system. Click any swatch to copy its HEX value.",
+      "The TW colour system anchored in a single primary blue. Click any swatch to copy its HEX value.",
     items: [
+      {
+        type: "text",
+        title: "TW Accent — #0064FF",
+        content:
+          "Our primary brand colour. A confident, approachable blue that balances professionalism with warmth.",
+      },
+      {
+        type: "text",
+        title: "Why We Picked This",
+        content:
+          "Blue signals trust, reliability, and calm — exactly what teachers need from a daily tool. TW Accent (#0064FF) is inspired by MOE Singapore\u2019s institutional blue, grounding Teacher Workspace in a colour teachers already associate with education. We shifted the hue slightly brighter to feel more modern and energetic, aligning with the Kind Utility philosophy: familiar enough to feel safe, polished enough to feel premium. It works across light and dark contexts, meets WCAG AA contrast on white, and scales cleanly into a full shade ramp for UI states.",
+      },
+      { type: "divider" },
       {
         type: "color-swatch",
         title: "Primary",
@@ -17,7 +30,7 @@ export const panelContents: Record<string, PanelContent> = {
       { type: "divider" },
       {
         type: "color-swatch",
-        title: "Blue Shades (Tailwind Placeholder)",
+        title: "Blue Shade Ramp",
         colors: [
           { name: "Blue 50", hex: "#EFF6FF" },
           { name: "Blue 100", hex: "#DBEAFE" },
@@ -46,13 +59,19 @@ export const panelContents: Record<string, PanelContent> = {
     id: "imagery",
     title: "Imagery",
     description:
-      "Photography and visual assets for Teacher Workspace. Click to enlarge, copy filename, or open source link.",
+      "Photography guidelines and assets for Teacher Workspace.",
     items: [
       {
         type: "text",
         title: "Photography Style",
         content:
-          "Use real photographs of teachers in natural settings. Capture authentic moments \u2014 collaboration, focus, joy. Avoid stock photography that feels staged or generic. Lighting should be warm and natural.",
+          "Authentic, warm images of real teachers in real classrooms. Our photography captures the everyday moments of teaching — focus, collaboration, connection, and joy.",
+      },
+      {
+        type: "text",
+        title: "Why We Picked This",
+        content:
+          "Teachers are the heart of Teacher Workspace. Stock photography feels impersonal and generic — exactly the opposite of Kind Utility. Real photography signals that we see teachers as real people, not abstract users. Warm, natural lighting evokes approachability. Candid moments (not staged poses) build trust because they mirror the reality teachers live. This visual honesty is how we make the brand promise tangible: we understand your world because we\u2019ve been there.",
       },
       { type: "divider" },
       {
@@ -107,13 +126,19 @@ export const panelContents: Record<string, PanelContent> = {
     id: "illustrations",
     title: "Illustrations",
     description:
-      "Illustration assets for Teacher Workspace. Click to enlarge, copy filename, or open source link.",
+      "Illustration style and assets for Teacher Workspace.",
     items: [
       {
         type: "text",
         title: "Illustration Style",
         content:
-          "Illustrations complement photography to explain concepts, add warmth, and create moments of delight. Our illustration style is warm, approachable, and slightly playful without being childish.",
+          "Warm, approachable, and slightly playful without being childish. Rounded forms, soft edges, and a hand-drawn quality that feels human and crafted.",
+      },
+      {
+        type: "text",
+        title: "Why We Picked This",
+        content:
+          "Illustrations fill the gap where photography can\u2019t reach — explaining abstract concepts, adding moments of delight, and softening the interface. A hand-drawn, slightly imperfect style reinforces Kind Utility: it signals that a real person made this with care, not a machine. The rounded, soft aesthetic lowers cognitive load and reduces intimidation, making complex features feel approachable. We anchor the palette in TW blue to maintain brand consistency while using warm accent colours to add life. The result is an illustration system that feels like a kind colleague sketching something out on a whiteboard to help you understand.",
       },
       { type: "divider" },
       {
@@ -157,7 +182,7 @@ export const panelContents: Record<string, PanelContent> = {
         type: "guideline",
         title: "Illustration Guidelines",
         doText:
-          "Warm color palette anchored in TW blue. Human figures with natural proportions. Soft edges and rounded forms. Subtle textures.",
+          "Warm color palette anchored in TW blue. Human figures with natural proportions. Soft edges and rounded forms. Subtle textures and hand-drawn quality.",
         dontText:
           "Overly corporate or flat illustrations. Cartoonish proportions. Sharp, aggressive angles. Neon or harsh colors.",
       },
@@ -168,20 +193,32 @@ export const panelContents: Record<string, PanelContent> = {
     id: "typography",
     title: "Typography",
     description:
-      "The typographic system for Teacher Workspace.",
+      "The typographic system for Teacher Workspace — two fonts, clearly defined roles.",
     items: [
       {
         type: "text",
-        title: "Display \u2014 Plus Jakarta Sans",
+        title: "Plus Jakarta Sans",
         content:
-          "Used for headlines, hero text, and display-level typography. Plus Jakarta Sans\u2019s clean geometric forms create a modern, confident presence while remaining approachable and friendly.\n\nWeight: SemiBold (600) for all display and heading text.\nSource: Google Fonts (free, open source).",
+          "Our display font. Used for headlines, hero text, and all display-level typography. Clean geometric forms create a modern, confident presence while remaining approachable and friendly.",
+      },
+      {
+        type: "text",
+        title: "Why We Picked This",
+        content:
+          "Plus Jakarta Sans strikes the exact balance Kind Utility demands: geometric enough to feel modern and professional, soft enough to feel warm and human. Its open letterforms improve readability at large sizes, and the SemiBold weight (600) gives headlines presence without aggression. It\u2019s free via Google Fonts — respecting the Light Weight principle by eliminating licensing overhead and ensuring fast, reliable loading. The name itself evokes Southeast Asia, subtly connecting to our Singapore roots.",
       },
       { type: "divider" },
       {
         type: "text",
-        title: "Body \u2014 Inter",
+        title: "Inter",
         content:
-          "Used for body copy, UI text, labels, and all readable content. Inter\u2019s exceptional legibility at small sizes makes it ideal for interface text and longer reading.\n\nWeights: Regular (400) for body, Medium (500) for emphasis, SemiBold (600) for labels.\nSource: Google Fonts (free, open source).",
+          "Our body font. Used for body copy, UI text, labels, and all readable content. Exceptional legibility at small sizes makes it ideal for interface text and longer reading.",
+      },
+      {
+        type: "text",
+        title: "Why We Picked This",
+        content:
+          "Inter was designed specifically for screens. Its tall x-height, open apertures, and carefully tuned spacing make it one of the most readable UI fonts available. For teachers scanning information quickly between classes, readability is kindness. It supports 3 weights in our system — Regular (400) for body, Medium (500) for emphasis, SemiBold (600) for labels — giving us enough range without adding complexity. Like Plus Jakarta Sans, it\u2019s free via Google Fonts.",
       },
       { type: "divider" },
       {
@@ -189,6 +226,25 @@ export const panelContents: Record<string, PanelContent> = {
         title: "Type Scale",
         content:
           "Display: 120px / 96px / 72px / 48px (Plus Jakarta Sans 600)\nHeading 1: 32px (Plus Jakarta Sans 600)\nHeading 2: 24px (Plus Jakarta Sans 600)\nHeading 3: 20px (Plus Jakarta Sans 600)\nBody Large: 18px (Inter Regular)\nBody: 16px (Inter Regular)\nBody Small: 14px (Inter Regular)\nCaption: 12px (Inter Medium)\nLabel: 11px (Inter SemiBold, uppercase, tracking wider)",
+      },
+      { type: "divider" },
+      {
+        type: "asset-list",
+        title: "Font Resources",
+        assets: [
+          {
+            name: "Plus Jakarta Sans",
+            thumbnailColor: "#E6F0FF",
+            description: "Display font — Google Fonts",
+            link: "https://fonts.google.com/specimen/Plus+Jakarta+Sans",
+          },
+          {
+            name: "Inter",
+            thumbnailColor: "#F0F0F5",
+            description: "Body font — Google Fonts",
+            link: "https://fonts.google.com/specimen/Inter",
+          },
+        ],
       },
       { type: "divider" },
       {
@@ -206,20 +262,26 @@ export const panelContents: Record<string, PanelContent> = {
     id: "use-cases",
     title: "Use Cases",
     description:
-      "Practical examples of brand guidelines applied to real scenarios.",
+      "Practical examples of how brand guidelines translate into real product decisions.",
     items: [
       {
         type: "text",
         title: "Naming Convention",
         content:
-          "Naming is one of the most powerful brand tools. Every feature, page, and label is an opportunity to reinforce our brand values. We prioritize Clarity above all else in naming.",
+          "Every feature, page, and label is a brand touchpoint. Names should be immediately understandable — a teacher encountering a feature for the first time should know exactly what it does.",
+      },
+      {
+        type: "text",
+        title: "Why This Matters",
+        content:
+          "Naming is one of the most powerful brand tools and one of the easiest to get wrong. In ed-tech, there\u2019s a tendency toward clever portmanteau names (SyncFlow, InsightHub, EduPulse) that sound impressive in a pitch deck but confuse real users. Kind Utility demands the opposite: plain language that teachers already know. A name that requires explanation has already failed. Clarity-first naming reduces cognitive load, builds trust, and makes the product feel like it was built by someone who respects teachers\u2019 time.",
       },
       { type: "divider" },
       {
         type: "text",
-        title: "Clarity First",
+        title: "Examples",
         content:
-          "Names should be immediately understandable. A teacher encountering a feature name for the first time should know exactly what it does. Clever names fail when they require explanation.\n\nGood: \u201CClass Planner\u201D \u2014 instantly clear.\nBad: \u201CSyncFlow\u201D \u2014 requires explanation.\n\nGood: \u201CStudent Notes\u201D \u2014 obvious purpose.\nBad: \u201CInsightHub\u201D \u2014 ambiguous and corporate.",
+          "Good: \u201CClass Planner\u201D \u2014 instantly clear.\nBad: \u201CSyncFlow\u201D \u2014 requires explanation.\n\nGood: \u201CStudent Notes\u201D \u2014 obvious purpose.\nBad: \u201CInsightHub\u201D \u2014 ambiguous and corporate.",
       },
       { type: "divider" },
       {
