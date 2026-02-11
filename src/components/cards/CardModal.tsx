@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import type { ModalContent, ModalSection } from "@/data/modal-contents";
 
@@ -16,7 +16,7 @@ function SectionRenderer({ section }: { section: ModalSection }) {
         <h3
           className="text-xl font-bold mt-4"
           style={{
-            fontFamily: "var(--font-display, 'Sora', sans-serif)",
+            fontFamily: "var(--font-display, 'Plus Jakarta Sans', sans-serif)",
             color: "var(--text-primary)",
           }}
         >
@@ -233,7 +233,6 @@ function SectionRenderer({ section }: { section: ModalSection }) {
 
 export default function CardModal({ content, onClose }: CardModalProps) {
   const isOpen = content !== null;
-  const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -247,8 +246,6 @@ export default function CardModal({ content, onClose }: CardModalProps) {
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = "hidden";
-      // Scroll to top when opening
-      if (scrollRef.current) scrollRef.current.scrollTop = 0;
     } else {
       document.body.style.overflow = "";
     }
@@ -272,59 +269,43 @@ export default function CardModal({ content, onClose }: CardModalProps) {
             onClick={onClose}
           />
 
-          {/* Centered modal — Stripe-style large page overlay */}
+          {/* Centered modal — Stripe-style wide scrollable overlay */}
           <motion.div
-            className="fixed inset-0 z-[70] flex items-center justify-center p-6 sm:p-10 pointer-events-none"
+            className="fixed inset-0 z-[70] overflow-y-auto pointer-events-none"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
           >
-            <motion.div
-              className="relative w-full max-w-[720px] max-h-[85vh] flex flex-col rounded-2xl overflow-hidden pointer-events-auto cursor-default"
-              style={{
-                backgroundColor: "var(--card-bg)",
-                border: "1px solid var(--card-border)",
-                boxShadow:
-                  "0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(0, 0, 0, 0.03)",
-              }}
-              initial={{ opacity: 0, scale: 0.96, y: 20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.96, y: 20 }}
-              transition={{ type: "spring", damping: 30, stiffness: 400, mass: 0.8 }}
-            >
-              {/* Header */}
-              <div
-                className="flex items-start justify-between px-10 pt-10 pb-6 shrink-0"
+            {/* Centering wrapper — allows modal to be taller than viewport and scroll */}
+            <div className="min-h-full flex items-start justify-center py-12 sm:py-16 px-4 sm:px-6">
+              <motion.div
+                className="relative w-full max-w-[960px] flex flex-col rounded-2xl overflow-hidden pointer-events-auto cursor-default"
+                style={{
+                  backgroundColor: "var(--card-bg)",
+                  border: "1px solid var(--card-border)",
+                  boxShadow:
+                    "0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(0, 0, 0, 0.03)",
+                }}
+                initial={{ opacity: 0, scale: 0.96, y: 30 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.96, y: 30 }}
+                transition={{ type: "spring", damping: 30, stiffness: 400, mass: 0.8 }}
               >
-                <div>
-                  <h2
-                    className="text-2xl sm:text-3xl font-bold"
-                    style={{
-                      fontFamily: "var(--font-display, 'Sora', sans-serif)",
-                      color: "var(--text-primary)",
-                    }}
-                  >
-                    {content.title}
-                  </h2>
-                  {content.subtitle && (
-                    <p
-                      className="text-sm mt-2"
-                      style={{ color: "var(--text-secondary)" }}
-                    >
-                      {content.subtitle}
-                    </p>
-                  )}
-                </div>
+                {/* Close button — fixed in corner */}
                 <button
                   onClick={onClose}
-                  className="w-9 h-9 rounded-full flex items-center justify-center transition-all hover:bg-black/5 cursor-pointer shrink-0 ml-4 mt-1"
-                  style={{ color: "var(--text-secondary)" }}
+                  className="absolute top-6 right-6 z-10 w-10 h-10 rounded-xl flex items-center justify-center transition-all hover:bg-black/5 cursor-pointer"
+                  style={{
+                    color: "var(--text-secondary)",
+                    border: "1px solid var(--card-border)",
+                    backgroundColor: "var(--card-bg)",
+                  }}
                   aria-label="Close modal"
                 >
                   <svg
-                    width="20"
-                    height="20"
+                    width="18"
+                    height="18"
                     viewBox="0 0 24 24"
                     fill="none"
                     stroke="currentColor"
@@ -335,20 +316,41 @@ export default function CardModal({ content, onClose }: CardModalProps) {
                     <line x1="6" y1="6" x2="18" y2="18" />
                   </svg>
                 </button>
-              </div>
 
-              {/* Divider */}
-              <div className="mx-10 h-px" style={{ backgroundColor: "var(--card-border)" }} />
-
-              {/* Scrollable content */}
-              <div ref={scrollRef} className="flex-1 overflow-y-auto px-10 py-8">
-                <div className="space-y-6">
-                  {content.sections.map((section, i) => (
-                    <SectionRenderer key={i} section={section} />
-                  ))}
+                {/* Header */}
+                <div className="px-12 pt-12 pb-8 shrink-0">
+                  <h2
+                    className="text-3xl sm:text-4xl font-bold pr-14"
+                    style={{
+                      fontFamily: "var(--font-display, 'Plus Jakarta Sans', sans-serif)",
+                      color: "var(--text-primary)",
+                    }}
+                  >
+                    {content.title}
+                  </h2>
+                  {content.subtitle && (
+                    <p
+                      className="text-base mt-3 leading-relaxed"
+                      style={{ color: "var(--text-secondary)" }}
+                    >
+                      {content.subtitle}
+                    </p>
+                  )}
                 </div>
-              </div>
-            </motion.div>
+
+                {/* Divider */}
+                <div className="mx-12 h-px" style={{ backgroundColor: "var(--card-border)" }} />
+
+                {/* Content — all inline, scrolls with page */}
+                <div className="px-12 py-10">
+                  <div className="space-y-8">
+                    {content.sections.map((section, i) => (
+                      <SectionRenderer key={i} section={section} />
+                    ))}
+                  </div>
+                </div>
+              </motion.div>
+            </div>
           </motion.div>
         </>
       )}

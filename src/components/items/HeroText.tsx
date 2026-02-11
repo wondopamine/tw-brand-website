@@ -13,7 +13,7 @@ export default function HeroText({ title, subtitle }: HeroTextProps) {
       <motion.h1
         className="text-6xl md:text-8xl lg:text-[120px] font-bold tracking-tight leading-none"
         style={{
-          fontFamily: "var(--font-display, 'Sora', sans-serif)",
+          fontFamily: "var(--font-display, 'Plus Jakarta Sans', sans-serif)",
           color: "var(--text-primary)",
         }}
         initial={{ opacity: 0, y: 30 }}
@@ -32,7 +32,7 @@ export default function HeroText({ title, subtitle }: HeroTextProps) {
           <span
             className="hero-badge"
             style={{
-              fontFamily: "var(--font-display, 'Sora', sans-serif)",
+              fontFamily: "var(--font-display, 'Plus Jakarta Sans', sans-serif)",
             }}
           >
             {subtitle}

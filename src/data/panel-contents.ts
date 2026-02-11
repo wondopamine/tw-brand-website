@@ -172,9 +172,9 @@ export const panelContents: Record<string, PanelContent> = {
     items: [
       {
         type: "text",
-        title: "Display \u2014 Sora",
+        title: "Display \u2014 Plus Jakarta Sans",
         content:
-          "Used for headlines, hero text, and display-level typography. Sora\u2019s geometric forms create a modern, confident presence while remaining approachable and friendly.\n\nWeights: Bold (700) for headlines, SemiBold (600) for subheadings.\nSource: Google Fonts (free, open source).",
+          "Used for headlines, hero text, and display-level typography. Plus Jakarta Sans\u2019s clean geometric forms create a modern, confident presence while remaining approachable and friendly.\n\nWeight: SemiBold (600) for all display and heading text.\nSource: Google Fonts (free, open source).",
       },
       { type: "divider" },
       {
@@ -188,14 +188,14 @@ export const panelContents: Record<string, PanelContent> = {
         type: "text",
         title: "Type Scale",
         content:
-          "Display: 120px / 96px / 72px / 48px (Sora Bold)\nHeading 1: 32px (Sora Bold)\nHeading 2: 24px (Sora SemiBold)\nHeading 3: 20px (Sora SemiBold)\nBody Large: 18px (Inter Regular)\nBody: 16px (Inter Regular)\nBody Small: 14px (Inter Regular)\nCaption: 12px (Inter Medium)\nLabel: 11px (Inter SemiBold, uppercase, tracking wider)",
+          "Display: 120px / 96px / 72px / 48px (Plus Jakarta Sans 600)\nHeading 1: 32px (Plus Jakarta Sans 600)\nHeading 2: 24px (Plus Jakarta Sans 600)\nHeading 3: 20px (Plus Jakarta Sans 600)\nBody Large: 18px (Inter Regular)\nBody: 16px (Inter Regular)\nBody Small: 14px (Inter Regular)\nCaption: 12px (Inter Medium)\nLabel: 11px (Inter SemiBold, uppercase, tracking wider)",
       },
       { type: "divider" },
       {
         type: "guideline",
         title: "Usage Guidelines",
         doText:
-          "Use Sora exclusively for display and headline text. Use Inter for all body and UI text. Maintain generous line height (1.5\u20131.6 for body). Respect the type scale consistently.",
+          "Use Plus Jakarta Sans exclusively for display and headline text. Use Inter for all body and UI text. Maintain generous line height (1.5\u20131.6 for body). Respect the type scale consistently.",
         dontText:
           "Mix display and body fonts inappropriately. Use decorative or script fonts. Set body text below 14px. Use all-caps for more than short labels.",
       },

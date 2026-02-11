@@ -19,7 +19,7 @@ export default function UtilityCard({
       <h3
         className="text-lg font-bold mb-2"
         style={{
-          fontFamily: "var(--font-display, 'Sora', sans-serif)",
+          fontFamily: "var(--font-display, 'Plus Jakarta Sans', sans-serif)",
           color: "var(--text-primary)",
         }}
       >

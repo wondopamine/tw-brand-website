@@ -8,27 +8,20 @@ interface PanelBodyProps {
   items: PanelContentItem[];
 }
 
-function CopyFeedback({ text }: { text: string }) {
-  const [copied, setCopied] = useState(false);
-
-  const handleCopy = useCallback(() => {
-    navigator.clipboard.writeText(text);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 1500);
-  }, [text]);
-
+function CopyFeedback({
+  text,
+  copied,
+}: {
+  text: string;
+  copied: boolean;
+}) {
   return (
-    <button
-      onClick={(e) => {
-        e.stopPropagation();
-        handleCopy();
-      }}
-      className="text-xs font-medium cursor-pointer transition-colors"
+    <span
+      className="text-xs font-medium transition-colors"
       style={{ color: copied ? "var(--accent)" : "var(--text-secondary)" }}
-      title={`Copy ${text}`}
     >
       {copied ? "Copied!" : text}
-    </button>
+    </span>
   );
 }
 
@@ -231,6 +224,68 @@ function AssetEnlargedView({
   );
 }
 
+function ColorSwatchGroup({
+  title,
+  colors,
+}: {
+  title?: string;
+  colors: { name: string; hex: string; isPrimary?: boolean }[];
+}) {
+  const [copiedHex, setCopiedHex] = useState<string | null>(null);
+
+  const handleCopy = useCallback((hex: string) => {
+    navigator.clipboard.writeText(hex);
+    setCopiedHex(hex);
+    setTimeout(() => setCopiedHex(null), 1500);
+  }, []);
+
+  return (
+    <div className="space-y-3">
+      {title && (
+        <h4
+          className="text-sm font-bold"
+          style={{ color: "var(--text-primary)" }}
+        >
+          {title}
+        </h4>
+      )}
+      <div className="space-y-2">
+        {colors.map((color) => (
+          <div key={color.hex} className="flex items-center gap-3">
+            <button
+              onClick={() => handleCopy(color.hex)}
+              className="flex items-center gap-3 flex-1 p-2 rounded-lg transition-colors cursor-pointer hover:bg-black/[0.02]"
+              title={`Click to copy ${color.hex}`}
+            >
+              <div
+                className="rounded-lg shrink-0"
+                style={{
+                  backgroundColor: color.hex,
+                  width: color.isPrimary ? 48 : 36,
+                  height: color.isPrimary ? 48 : 36,
+                  border:
+                    color.hex === "#EFF6FF" || color.hex === "#DBEAFE"
+                      ? "1px solid var(--card-border)"
+                      : undefined,
+                }}
+              />
+              <div className="text-left">
+                <span
+                  className="text-sm font-medium block"
+                  style={{ color: "var(--text-primary)" }}
+                >
+                  {color.name}
+                </span>
+                <CopyFeedback text={color.hex} copied={copiedHex === color.hex} />
+              </div>
+            </button>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export default function PanelBody({ items }: PanelBodyProps) {
   const [enlargedAsset, setEnlargedAsset] = useState<AssetEntry | null>(null);
 
@@ -254,7 +309,7 @@ export default function PanelBody({ items }: PanelBodyProps) {
                   <h3
                     className="text-base font-bold mb-2"
                     style={{
-                      fontFamily: "var(--font-display, 'Sora', sans-serif)",
+                      fontFamily: "var(--font-display, 'Plus Jakarta Sans', sans-serif)",
                       color: "var(--text-primary)",
                     }}
                   >
@@ -364,55 +419,11 @@ export default function PanelBody({ items }: PanelBodyProps) {
 
           case "color-swatch":
             return (
-              <div key={index} className="space-y-3">
-                {item.title && (
-                  <h4
-                    className="text-sm font-bold"
-                    style={{ color: "var(--text-primary)" }}
-                  >
-                    {item.title}
-                  </h4>
-                )}
-                <div className="space-y-2">
-                  {item.colors.map((color) => (
-                    <div
-                      key={color.hex}
-                      className="flex items-center gap-3"
-                    >
-                      <button
-                        onClick={() => {
-                          navigator.clipboard.writeText(color.hex);
-                        }}
-                        className="flex items-center gap-3 flex-1 p-2 rounded-lg transition-colors cursor-pointer hover:bg-black/[0.02]"
-                        title={`Click to copy ${color.hex}`}
-                      >
-                        <div
-                          className="rounded-lg shrink-0"
-                          style={{
-                            backgroundColor: color.hex,
-                            width: color.isPrimary ? 48 : 36,
-                            height: color.isPrimary ? 48 : 36,
-                            border:
-                              color.hex === "#EFF6FF" ||
-                              color.hex === "#DBEAFE"
-                                ? "1px solid var(--card-border)"
-                                : undefined,
-                          }}
-                        />
-                        <div className="text-left">
-                          <span
-                            className="text-sm font-medium block"
-                            style={{ color: "var(--text-primary)" }}
-                          >
-                            {color.name}
-                          </span>
-                          <CopyFeedback text={color.hex} />
-                        </div>
-                      </button>
-                    </div>
-                  ))}
-                </div>
-              </div>
+              <ColorSwatchGroup
+                key={index}
+                title={item.title}
+                colors={item.colors}
+              />
             );
 
           case "asset-list":

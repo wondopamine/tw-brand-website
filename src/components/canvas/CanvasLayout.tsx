@@ -34,7 +34,7 @@ function CanvasSpinner() {
           className="text-sm font-medium tracking-widest uppercase select-none"
           style={{
             color: "var(--text-secondary)",
-            fontFamily: "var(--font-display, 'Sora', sans-serif)",
+            fontFamily: "var(--font-display, 'Plus Jakarta Sans', sans-serif)",
           }}
           initial={{ opacity: 0, y: 6 }}
           animate={{ opacity: 1, y: 0 }}
