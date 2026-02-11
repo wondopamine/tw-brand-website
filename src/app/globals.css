@@ -8,6 +8,7 @@
   --card-border: #E5E5E9;
   --text-primary: #1a1a1a;
   --text-secondary: #6B6B73;
+  --text-slate: #334155;
   --accent: #0064FF;
   --accent-light: #E6F0FF;
   --accent-hover: #0050CC;
@@ -35,7 +36,7 @@
   --color-accent-light: var(--accent-light);
   --color-accent-hover: var(--accent-hover);
   --color-quote-highlight: var(--quote-highlight);
-  --font-display: var(--font-sora);
+  --font-display: var(--font-plus-jakarta);
   --font-body: var(--font-inter);
 }
 

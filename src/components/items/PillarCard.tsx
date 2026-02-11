@@ -22,7 +22,7 @@ export default function PillarCard({
       <h3
         className="text-xl font-bold mb-3"
         style={{
-          fontFamily: "var(--font-display, 'Sora', sans-serif)",
+          fontFamily: "var(--font-display, 'Plus Jakarta Sans', sans-serif)",
           color: "var(--text-primary)",
         }}
       >

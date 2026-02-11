@@ -11,7 +11,7 @@ export default function TextCard({ title, body }: TextCardProps) {
       <h3
         className="text-2xl font-bold mb-4"
         style={{
-          fontFamily: "var(--font-display, 'Sora', sans-serif)",
+          fontFamily: "var(--font-display, 'Plus Jakarta Sans', sans-serif)",
           color: "var(--text-primary)",
         }}
       >

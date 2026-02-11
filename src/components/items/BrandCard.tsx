@@ -3,14 +3,12 @@
 interface BrandCardProps {
   title: string;
   subtitle?: string;
-  accentColor?: string;
   onClick: () => void;
 }
 
 export default function BrandCard({
   title,
   subtitle,
-  accentColor,
   onClick,
 }: BrandCardProps) {
   return (
@@ -20,10 +18,10 @@ export default function BrandCard({
       aria-label={`Open ${title}`}
     >
       <h3
-        className="text-xl font-bold mb-2"
+        className="text-xl font-semibold mb-2"
         style={{
-          fontFamily: "var(--font-display, 'Sora', sans-serif)",
-          color: accentColor ?? "var(--text-primary)",
+          fontFamily: "var(--font-display, 'Plus Jakarta Sans', sans-serif)",
+          color: "var(--text-slate)",
         }}
       >
         {title}

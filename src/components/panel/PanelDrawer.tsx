@@ -70,7 +70,7 @@ export default function PanelDrawer({ content, onClose }: PanelDrawerProps) {
               <h2
                 className="text-lg font-bold uppercase tracking-wider"
                 style={{
-                  fontFamily: "var(--font-display, 'Sora', sans-serif)",
+                  fontFamily: "var(--font-display, 'Plus Jakarta Sans', sans-serif)",
                   color: "var(--text-primary)",
                 }}
               >

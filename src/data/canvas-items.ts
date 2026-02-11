@@ -32,6 +32,7 @@ export const canvasItems: CanvasItem[] = [
     title: "Why Aesthetic Matters?",
     subtitle: "Good design builds trust and signals reliability.",
     modalId: "aesthetics",
+    rotation: -1.5,
     mobileOrder: 1,
   },
 
@@ -44,6 +45,7 @@ export const canvasItems: CanvasItem[] = [
     title: "About TW Brand Guidelines",
     subtitle: "What this document is — and what it isn't.",
     modalId: "about-guidelines",
+    rotation: 1,
     mobileOrder: 2,
   },
 
@@ -57,6 +59,7 @@ export const canvasItems: CanvasItem[] = [
     subtitle: "Pillars of Kind Utility — our brand philosophy.",
     modalId: "manifesto",
     accentColor: "var(--accent)",
+    rotation: 2,
     mobileOrder: 3,
   },
 
@@ -70,6 +73,7 @@ export const canvasItems: CanvasItem[] = [
     title: "Always From Teachers",
     subtitle: "Designed with teachers, for teachers.",
     modalId: "always-from-teachers",
+    rotation: -2,
     mobileOrder: 4,
   },
 
@@ -102,7 +106,37 @@ export const canvasItems: CanvasItem[] = [
     mobileOrder: 5,
   },
 
-  // Bottom row (2 cards below hero)
+  // Teacher photos — clickable image gallery card, shuffles on click
+  {
+    id: "image-teachers-classroom",
+    type: "image-card",
+    position: { x: CX - 190, y: CY + 220 },
+    size: { width: 380, height: 220 },
+    images: [
+      {
+        src: "/images/teachers-classroom.jpg",
+        alt: "Teacher guiding students with tablets in classroom",
+        description:
+          "Real classrooms, real teachers — every design decision starts here.",
+      },
+      {
+        src: "/images/teachers-classroom-2.png",
+        alt: "Teacher leaning in to help two students with tablets",
+        description:
+          "Designed alongside educators who use technology daily.",
+      },
+      {
+        src: "/images/teachers-classroom-3.png",
+        alt: "Teacher engaging with students using tablets at desk",
+        description:
+          "Warm, human moments that inspire our brand aesthetic.",
+      },
+    ],
+    rotation: -1,
+    mobileOrder: 8,
+  },
+
+  // Bottom cards (flanking the photo)
   // 6. Voice & Tone — bottom-left
   {
     id: "card-voice-tone",
@@ -112,6 +146,7 @@ export const canvasItems: CanvasItem[] = [
     title: "Voice & Tone",
     subtitle: "How we communicate — warm, clear, human.",
     modalId: "voice-tone",
+    rotation: 1.5,
     mobileOrder: 6,
   },
 
@@ -119,12 +154,13 @@ export const canvasItems: CanvasItem[] = [
   {
     id: "card-brand-principles",
     type: "brand-card",
-    position: { x: CX + 380, y: CY + 240 },
+    position: { x: CX + 380, y: CY + 280 },
     size: { width: 400, height: 260 },
     title: "Brand Principles",
     subtitle: "Utility by Default, Kind at Surface, Calm Guidance, Light Weight.",
     modalId: "brand-principles",
     accentColor: "var(--accent)",
+    rotation: -1.5,
     mobileOrder: 7,
   },
 
@@ -132,46 +168,46 @@ export const canvasItems: CanvasItem[] = [
   {
     id: "folder-colours",
     type: "folder",
-    position: { x: CX - 460, y: CY + 560 },
+    position: { x: CX - 460, y: CY + 620 },
     size: { width: 140, height: 160 },
     label: "COLOURS",
     panelId: "colours",
-    mobileOrder: 8,
+    mobileOrder: 9,
   },
   {
     id: "folder-imagery",
     type: "folder",
-    position: { x: CX - 230, y: CY + 560 },
+    position: { x: CX - 230, y: CY + 620 },
     size: { width: 140, height: 160 },
     label: "IMAGERY",
     panelId: "imagery",
-    mobileOrder: 9,
+    mobileOrder: 10,
   },
   {
     id: "folder-illustrations",
     type: "folder",
-    position: { x: CX - 0, y: CY + 560 },
+    position: { x: CX - 0, y: CY + 620 },
     size: { width: 140, height: 160 },
     label: "ILLUSTRATIONS",
     panelId: "illustrations",
-    mobileOrder: 10,
+    mobileOrder: 11,
   },
   {
     id: "folder-typography",
     type: "folder",
-    position: { x: CX + 230, y: CY + 560 },
+    position: { x: CX + 230, y: CY + 620 },
     size: { width: 140, height: 160 },
     label: "TYPOGRAPHY",
     panelId: "typography",
-    mobileOrder: 11,
+    mobileOrder: 12,
   },
   {
     id: "folder-use-cases",
     type: "folder",
-    position: { x: CX + 460, y: CY + 560 },
+    position: { x: CX + 460, y: CY + 620 },
     size: { width: 140, height: 160 },
     label: "USE CASES",
     panelId: "use-cases",
-    mobileOrder: 12,
+    mobileOrder: 13,
   },
 ];

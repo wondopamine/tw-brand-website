@@ -13,6 +13,7 @@ import QuoteCard from "@/components/items/QuoteCard";
 import UtilityCard from "@/components/items/UtilityCard";
 import IllustrationReel from "@/components/items/IllustrationReel";
 import BrandCard from "@/components/items/BrandCard";
+import ImageCard from "@/components/items/ImageCard";
 import FolderIcon from "@/components/items/FolderIcon";
 
 interface CanvasItemProps {
@@ -30,6 +31,7 @@ const GLOW_CARD_TYPES = new Set([
   "utility-card",
   "illustration-reel",
   "brand-card",
+  "image-card",
 ]);
 
 export default function CanvasItem({
@@ -90,8 +92,14 @@ export default function CanvasItem({
           <BrandCard
             title={item.title}
             subtitle={item.subtitle}
-            accentColor={item.accentColor}
             onClick={() => onCardClick(item.modalId)}
+          />
+        );
+      case "image-card":
+        return (
+          <ImageCard
+            images={item.images}
+            caption={item.caption}
           />
         );
       case "folder":

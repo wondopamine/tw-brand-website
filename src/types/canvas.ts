@@ -7,6 +7,7 @@ export type CanvasItemType =
   | "utility-card"
   | "illustration-reel"
   | "brand-card"
+  | "image-card"
   | "folder";
 
 export interface CanvasPosition {
@@ -97,6 +98,19 @@ export interface BrandCardItem extends CanvasItemBase {
   accentColor?: string;
 }
 
+// Image card — photo gallery that shuffles on click, shows description on hover
+export interface ImageCardImage {
+  src: string;
+  alt: string;
+  description: string;
+}
+
+export interface ImageCardItem extends CanvasItemBase {
+  type: "image-card";
+  images: ImageCardImage[];
+  caption?: string;
+}
+
 export interface FolderItem extends CanvasItemBase {
   type: "folder";
   label: string;
@@ -112,4 +126,5 @@ export type CanvasItem =
   | UtilityCardItem
   | IllustrationReelItem
   | BrandCardItem
+  | ImageCardItem
   | FolderItem;

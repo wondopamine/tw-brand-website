@@ -21,7 +21,7 @@ export default function ManifestoCard({
       <h2
         className="text-3xl md:text-4xl font-bold mb-4"
         style={{
-          fontFamily: "var(--font-display, 'Sora', sans-serif)",
+          fontFamily: "var(--font-display, 'Plus Jakarta Sans', sans-serif)",
           color: "var(--accent)",
         }}
       >
