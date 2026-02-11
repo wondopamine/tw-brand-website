@@ -5,7 +5,7 @@ import Link from "next/link";
 
 export default function Home() {
   return (
-    <div className="min-h-screen canvas-grid">
+    <div className="min-h-screen canvas-grid canvas-grid-lines">
       {/* Scrollable centered modal — same pattern as CardModal */}
       <motion.div
         className="min-h-full flex items-start justify-center py-12 sm:py-16 px-4 sm:px-6"
