@@ -32,9 +32,9 @@ interface MouseRecord {
   t: number;
 }
 
-const MIN_ZOOM = 0.3;
-const MAX_ZOOM = 2;
-const ZOOM_STEP = 0.15;
+const MIN_ZOOM = 0.5;
+const MAX_ZOOM = 1.5;
+const ZOOM_STEP = 0.1;
 
 export function useCanvasPan({
   canvasWidth,

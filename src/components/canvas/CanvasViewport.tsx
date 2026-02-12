@@ -61,8 +61,8 @@ export default function CanvasViewport() {
     gridPadding: GRID_PADDING,
   });
 
-  // Cursor tracking for grid highlight
-  useCursorPosition(canvasInnerRef, offsetX, offsetY);
+  // Cursor tracking for grid highlight (pass zoom so mask tracks correctly at all zoom levels)
+  useCursorPosition(canvasInnerRef, offsetX, offsetY, zoom);
 
   // Viewport dimensions for minimap
   const [viewportSize, setViewportSize] = useState({ width: 0, height: 0 });
@@ -175,6 +175,9 @@ export default function CanvasViewport() {
                 x={pos.x}
                 y={pos.y}
                 rotation={sticker.rotation}
+                shape={sticker.shape}
+                size={sticker.size}
+                bg={sticker.bg}
                 zoom={zoom}
                 onPositionChange={handleStickerMove}
               />

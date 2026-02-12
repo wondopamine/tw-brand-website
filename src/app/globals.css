@@ -112,14 +112,14 @@ body {
   opacity: 0;
   transition: opacity 0.4s ease;
   -webkit-mask-image: radial-gradient(
-    circle 400px at var(--cursor-x, -1000px) var(--cursor-y, -1000px),
+    circle var(--cursor-radius, 400px) at var(--cursor-x, -1000px) var(--cursor-y, -1000px),
     white 0px,
-    transparent 400px
+    transparent var(--cursor-radius, 400px)
   );
   mask-image: radial-gradient(
-    circle 400px at var(--cursor-x, -1000px) var(--cursor-y, -1000px),
+    circle var(--cursor-radius, 400px) at var(--cursor-x, -1000px) var(--cursor-y, -1000px),
     white 0px,
-    transparent 400px
+    transparent var(--cursor-radius, 400px)
   );
 }
 
@@ -133,9 +133,9 @@ body {
   position: absolute;
   inset: 0;
   background: radial-gradient(
-    circle 250px at var(--cursor-x, -1000px) var(--cursor-y, -1000px),
+    circle var(--cursor-glow-radius, 250px) at var(--cursor-x, -1000px) var(--cursor-y, -1000px),
     rgba(0, 100, 255, 0.035),
-    transparent 250px
+    transparent var(--cursor-glow-radius, 250px)
   );
   pointer-events: none;
   z-index: 0;
