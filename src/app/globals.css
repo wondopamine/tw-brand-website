@@ -216,6 +216,44 @@ body {
   user-select: none;
 }
 
+/* ===== TYPOGRAPHY PLAYGROUND SLIDERS ===== */
+.typo-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--card-border);
+  outline: none;
+  cursor: pointer;
+}
+
+.typo-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--accent);
+  border: 2px solid white;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+  cursor: pointer;
+  transition: transform 0.15s ease;
+}
+
+.typo-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+}
+
+.typo-slider::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--accent);
+  border: 2px solid white;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+  cursor: pointer;
+}
+
 /* ===== CANVAS LOADING SPINNER ===== */
 .canvas-spinner {
   width: 40px;

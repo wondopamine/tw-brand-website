@@ -1,7 +1,13 @@
 "use client";
 
 import { useRef, useState, useCallback } from "react";
-import { motion, useMotionValue, useTransform, useSpring } from "motion/react";
+import {
+  motion,
+  useMotionValue,
+  useTransform,
+  useSpring,
+  type MotionValue,
+} from "motion/react";
 import { STICKER_COMPONENTS } from "./StickerGraphics";
 
 interface CanvasStickerProps {
@@ -15,6 +21,19 @@ interface CanvasStickerProps {
   onPositionChange: (id: string, x: number, y: number) => void;
 }
 
+/**
+ * Physics-driven sticker with realistic fold/flip when dragged.
+ *
+ * The sticker uses a simple physics model:
+ * - Drag velocity is tracked per-frame via an exponential moving average.
+ * - Velocity is mapped through springs to 3D transforms (rotateX/Y, skew)
+ *   with high stiffness + moderate damping, giving the sticker the snappy
+ *   "peel off the surface, flip in the direction of motion" effect seen in
+ *   real die-cut vinyl stickers.
+ * - On release the spring animates back to flat (all transforms → 0).
+ * - A subtle "corner lift" scale-Y compression is added so the sticker
+ *   looks like it buckles slightly when moved fast.
+ */
 export default function CanvasSticker({
   id,
   label,
@@ -32,26 +51,33 @@ export default function CanvasSticker({
   const lastMoveRef = useRef({ x: 0, y: 0, t: 0 });
   const [lifted, setLifted] = useState(false);
 
-  // Motion values for 3D fold/flip effect — like peeling a real sticker
+  /* ---- motion values that drive the 3D fold ---- */
   const dragVx = useMotionValue(0);
   const dragVy = useMotionValue(0);
 
-  // Spring-smoothed velocity for natural peel/flip motion
-  const springVx = useSpring(dragVx, { stiffness: 180, damping: 16, mass: 0.4 });
-  const springVy = useSpring(dragVy, { stiffness: 180, damping: 16, mass: 0.4 });
+  // High stiffness + low mass = snappy response that overshoots slightly
+  const springCfg = { stiffness: 280, damping: 14, mass: 0.35 };
+  const springVx = useSpring(dragVx, springCfg);
+  const springVy = useSpring(dragVy, springCfg);
 
-  // Map velocity to 3D rotations — sticker peel/flip effect
-  // Moving right → sticker flips showing its left edge lifting (rotateY)
-  // Moving down → sticker curls forward showing top edge lifting (rotateX)
-  const rotateY = useTransform(springVx, [-30, 0, 30], [-28, 0, 28]);
-  const rotateX = useTransform(springVy, [-30, 0, 30], [22, 0, -22]);
+  // Primary rotations — moving right flips the left edge up (rotateY)
+  //                      moving down curls the top edge forward (rotateX)
+  const rotateY = useTransform(springVx, [-40, 0, 40], [-35, 0, 35]);
+  const rotateX = useTransform(springVy, [-40, 0, 40], [30, 0, -30]);
 
-  // Subtle warp — paper doesn't stay flat when peeled
-  const skewX = useTransform(springVx, [-30, 0, 30], [-3, 0, 3]);
-  const skewY = useTransform(springVy, [-30, 0, 30], [2, 0, -2]);
+  // Paper warp — shear + compression for natural fold
+  const skewX = useTransform(springVx, [-40, 0, 40], [-6, 0, 6]);
+  const skewY = useTransform(springVy, [-40, 0, 40], [4, 0, -4]);
+
+  // Buckle: fast motion compresses the sticker along the cross-axis
+  const absVx: MotionValue<number> = useTransform(springVx, (v: number) => Math.abs(v));
+  const absVy: MotionValue<number> = useTransform(springVy, (v: number) => Math.abs(v));
+  const scaleY = useTransform(absVx, [0, 40], [1, 0.92]);
+  const scaleX = useTransform(absVy, [0, 40], [1, 0.92]);
 
   const StickerSVG = STICKER_COMPONENTS[id];
 
+  /* ---- drag handlers ---- */
   const handleMouseDown = useCallback(
     (e: React.MouseEvent) => {
       e.stopPropagation();
@@ -78,13 +104,13 @@ export default function CanvasSticker({
         const rawVx = ((moveEvent.clientX - lastMoveRef.current.x) / dt) * 16;
         const rawVy = ((moveEvent.clientY - lastMoveRef.current.y) / dt) * 16;
 
-        // Smooth velocity with exponential moving average
-        velocityRef.current.vx = velocityRef.current.vx * 0.55 + rawVx * 0.45;
-        velocityRef.current.vy = velocityRef.current.vy * 0.55 + rawVy * 0.45;
+        // Exponential moving average for smooth velocity
+        velocityRef.current.vx = velocityRef.current.vx * 0.5 + rawVx * 0.5;
+        velocityRef.current.vy = velocityRef.current.vy * 0.5 + rawVy * 0.5;
 
-        // Clamp for fold effect
-        dragVx.set(Math.max(-30, Math.min(30, velocityRef.current.vx)));
-        dragVy.set(Math.max(-30, Math.min(30, velocityRef.current.vy)));
+        // Clamp and feed to spring
+        dragVx.set(Math.max(-40, Math.min(40, velocityRef.current.vx)));
+        dragVy.set(Math.max(-40, Math.min(40, velocityRef.current.vy)));
 
         lastMoveRef.current = { x: moveEvent.clientX, y: moveEvent.clientY, t: now };
 
@@ -101,7 +127,6 @@ export default function CanvasSticker({
       const handleMouseUp = () => {
         isDragging.current = false;
         setLifted(false);
-        // Reset velocities — spring animates back to flat
         dragVx.set(0);
         dragVy.set(0);
         window.removeEventListener("mousemove", handleMouseMove);
@@ -114,7 +139,7 @@ export default function CanvasSticker({
     [id, x, y, zoom, onPositionChange, dragVx, dragVy]
   );
 
-  // Touch support
+  /* ---- touch support ---- */
   const handleTouchStart = useCallback(
     (e: React.TouchEvent) => {
       e.stopPropagation();
@@ -145,11 +170,11 @@ export default function CanvasSticker({
         const rawVx = ((t.clientX - lastMoveRef.current.x) / dt) * 16;
         const rawVy = ((t.clientY - lastMoveRef.current.y) / dt) * 16;
 
-        velocityRef.current.vx = velocityRef.current.vx * 0.55 + rawVx * 0.45;
-        velocityRef.current.vy = velocityRef.current.vy * 0.55 + rawVy * 0.45;
+        velocityRef.current.vx = velocityRef.current.vx * 0.5 + rawVx * 0.5;
+        velocityRef.current.vy = velocityRef.current.vy * 0.5 + rawVy * 0.5;
 
-        dragVx.set(Math.max(-30, Math.min(30, velocityRef.current.vx)));
-        dragVy.set(Math.max(-30, Math.min(30, velocityRef.current.vy)));
+        dragVx.set(Math.max(-40, Math.min(40, velocityRef.current.vx)));
+        dragVy.set(Math.max(-40, Math.min(40, velocityRef.current.vy)));
 
         lastMoveRef.current = { x: t.clientX, y: t.clientY, t: now };
 
@@ -190,36 +215,38 @@ export default function CanvasSticker({
         top: y,
         zIndex: lifted ? 100 : 20,
         cursor: lifted ? "grabbing" : "grab",
-        perspective: 800,
+        perspective: 600,
       }}
       initial={{ opacity: 0, scale: 0, rotate: rotation }}
       animate={{
         opacity: 1,
-        scale: lifted ? 1.12 : 1,
+        scale: lifted ? 1.15 : 1,
         rotate: rotation,
       }}
       transition={{
         opacity: { duration: 0.4, delay: 0.6 },
-        scale: { type: "spring", stiffness: 350, damping: 22 },
+        scale: { type: "spring", stiffness: 400, damping: 20 },
       }}
       onMouseDown={handleMouseDown}
       onTouchStart={handleTouchStart}
       aria-label={`Sticker: ${label}`}
     >
-      {/* 3D fold/flip wrapper — simulates peeling a real sticker */}
+      {/* 3D fold/flip wrapper — physics-driven transforms */}
       <motion.div
         style={{
           rotateX,
           rotateY,
           skewX,
           skewY,
+          scaleX,
+          scaleY,
           transformStyle: "preserve-3d",
           width: size,
           height: size,
           filter: lifted
-            ? "drop-shadow(0 12px 20px rgba(0, 0, 0, 0.2)) drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1))"
+            ? "drop-shadow(0 16px 24px rgba(0, 0, 0, 0.25)) drop-shadow(0 6px 8px rgba(0, 0, 0, 0.12))"
             : "drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1)) drop-shadow(0 1px 2px rgba(0, 0, 0, 0.06))",
-          transition: "filter 0.25s ease",
+          transition: "filter 0.2s ease",
         }}
       >
         <StickerSVG size={size} />

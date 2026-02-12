@@ -8,14 +8,14 @@ const CX = CANVAS_WIDTH / 2; // 1600
 const CY = CANVAS_HEIGHT / 2; // 1000
 
 export const canvasItems: CanvasItem[] = [
-  // ===== HERO (dead center, half-sized) =====
+  // ===== HERO (dead center — large to fit typography playground) =====
   {
     id: "hero",
     type: "hero-text",
-    position: { x: CX - 280, y: CY - 80 },
-    size: { width: 560, height: 160 },
+    position: { x: CX - 460, y: CY - 200 },
+    size: { width: 920, height: 400 },
     title: "Teacher Workspace",
-    subtitle: "Brand Guideline",
+    subtitle: "Brand Guidelines",
     zIndex: 10,
     mobileOrder: 0,
   },
