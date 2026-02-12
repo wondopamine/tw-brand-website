@@ -202,6 +202,20 @@ body {
   user-select: none;
 }
 
+/* Half-sized hero badge for canvas view */
+.hero-badge-sm {
+  display: inline-block;
+  padding: 6px 18px;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  color: var(--accent);
+  background: var(--accent-light);
+  border: 1px solid rgba(0, 100, 255, 0.15);
+  border-radius: 999px;
+  user-select: none;
+}
+
 /* ===== CANVAS LOADING SPINNER ===== */
 .canvas-spinner {
   width: 40px;

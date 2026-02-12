@@ -17,9 +17,13 @@ interface CanvasPanConfig {
 interface CanvasPanResult {
   offsetX: number;
   offsetY: number;
+  zoom: number;
   isDragging: boolean;
   containerRef: React.RefObject<HTMLDivElement | null>;
   panTo: (x: number, y: number) => void;
+  zoomIn: () => void;
+  zoomOut: () => void;
+  resetZoom: () => void;
 }
 
 interface MouseRecord {
@@ -27,6 +31,10 @@ interface MouseRecord {
   y: number;
   t: number;
 }
+
+const MIN_ZOOM = 0.3;
+const MAX_ZOOM = 2;
+const ZOOM_STEP = 0.15;
 
 export function useCanvasPan({
   canvasWidth,
@@ -42,7 +50,9 @@ export function useCanvasPan({
   // Use refs for high-frequency updates, sync to state for re-renders
   const offsetXRef = useRef(initialOffsetX ?? 0);
   const offsetYRef = useRef(initialOffsetY ?? 0);
+  const zoomRef = useRef(1);
   const [offset, setOffset] = useState({ x: offsetXRef.current, y: offsetYRef.current });
+  const [zoom, setZoom] = useState(1);
 
   const isDraggingRef = useRef(false);
   const [isDragging, setIsDragging] = useState(false);
@@ -63,10 +73,11 @@ export function useCanvasPan({
       const vw = container.clientWidth;
       const vh = container.clientHeight;
       const padding = 200;
+      const z = zoomRef.current;
 
-      const minX = -(canvasWidth - padding);
+      const minX = -(canvasWidth * z - padding);
       const maxX = vw - padding;
-      const minY = -(canvasHeight - padding);
+      const minY = -(canvasHeight * z - padding);
       const maxY = vh - padding;
 
       return {
@@ -85,12 +96,12 @@ export function useCanvasPan({
       offsetYRef.current = clamped.y;
 
       // Apply transform directly for immediate visual feedback.
-      // Must include gridPadding offset to match the React-rendered transform.
       const container = containerRef.current;
       if (container) {
         const canvas = container.firstElementChild as HTMLElement | null;
         if (canvas) {
-          canvas.style.transform = `translate3d(${clamped.x - gridPadding}px, ${clamped.y - gridPadding}px, 0)`;
+          const z = zoomRef.current;
+          canvas.style.transform = `translate3d(${clamped.x - gridPadding * z}px, ${clamped.y - gridPadding * z}px, 0) scale(${z})`;
         }
       }
 
@@ -102,7 +113,28 @@ export function useCanvasPan({
         });
       }
     },
-    [clamp]
+    [clamp, gridPadding]
+  );
+
+  // Apply zoom with transform
+  const applyZoom = useCallback(
+    (newZoom: number, centerX?: number, centerY?: number) => {
+      const oldZoom = zoomRef.current;
+      const clampedZoom = Math.min(MAX_ZOOM, Math.max(MIN_ZOOM, newZoom));
+      zoomRef.current = clampedZoom;
+      setZoom(clampedZoom);
+
+      // If a center point is provided, adjust offset to zoom toward that point
+      if (centerX !== undefined && centerY !== undefined) {
+        const zoomRatio = clampedZoom / oldZoom;
+        const newOffsetX = centerX - (centerX - offsetXRef.current) * zoomRatio;
+        const newOffsetY = centerY - (centerY - offsetYRef.current) * zoomRatio;
+        applyOffset(newOffsetX, newOffsetY);
+      } else {
+        applyOffset(offsetXRef.current, offsetYRef.current);
+      }
+    },
+    [applyOffset]
   );
 
   // Stop any running momentum
@@ -170,6 +202,28 @@ export function useCanvasPan({
     [clamp, applyOffset, stopMomentum]
   );
 
+  // Zoom controls
+  const zoomIn = useCallback(() => {
+    const container = containerRef.current;
+    const cx = container ? container.clientWidth / 2 : 0;
+    const cy = container ? container.clientHeight / 2 : 0;
+    applyZoom(zoomRef.current + ZOOM_STEP, cx, cy);
+  }, [applyZoom]);
+
+  const zoomOut = useCallback(() => {
+    const container = containerRef.current;
+    const cx = container ? container.clientWidth / 2 : 0;
+    const cy = container ? container.clientHeight / 2 : 0;
+    applyZoom(zoomRef.current - ZOOM_STEP, cx, cy);
+  }, [applyZoom]);
+
+  const resetZoom = useCallback(() => {
+    const container = containerRef.current;
+    const cx = container ? container.clientWidth / 2 : 0;
+    const cy = container ? container.clientHeight / 2 : 0;
+    applyZoom(1, cx, cy);
+  }, [applyZoom]);
+
   // Mouse handlers
   useEffect(() => {
     const container = containerRef.current;
@@ -178,7 +232,7 @@ export function useCanvasPan({
     const handleMouseDown = (e: MouseEvent) => {
       // Don't start drag on buttons/links (folder icons, illustration reel)
       const target = e.target as HTMLElement;
-      if (target.closest("button") || target.closest("a")) {
+      if (target.closest("button") || target.closest("a") || target.closest("[data-sticker]")) {
         return;
       }
 
@@ -247,15 +301,22 @@ export function useCanvasPan({
       }
     };
 
-    // Wheel / trackpad
+    // Wheel / trackpad — with zoom on ctrl/meta
     const handleWheel = (e: WheelEvent) => {
       e.preventDefault();
       stopMomentum();
 
-      applyOffset(
-        offsetXRef.current - e.deltaX,
-        offsetYRef.current - e.deltaY
-      );
+      if (e.ctrlKey || e.metaKey) {
+        // Zoom toward cursor position
+        const delta = -e.deltaY * 0.005;
+        applyZoom(zoomRef.current + delta, e.clientX, e.clientY);
+      } else {
+        // Pan
+        applyOffset(
+          offsetXRef.current - e.deltaX,
+          offsetYRef.current - e.deltaY
+        );
+      }
     };
 
     container.addEventListener("mousedown", handleMouseDown);
@@ -268,13 +329,24 @@ export function useCanvasPan({
     let touchStartY = 0;
     let touchStartOffsetX = 0;
     let touchStartOffsetY = 0;
+    let lastPinchDist = 0;
 
     const handleTouchStart = (e: TouchEvent) => {
-      if (e.touches.length !== 1) return;
       const target = e.target as HTMLElement;
-      if (target.closest("button") || target.closest("a")) return;
+      if (target.closest("button") || target.closest("a") || target.closest("[data-sticker]")) return;
 
       stopMomentum();
+
+      if (e.touches.length === 2) {
+        // Pinch zoom start
+        const dx = e.touches[0].clientX - e.touches[1].clientX;
+        const dy = e.touches[0].clientY - e.touches[1].clientY;
+        lastPinchDist = Math.sqrt(dx * dx + dy * dy);
+        return;
+      }
+
+      if (e.touches.length !== 1) return;
+
       const touch = e.touches[0];
       touchStartX = touch.clientX;
       touchStartY = touch.clientY;
@@ -285,14 +357,30 @@ export function useCanvasPan({
     };
 
     const handleTouchMove = (e: TouchEvent) => {
+      if (e.touches.length === 2) {
+        // Pinch zoom
+        e.preventDefault();
+        const dx = e.touches[0].clientX - e.touches[1].clientX;
+        const dy = e.touches[0].clientY - e.touches[1].clientY;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (lastPinchDist > 0) {
+          const centerX = (e.touches[0].clientX + e.touches[1].clientX) / 2;
+          const centerY = (e.touches[0].clientY + e.touches[1].clientY) / 2;
+          const scale = dist / lastPinchDist;
+          applyZoom(zoomRef.current * scale, centerX, centerY);
+        }
+        lastPinchDist = dist;
+        return;
+      }
+
       if (!isDraggingRef.current || e.touches.length !== 1) return;
       e.preventDefault();
 
       const touch = e.touches[0];
-      const dx = touch.clientX - touchStartX;
-      const dy = touch.clientY - touchStartY;
+      const tdx = touch.clientX - touchStartX;
+      const tdy = touch.clientY - touchStartY;
 
-      applyOffset(touchStartOffsetX + dx, touchStartOffsetY + dy);
+      applyOffset(touchStartOffsetX + tdx, touchStartOffsetY + tdy);
 
       const now = Date.now();
       mouseHistoryRef.current.push({ x: touch.clientX, y: touch.clientY, t: now });
@@ -302,6 +390,7 @@ export function useCanvasPan({
     };
 
     const handleTouchEnd = () => {
+      lastPinchDist = 0;
       if (!isDraggingRef.current) return;
       isDraggingRef.current = false;
 
@@ -340,7 +429,7 @@ export function useCanvasPan({
       if (syncRafRef.current) cancelAnimationFrame(syncRafRef.current);
       stopMomentum();
     };
-  }, [disabled, applyOffset, startMomentum, stopMomentum]);
+  }, [disabled, applyOffset, applyZoom, startMomentum, stopMomentum]);
 
   // Set initial offset on mount — center the canvas content in the viewport
   useEffect(() => {
@@ -355,8 +444,12 @@ export function useCanvasPan({
   return {
     offsetX: offset.x,
     offsetY: offset.y,
+    zoom,
     isDragging,
     containerRef,
     panTo,
+    zoomIn,
+    zoomOut,
+    resetZoom,
   };
 }

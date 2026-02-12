@@ -13,6 +13,7 @@ interface MinimapProps {
   offsetY: number;
   viewportWidth: number;
   viewportHeight: number;
+  zoom: number;
   onNavigate: (x: number, y: number) => void;
 }
 
@@ -51,16 +52,18 @@ export default function Minimap({
   offsetY,
   viewportWidth,
   viewportHeight,
+  zoom,
   onNavigate,
 }: MinimapProps) {
   const scaleX = MINIMAP_WIDTH / canvasWidth;
   const scaleY = MINIMAP_HEIGHT / canvasHeight;
 
   // Viewport indicator position (convert pan offset to minimap coordinates)
-  const vpLeft = (-offsetX) * scaleX;
-  const vpTop = (-offsetY) * scaleY;
-  const vpWidth = viewportWidth * scaleX;
-  const vpHeight = viewportHeight * scaleY;
+  // Account for zoom: at higher zoom, the viewport covers less of the canvas
+  const vpLeft = (-offsetX / zoom) * scaleX;
+  const vpTop = (-offsetY / zoom) * scaleY;
+  const vpWidth = (viewportWidth / zoom) * scaleX;
+  const vpHeight = (viewportHeight / zoom) * scaleY;
 
   const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
     const rect = e.currentTarget.getBoundingClientRect();
@@ -72,8 +75,8 @@ export default function Minimap({
     const canvasY = clickY / scaleY;
 
     onNavigate(
-      -(canvasX - viewportWidth / 2),
-      -(canvasY - viewportHeight / 2)
+      -(canvasX * zoom - viewportWidth / 2),
+      -(canvasY * zoom - viewportHeight / 2)
     );
   };
 
