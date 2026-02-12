@@ -170,14 +170,11 @@ export default function CanvasViewport() {
               <CanvasSticker
                 key={sticker.id}
                 id={sticker.id}
-                emoji={sticker.emoji}
                 label={sticker.label}
                 x={pos.x}
                 y={pos.y}
                 rotation={sticker.rotation}
-                shape={sticker.shape}
                 size={sticker.size}
-                bg={sticker.bg}
                 zoom={zoom}
                 onPositionChange={handleStickerMove}
               />

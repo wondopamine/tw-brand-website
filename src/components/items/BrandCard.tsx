@@ -34,25 +34,6 @@ export default function BrandCard({
           {subtitle}
         </p>
       )}
-      <div className="mt-4 flex items-center gap-1">
-        <span
-          className="text-xs font-medium"
-          style={{ color: "var(--accent)" }}
-        >
-          View details
-        </span>
-        <svg
-          width="14"
-          height="14"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          style={{ color: "var(--accent)" }}
-        >
-          <polyline points="9 18 15 12 9 6" />
-        </svg>
-      </div>
     </button>
   );
 }

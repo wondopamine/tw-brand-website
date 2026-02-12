@@ -15,7 +15,7 @@ export const canvasItems: CanvasItem[] = [
     position: { x: CX - 280, y: CY - 80 },
     size: { width: 560, height: 160 },
     title: "Teacher Workspace",
-    subtitle: "Brand Guidelines",
+    subtitle: "Brand Guideline",
     zIndex: 10,
     mobileOrder: 0,
   },

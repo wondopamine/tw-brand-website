@@ -11,34 +11,23 @@ export default function HeroText({ title, subtitle }: HeroTextProps) {
   return (
     <div className="flex flex-col items-center justify-center h-full text-center select-none">
       <motion.h1
-        className="text-3xl md:text-4xl lg:text-[60px] font-bold tracking-tight leading-none"
+        className="text-3xl md:text-4xl lg:text-[60px] font-bold tracking-tight leading-[1.1]"
         style={{
           fontFamily: "var(--font-display, 'Plus Jakarta Sans', sans-serif)",
-          color: "var(--text-primary)",
+          color: "var(--accent)",
         }}
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, ease: "easeOut" }}
       >
         {title}
-      </motion.h1>
-      {subtitle && (
-        <motion.div
-          className="mt-4"
-          initial={{ opacity: 0, y: 20, scale: 0.95 }}
-          animate={{ opacity: 1, y: 0, scale: 1 }}
-          transition={{ duration: 0.6, delay: 0.3, ease: "easeOut" }}
-        >
-          <span
-            className="hero-badge-sm"
-            style={{
-              fontFamily: "var(--font-display, 'Plus Jakarta Sans', sans-serif)",
-            }}
-          >
+        {subtitle && (
+          <>
+            <br />
             {subtitle}
-          </span>
-        </motion.div>
-      )}
+          </>
+        )}
+      </motion.h1>
     </div>
   );
 }
