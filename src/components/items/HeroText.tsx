@@ -25,8 +25,8 @@ const ALIGNS = [
 
 export default function HeroText({ title, subtitle }: HeroTextProps) {
   const [weight, setWeight] = useState(700);
-  const [fontSize, setFontSize] = useState(147);
-  const [spacing, setSpacing] = useState(10);
+  const [fontSize, setFontSize] = useState(72);
+  const [spacing, setSpacing] = useState(0);
   const [align, setAlign] = useState<"left" | "center" | "right">("left");
   const [italic, setItalic] = useState(false);
 
@@ -40,9 +40,9 @@ export default function HeroText({ title, subtitle }: HeroTextProps) {
       style={{ fontFamily: "var(--font-display, 'Plus Jakarta Sans', sans-serif)" }}
       data-sticker
     >
-      {/* ===== Typography Controls Bar ===== */}
+      {/* ===== Typography Controls Bar — z-50 keeps it above surrounding cards ===== */}
       <motion.div
-        className="flex items-center gap-3 mb-5 flex-wrap"
+        className="relative z-50 flex items-center gap-3 mb-5 flex-wrap"
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.4 }}
@@ -212,8 +212,8 @@ export default function HeroText({ title, subtitle }: HeroTextProps) {
         <button
           onClick={() => {
             setWeight(700);
-            setFontSize(147);
-            setSpacing(10);
+            setFontSize(72);
+            setSpacing(0);
             setAlign("left");
             setItalic(false);
           }}

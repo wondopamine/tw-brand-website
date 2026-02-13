@@ -232,7 +232,7 @@ export function useCanvasPan({
     const handleMouseDown = (e: MouseEvent) => {
       // Don't start drag on buttons/links (folder icons, illustration reel)
       const target = e.target as HTMLElement;
-      if (target.closest("button") || target.closest("a") || target.closest("[data-sticker]")) {
+      if (target.closest("button") || target.closest("a") || target.closest("input") || target.closest("select") || target.closest("[data-sticker]")) {
         return;
       }
 
@@ -333,7 +333,7 @@ export function useCanvasPan({
 
     const handleTouchStart = (e: TouchEvent) => {
       const target = e.target as HTMLElement;
-      if (target.closest("button") || target.closest("a") || target.closest("[data-sticker]")) return;
+      if (target.closest("button") || target.closest("a") || target.closest("input") || target.closest("select") || target.closest("[data-sticker]")) return;
 
       stopMomentum();
 
