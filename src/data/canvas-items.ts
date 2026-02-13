@@ -16,7 +16,7 @@ export const canvasItems: CanvasItem[] = [
     size: { width: 920, height: 400 },
     title: "Teacher Workspace",
     subtitle: "Brand Guidelines",
-    zIndex: 10,
+    zIndex: 0,
     mobileOrder: 0,
   },
 

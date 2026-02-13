@@ -243,9 +243,9 @@ export default function HeroText({ title, subtitle }: HeroTextProps) {
         </button>
       </motion.div>
 
-      {/* ===== Text Preview ===== */}
+      {/* ===== Text Preview — overflow visible so text extends under surrounding cards ===== */}
       <motion.div
-        className="flex-1 flex items-center overflow-hidden"
+        className="flex-1 flex items-center"
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, ease: "easeOut" }}

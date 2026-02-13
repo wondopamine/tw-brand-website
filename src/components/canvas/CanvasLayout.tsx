@@ -91,6 +91,9 @@ export default function CanvasLayout({
             height: item.size.height,
             zIndex: item.zIndex ?? 1,
             rotate: item.rotation ?? 0,
+            // Hero text overflows its box so large font sizes
+            // bleed under surrounding cards instead of being clipped
+            overflow: item.type === "hero-text" ? "visible" : undefined,
           }}
           initial={{ opacity: 0, y: 30, scale: 0.95 }}
           animate={
