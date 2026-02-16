@@ -149,19 +149,29 @@ body {
 
 /* ===== GLOW CARD (Stripe-style subtle blob-tracking border glow) ===== */
 .glow-card-outer {
+  --glow-x: 50%;
+  --glow-y: 50%;
   position: relative;
   overflow: hidden;
   background: var(--card-border);
   border-radius: 16px;
   padding: 1px;
   cursor: pointer;
-  transition: padding 0.2s ease;
+  transition: padding 0.3s ease;
 }
 
-/* Thicker border on hover — padding grows to reveal more of the
-   outer background (which includes the glow blob) */
+/* Gradient border on hover — radial gradient radiates from cursor position.
+   #0266FF (TW blue) is strongest near the cursor and fades naturally outward. */
 .glow-card-hovered {
   padding: 2px;
+  background:
+    radial-gradient(
+      400px circle at var(--glow-x) var(--glow-y),
+      #0266FF 0%,
+      rgba(2, 102, 255, 0.4) 25%,
+      rgba(2, 102, 255, 0.1) 50%,
+      var(--card-border) 80%
+    );
 }
 
 /* The blob — a blurred circle that tracks the cursor behind the card surface.
@@ -175,7 +185,7 @@ body {
   width: 300px;
   height: 300px;
   border-radius: 50%;
-  background: rgba(0, 100, 255, 0.35);
+  background: rgba(2, 102, 255, 0.35);
   filter: blur(60px);
   opacity: 0;
   transition: opacity 0.4s ease;
@@ -193,8 +203,6 @@ body {
   background: var(--card-bg);
   border-radius: 15px;
   height: 100%;
-  transform-style: preserve-3d;
-  will-change: transform;
 }
 
 /* ===== HERO BADGE / TAG ===== */

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback, useRef, useEffect } from "react";
+import { useState, useCallback } from "react";
 import { motion } from "motion/react";
 
 interface HeroTextProps {
@@ -23,59 +23,142 @@ const ALIGNS = [
   { label: "Right", value: "right", icon: "align-right" },
 ] as const;
 
-/**
- * Generates horizontal dotted guide lines based on font metrics.
- * Mimics the Vercel Geist font playground grid:
- * - Cap height line
- * - x-height line
- * - Baseline
- * - Descender line
- * These are approximate ratios for Plus Jakarta Sans.
- */
-function TypoGrid({ fontSize, lineCount }: { fontSize: number; lineCount: number }) {
-  const lineHeight = fontSize * 0.95; // matches leading-[0.95]
+/* ------------------------------------------------------------------ */
+/*  Cross marker — small + symbol used at corners of the playground   */
+/* ------------------------------------------------------------------ */
+function CrossMarker({ x, y }: { x: number; y: number }) {
+  const arm = 6;
+  return (
+    <g>
+      <line
+        x1={x - arm} y1={y} x2={x + arm} y2={y}
+        stroke="rgba(0,0,0,0.25)" strokeWidth="1"
+      />
+      <line
+        x1={x} y1={y - arm} x2={x} y2={y + arm}
+        stroke="rgba(0,0,0,0.25)" strokeWidth="1"
+      />
+    </g>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/*  TypoGrid — responsive dotted guide lines + background grid        */
+/*  Adapts entirely to the current fontSize. Mimics Vercel Geist:     */
+/*  • Dotted horizontal lines at cap height, x-height, baseline,      */
+/*    descender for each text line                                     */
+/*  • A subtle background grid whose cell size is derived from the    */
+/*    font size so it scales naturally                                  */
+/*  • Cross (+) markers at top-left and bottom-right corners           */
+/* ------------------------------------------------------------------ */
+function TypoGrid({
+  fontSize,
+  lineCount,
+  width,
+  height,
+}: {
+  fontSize: number;
+  lineCount: number;
+  width: number;
+  height: number;
+}) {
+  const lineHeight = fontSize * 1.15;
   const capHeight = fontSize * 0.72;
   const xHeight = fontSize * 0.50;
   const descender = fontSize * 0.22;
 
-  const lines: { y: number; dashed: boolean; strong: boolean }[] = [];
+  // Background grid cell size derived from font — keeps it proportional
+  const gridCell = Math.max(12, Math.round(fontSize / 4));
 
+  // Build horizontal guide lines for each text line
+  const guides: { y: number; label: string; strong: boolean }[] = [];
   for (let i = 0; i < lineCount; i++) {
     const baseY = i * lineHeight;
-    // Baseline (bottom of capital letters)
-    lines.push({ y: baseY + capHeight, dashed: true, strong: true });
-    // Cap height (top of capital letters)
-    lines.push({ y: baseY, dashed: true, strong: false });
-    // x-height
-    lines.push({ y: baseY + (capHeight - xHeight), dashed: true, strong: false });
-    // Descender
-    lines.push({ y: baseY + capHeight + descender, dashed: true, strong: false });
+    guides.push({ y: baseY, label: "cap", strong: false });
+    guides.push({ y: baseY + (capHeight - xHeight), label: "x", strong: false });
+    guides.push({ y: baseY + capHeight, label: "base", strong: true });
+    guides.push({ y: baseY + capHeight + descender, label: "desc", strong: false });
+  }
+
+  // Total text block height
+  const textBlockH = lineCount * lineHeight;
+
+  // Build background grid lines (vertical + horizontal)
+  const bgLines: React.ReactElement[] = [];
+
+  // Vertical lines
+  for (let x = 0; x <= width; x += gridCell) {
+    bgLines.push(
+      <line
+        key={`v-${x}`}
+        x1={x} y1={0} x2={x} y2={height}
+        stroke="rgba(0,0,0,0.04)"
+        strokeWidth="0.5"
+      />
+    );
+  }
+  // Horizontal lines
+  for (let y = 0; y <= height; y += gridCell) {
+    bgLines.push(
+      <line
+        key={`h-${y}`}
+        x1={0} y1={y} x2={width} y2={y}
+        stroke="rgba(0,0,0,0.04)"
+        strokeWidth="0.5"
+      />
+    );
+  }
+
+  // Stronger lines every 4th cell
+  const majorCell = gridCell * 4;
+  for (let x = 0; x <= width; x += majorCell) {
+    bgLines.push(
+      <line
+        key={`vm-${x}`}
+        x1={x} y1={0} x2={x} y2={height}
+        stroke="rgba(0,0,0,0.07)"
+        strokeWidth="0.5"
+      />
+    );
+  }
+  for (let y = 0; y <= height; y += majorCell) {
+    bgLines.push(
+      <line
+        key={`hm-${y}`}
+        x1={0} y1={y} x2={width} y2={y}
+        stroke="rgba(0,0,0,0.07)"
+        strokeWidth="0.5"
+      />
+    );
   }
 
   return (
     <svg
       className="absolute inset-0 w-full h-full pointer-events-none"
       style={{ overflow: "visible" }}
+      viewBox={`0 0 ${width} ${height}`}
+      preserveAspectRatio="none"
     >
-      {lines.map((line, i) => (
+      {/* Background grid — responsive to font size */}
+      {bgLines}
+
+      {/* Typographic guide lines */}
+      {guides.map((g, i) => (
         <line
-          key={i}
-          x1="0"
-          y1={line.y}
-          x2="100%"
-          y2={line.y}
-          stroke={line.strong ? "rgba(0, 0, 0, 0.12)" : "rgba(0, 0, 0, 0.06)"}
-          strokeWidth="1"
-          strokeDasharray={line.strong ? "6 4" : "2 6"}
+          key={`guide-${i}`}
+          x1={0}
+          y1={g.y}
+          x2={width}
+          y2={g.y}
+          stroke={g.strong ? "rgba(0, 0, 0, 0.15)" : "rgba(0, 0, 0, 0.08)"}
+          strokeWidth={g.strong ? "1" : "0.75"}
+          strokeDasharray={g.strong ? "6 4" : "2 6"}
         />
       ))}
-      {/* Vertical edge markers — small crosshairs at left/right */}
-      {lines.filter((_, i) => i % 4 === 0).map((line, i) => (
-        <g key={`cross-${i}`}>
-          <line x1="0" y1={line.y - 4} x2="0" y2={line.y + 4} stroke="rgba(0,0,0,0.1)" strokeWidth="1" />
-          <line x1="-4" y1={line.y} x2="4" y2={line.y} stroke="rgba(0,0,0,0.1)" strokeWidth="1" />
-        </g>
-      ))}
+
+      {/* Cross (+) markers at top-left and bottom-right corners */}
+      <CrossMarker x={0} y={0} />
+      <CrossMarker x={width} y={textBlockH + descender} />
     </svg>
   );
 }
@@ -100,15 +183,22 @@ export default function HeroText({ title, subtitle }: HeroTextProps) {
 
   return (
     <div
-      className="flex flex-col h-full select-none"
-      style={{ fontFamily: "var(--font-display, 'Plus Jakarta Sans', sans-serif)" }}
+      className="flex flex-col h-full"
+      style={{
+        fontFamily: "var(--font-display, 'Plus Jakarta Sans', sans-serif)",
+        /* Opaque background hides the static canvas grid behind this area
+           so only the dynamic TypoGrid is visible */
+        backgroundColor: "var(--canvas-bg)",
+        position: "relative",
+        zIndex: 1,
+      }}
       data-sticker
       onMouseDown={stopProp}
       onTouchStart={stopProp}
     >
       {/* ===== Typography Controls Bar ===== */}
       <motion.div
-        className="relative flex items-center gap-3 mb-5 flex-wrap"
+        className="relative flex items-center gap-3 px-6 pt-4 pb-3 flex-wrap"
         style={{ zIndex: 50, pointerEvents: "auto" }}
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
@@ -285,21 +375,28 @@ export default function HeroText({ title, subtitle }: HeroTextProps) {
 
       {/* ===== Text Preview with dynamic typographic grid ===== */}
       <motion.div
-        className="relative flex-1 flex items-center"
+        className="relative flex-1 px-6 pb-4"
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, ease: "easeOut" }}
+        style={{ overflow: "visible" }}
       >
-        {/* Dynamic dotted grid — responsive to font size */}
-        <TypoGrid fontSize={fontSize} lineCount={lineCount + 1} />
+        {/* Dynamic grid + typographic guides — fully responsive to font size */}
+        <TypoGrid
+          fontSize={fontSize}
+          lineCount={lineCount + 1}
+          width={920 - 48}  /* container width minus px-6 padding */
+          height={400 - 80} /* container height minus controls + padding */
+        />
 
         <div
-          className="relative w-full leading-[0.95]"
+          className="relative w-full"
           style={{
             fontSize: `${fontSize}px`,
             fontWeight: weight,
             fontStyle: italic ? "italic" : "normal",
             letterSpacing: `${spacing * 0.01}em`,
+            lineHeight: 1.15,
             textAlign: align,
             color: "var(--accent)",
             fontFamily: "var(--font-display, 'Plus Jakarta Sans', sans-serif)",

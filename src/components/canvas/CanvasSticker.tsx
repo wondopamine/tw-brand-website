@@ -216,6 +216,7 @@ export default function CanvasSticker({
         zIndex: lifted ? 100 : 20,
         cursor: lifted ? "grabbing" : "grab",
         perspective: 600,
+        pointerEvents: "auto",
       }}
       initial={{ opacity: 0, scale: 0, rotate: rotation }}
       animate={{

@@ -153,7 +153,9 @@ export default function CanvasViewport() {
           onCardClick={handleCardClick}
         />
 
-        {/* Draggable stickers — rendered inside canvas-inner so they move with the canvas */}
+        {/* Draggable stickers — rendered inside canvas-inner so they move with the canvas.
+             Container is pointer-events:none so it doesn't block clicks on items below (e.g. hero controls).
+             Individual stickers handle their own pointer events. */}
         <div
           className="absolute"
           style={{
@@ -161,7 +163,7 @@ export default function CanvasViewport() {
             top: GRID_PADDING,
             width: CANVAS_WIDTH,
             height: CANVAS_HEIGHT,
-            pointerEvents: isDragging ? "none" : "auto",
+            pointerEvents: "none",
           }}
         >
           {defaultStickers.map((sticker) => {
