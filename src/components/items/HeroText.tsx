@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useRef, useEffect } from "react";
 import { motion } from "motion/react";
 
 interface HeroTextProps {
@@ -23,6 +23,63 @@ const ALIGNS = [
   { label: "Right", value: "right", icon: "align-right" },
 ] as const;
 
+/**
+ * Generates horizontal dotted guide lines based on font metrics.
+ * Mimics the Vercel Geist font playground grid:
+ * - Cap height line
+ * - x-height line
+ * - Baseline
+ * - Descender line
+ * These are approximate ratios for Plus Jakarta Sans.
+ */
+function TypoGrid({ fontSize, lineCount }: { fontSize: number; lineCount: number }) {
+  const lineHeight = fontSize * 0.95; // matches leading-[0.95]
+  const capHeight = fontSize * 0.72;
+  const xHeight = fontSize * 0.50;
+  const descender = fontSize * 0.22;
+
+  const lines: { y: number; dashed: boolean; strong: boolean }[] = [];
+
+  for (let i = 0; i < lineCount; i++) {
+    const baseY = i * lineHeight;
+    // Baseline (bottom of capital letters)
+    lines.push({ y: baseY + capHeight, dashed: true, strong: true });
+    // Cap height (top of capital letters)
+    lines.push({ y: baseY, dashed: true, strong: false });
+    // x-height
+    lines.push({ y: baseY + (capHeight - xHeight), dashed: true, strong: false });
+    // Descender
+    lines.push({ y: baseY + capHeight + descender, dashed: true, strong: false });
+  }
+
+  return (
+    <svg
+      className="absolute inset-0 w-full h-full pointer-events-none"
+      style={{ overflow: "visible" }}
+    >
+      {lines.map((line, i) => (
+        <line
+          key={i}
+          x1="0"
+          y1={line.y}
+          x2="100%"
+          y2={line.y}
+          stroke={line.strong ? "rgba(0, 0, 0, 0.12)" : "rgba(0, 0, 0, 0.06)"}
+          strokeWidth="1"
+          strokeDasharray={line.strong ? "6 4" : "2 6"}
+        />
+      ))}
+      {/* Vertical edge markers — small crosshairs at left/right */}
+      {lines.filter((_, i) => i % 4 === 0).map((line, i) => (
+        <g key={`cross-${i}`}>
+          <line x1="0" y1={line.y - 4} x2="0" y2={line.y + 4} stroke="rgba(0,0,0,0.1)" strokeWidth="1" />
+          <line x1="-4" y1={line.y} x2="4" y2={line.y} stroke="rgba(0,0,0,0.1)" strokeWidth="1" />
+        </g>
+      ))}
+    </svg>
+  );
+}
+
 export default function HeroText({ title, subtitle }: HeroTextProps) {
   const [weight, setWeight] = useState(700);
   const [fontSize, setFontSize] = useState(72);
@@ -34,20 +91,30 @@ export default function HeroText({ title, subtitle }: HeroTextProps) {
     setWeight(Number(e.target.value));
   }, []);
 
+  // Prevent any event from propagating to the canvas pan handler
+  const stopProp = useCallback((e: React.MouseEvent | React.TouchEvent) => {
+    e.stopPropagation();
+  }, []);
+
+  const lineCount = subtitle ? 2 : 1;
+
   return (
     <div
       className="flex flex-col h-full select-none"
       style={{ fontFamily: "var(--font-display, 'Plus Jakarta Sans', sans-serif)" }}
       data-sticker
+      onMouseDown={stopProp}
+      onTouchStart={stopProp}
     >
-      {/* ===== Typography Controls Bar — z-50 keeps it above surrounding cards ===== */}
+      {/* ===== Typography Controls Bar ===== */}
       <motion.div
-        className="relative z-50 flex items-center gap-3 mb-5 flex-wrap"
+        className="relative flex items-center gap-3 mb-5 flex-wrap"
+        style={{ zIndex: 50, pointerEvents: "auto" }}
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.4 }}
       >
-        {/* Weight selector — styled dropdown */}
+        {/* Weight selector */}
         <div
           className="relative flex items-center rounded-md px-3 py-1.5"
           style={{
@@ -59,7 +126,7 @@ export default function HeroText({ title, subtitle }: HeroTextProps) {
             value={weight}
             onChange={handleWeightChange}
             className="appearance-none bg-transparent text-xs font-medium pr-4 cursor-pointer outline-none"
-            style={{ color: "var(--text-primary)" }}
+            style={{ color: "var(--text-primary)", pointerEvents: "auto" }}
           >
             {WEIGHTS.map((w) => (
               <option key={w.value} value={w.value}>
@@ -82,9 +149,7 @@ export default function HeroText({ title, subtitle }: HeroTextProps) {
         {/* Italic toggles */}
         <div
           className="flex items-center rounded-md overflow-hidden"
-          style={{
-            border: "1px solid var(--card-border)",
-          }}
+          style={{ border: "1px solid var(--card-border)" }}
         >
           <button
             onClick={() => setItalic(false)}
@@ -113,9 +178,7 @@ export default function HeroText({ title, subtitle }: HeroTextProps) {
         {/* Alignment buttons */}
         <div
           className="flex items-center rounded-md overflow-hidden"
-          style={{
-            border: "1px solid var(--card-border)",
-          }}
+          style={{ border: "1px solid var(--card-border)" }}
         >
           {ALIGNS.map((a) => (
             <button
@@ -160,41 +223,29 @@ export default function HeroText({ title, subtitle }: HeroTextProps) {
 
         {/* Size slider */}
         <div className="flex items-center gap-2">
-          <span
-            className="text-[11px] font-medium uppercase tracking-wider"
-            style={{ color: "var(--text-secondary)" }}
-          >
+          <span className="text-[11px] font-medium uppercase tracking-wider" style={{ color: "var(--text-secondary)" }}>
             Size
           </span>
-          <span
-            className="text-[11px] font-semibold tabular-nums w-6 text-right"
-            style={{ color: "var(--text-primary)" }}
-          >
+          <span className="text-[11px] font-semibold tabular-nums w-7 text-right" style={{ color: "var(--text-primary)" }}>
             {fontSize}
           </span>
           <input
             type="range"
-            min={60}
+            min={40}
             max={220}
             value={fontSize}
             onChange={(e) => setFontSize(Number(e.target.value))}
             className="typo-slider"
-            style={{ width: 80 }}
+            style={{ width: 90 }}
           />
         </div>
 
         {/* Spacing slider */}
         <div className="flex items-center gap-2">
-          <span
-            className="text-[11px] font-medium uppercase tracking-wider"
-            style={{ color: "var(--text-secondary)" }}
-          >
+          <span className="text-[11px] font-medium uppercase tracking-wider" style={{ color: "var(--text-secondary)" }}>
             Spacing
           </span>
-          <span
-            className="text-[11px] font-semibold tabular-nums w-7 text-right"
-            style={{ color: "var(--text-primary)" }}
-          >
+          <span className="text-[11px] font-semibold tabular-nums w-8 text-right" style={{ color: "var(--text-primary)" }}>
             {spacing}%
           </span>
           <input
@@ -204,7 +255,7 @@ export default function HeroText({ title, subtitle }: HeroTextProps) {
             value={spacing}
             onChange={(e) => setSpacing(Number(e.target.value))}
             className="typo-slider"
-            style={{ width: 80 }}
+            style={{ width: 90 }}
           />
         </div>
 
@@ -226,32 +277,24 @@ export default function HeroText({ title, subtitle }: HeroTextProps) {
           title="Reset"
         >
           <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-            <path
-              d="M2 7a5 5 0 1 1 1 3"
-              stroke="currentColor"
-              strokeWidth="1.3"
-              strokeLinecap="round"
-            />
-            <path
-              d="M2 3v4h4"
-              stroke="currentColor"
-              strokeWidth="1.3"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
+            <path d="M2 7a5 5 0 1 1 1 3" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" />
+            <path d="M2 3v4h4" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
         </button>
       </motion.div>
 
-      {/* ===== Text Preview — overflow visible so text extends under surrounding cards ===== */}
+      {/* ===== Text Preview with dynamic typographic grid ===== */}
       <motion.div
-        className="flex-1 flex items-center"
+        className="relative flex-1 flex items-center"
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, ease: "easeOut" }}
       >
+        {/* Dynamic dotted grid — responsive to font size */}
+        <TypoGrid fontSize={fontSize} lineCount={lineCount + 1} />
+
         <div
-          className="w-full leading-[0.95]"
+          className="relative w-full leading-[0.95]"
           style={{
             fontSize: `${fontSize}px`,
             fontWeight: weight,

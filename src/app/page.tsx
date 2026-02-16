@@ -6,13 +6,62 @@ import Link from "next/link";
 export default function Home() {
   return (
     <div className="min-h-screen canvas-grid canvas-grid-lines">
-      {/* Scrollable centered modal — same pattern as CardModal */}
+      {/* Top-left navigation hint */}
+      <div className="fixed top-4 left-6 z-10">
+        <span
+          className="text-xs"
+          style={{
+            color: "var(--text-secondary)",
+            fontFamily: "var(--font-body, 'Inter', sans-serif)",
+          }}
+        >
+          Homepage - Sign in page
+        </span>
+      </div>
+
       <motion.div
-        className="min-h-full flex items-start justify-center py-12 sm:py-16 px-4 sm:px-6"
+        className="min-h-full flex flex-col items-center py-12 sm:py-16 px-4 sm:px-6"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.3 }}
       >
+        {/* ===== Title + Badge — outside the card ===== */}
+        <motion.div
+          className="text-center mb-10"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{
+            type: "spring",
+            damping: 30,
+            stiffness: 400,
+            mass: 0.8,
+          }}
+        >
+          <h1
+            className="text-3xl md:text-4xl font-semibold tracking-tight"
+            style={{
+              fontFamily:
+                "var(--font-display, 'Plus Jakarta Sans', sans-serif)",
+              color: "var(--text-primary)",
+            }}
+          >
+            Teacher Workspace
+          </h1>
+
+          <div className="flex justify-center mt-4">
+            <span
+              className="inline-block px-4 py-1.5 text-sm font-medium rounded-full"
+              style={{
+                color: "var(--accent)",
+                border: "1px solid rgba(0, 100, 255, 0.2)",
+              }}
+            >
+              Brand Guidelines
+            </span>
+          </div>
+        </motion.div>
+
+        {/* ===== Manifesto Card — starts from video ===== */}
         <motion.div
           className="relative w-full max-w-[680px] flex flex-col rounded-2xl overflow-hidden"
           style={{
@@ -28,37 +77,13 @@ export default function Home() {
             damping: 30,
             stiffness: 400,
             mass: 0.8,
+            delay: 0.05,
           }}
         >
           {/* Content */}
           <div className="px-8 md:px-16 py-14 md:py-20">
-            {/* Title */}
-            <h1
-              className="text-3xl md:text-4xl font-semibold text-center tracking-tight"
-              style={{
-                fontFamily:
-                  "var(--font-display, 'Plus Jakarta Sans', sans-serif)",
-                color: "var(--text-primary)",
-              }}
-            >
-              Teacher Workspace
-            </h1>
-
-            {/* Badge */}
-            <div className="flex justify-center mt-4">
-              <span
-                className="inline-block px-4 py-1.5 text-sm font-medium rounded-full"
-                style={{
-                  color: "var(--accent)",
-                  border: "1px solid rgba(0, 100, 255, 0.2)",
-                }}
-              >
-                Brand Guidelines
-              </span>
-            </div>
-
             {/* Video illustration */}
-            <div className="flex justify-center mt-10 mb-10">
+            <div className="flex justify-center mb-10">
               <div className="w-[240px] h-[240px] md:w-[280px] md:h-[280px] overflow-hidden rounded-lg">
                 <video
                   src="/images/manifesto-illustration.mp4"
@@ -101,7 +126,7 @@ export default function Home() {
               Human-first at the surface
             </h2>
 
-            {/* Body text — same style as CardModal paragraph sections */}
+            {/* Body text */}
             <div className="mt-8 space-y-5">
               <p
                 className="text-[15px] leading-relaxed"
