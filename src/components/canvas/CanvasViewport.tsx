@@ -166,7 +166,7 @@ export default function CanvasViewport() {
             pointerEvents: "none",
           }}
         >
-          {defaultStickers.map((sticker) => {
+          {defaultStickers.map((sticker, i) => {
             const pos = stickerPositions[sticker.id] ?? sticker.defaultPosition;
             return (
               <CanvasSticker
@@ -178,6 +178,7 @@ export default function CanvasViewport() {
                 rotation={sticker.rotation}
                 size={sticker.size}
                 zoom={zoom}
+                entranceDelay={2.2 + i * 0.12}
                 onPositionChange={handleStickerMove}
               />
             );

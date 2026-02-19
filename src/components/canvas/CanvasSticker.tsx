@@ -18,6 +18,7 @@ interface CanvasStickerProps {
   rotation?: number;
   size: number;
   zoom: number;
+  entranceDelay?: number;
   onPositionChange: (id: string, x: number, y: number) => void;
 }
 
@@ -42,6 +43,7 @@ export default function CanvasSticker({
   rotation = 0,
   size,
   zoom,
+  entranceDelay = 0.6,
   onPositionChange,
 }: CanvasStickerProps) {
   const stickerRef = useRef<HTMLDivElement>(null);
@@ -225,7 +227,7 @@ export default function CanvasSticker({
         rotate: rotation,
       }}
       transition={{
-        opacity: { duration: 0.4, delay: 0.6 },
+        opacity: { duration: 0.4, delay: entranceDelay },
         scale: { type: "spring", stiffness: 400, damping: 20 },
       }}
       onMouseDown={handleMouseDown}
