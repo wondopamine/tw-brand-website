@@ -282,11 +282,15 @@ export default function HeroText({ title, subtitle }: HeroTextProps) {
 
   const guideRow = fontSize;
 
-  // Build the preview text — repeat lines to fill lineCount
+  // Build the preview text — split title + subtitle into individual lines
+  // then show exactly lineCount lines from the pool
+  const allSourceLines: string[] = [title];
+  if (subtitle) {
+    allSourceLines.push(...subtitle.split("\n"));
+  }
   const previewLines: string[] = [];
-  const sourceLines = subtitle ? [title, subtitle] : [title];
   for (let i = 0; i < lineCount; i++) {
-    previewLines.push(sourceLines[i % sourceLines.length]);
+    previewLines.push(allSourceLines[i % allSourceLines.length]);
   }
 
   return (

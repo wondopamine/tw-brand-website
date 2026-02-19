@@ -14,21 +14,21 @@ export const canvasItems: CanvasItem[] = [
     type: "hero-text",
     position: { x: CX - 460, y: CY - 200 },
     size: { width: 920, height: 400 },
-    title: "Teacher Workspace",
-    subtitle: "Brand Guidelines",
+    title: "Teacher",
+    subtitle: "Workspace\nBrand\nGuidelines",
     zIndex: 0,
     mobileOrder: 0,
   },
 
-  // ===== CARDS — surrounding the hero in a ring =====
+  // ===== CARDS — surrounding the hero in a well-spaced ring =====
 
-  // Top row (3 cards above hero)
+  // Top row (3 cards above hero) — spread wider to avoid overlap
   // 1. Why Aesthetic Matters? — top-left
   {
     id: "card-aesthetics",
     type: "brand-card",
-    position: { x: CX - 800, y: CY - 470 },
-    size: { width: 380, height: 240 },
+    position: { x: CX - 820, y: CY - 500 },
+    size: { width: 360, height: 220 },
     title: "Why Aesthetic Matters?",
     subtitle: "Good design builds trust and signals reliability.",
     modalId: "aesthetics",
@@ -40,8 +40,8 @@ export const canvasItems: CanvasItem[] = [
   {
     id: "card-about",
     type: "brand-card",
-    position: { x: CX - 190, y: CY - 490 },
-    size: { width: 380, height: 240 },
+    position: { x: CX - 180, y: CY - 520 },
+    size: { width: 360, height: 220 },
     title: "About TW Brand Guidelines",
     subtitle: "What this document is — and what it isn't.",
     modalId: "about-guidelines",
@@ -53,8 +53,8 @@ export const canvasItems: CanvasItem[] = [
   {
     id: "card-manifesto",
     type: "brand-card",
-    position: { x: CX + 420, y: CY - 470 },
-    size: { width: 380, height: 260 },
+    position: { x: CX + 440, y: CY - 500 },
+    size: { width: 360, height: 240 },
     title: "Manifesto",
     subtitle: "Pillars of Kind Utility — our brand philosophy.",
     modalId: "manifesto",
@@ -63,13 +63,13 @@ export const canvasItems: CanvasItem[] = [
     mobileOrder: 3,
   },
 
-  // Side cards (flanking hero)
+  // Side cards (flanking hero) — pushed further out
   // 4. Always From Teachers — left of hero
   {
     id: "card-teachers",
     type: "brand-card",
-    position: { x: CX - 920, y: CY - 120 },
-    size: { width: 360, height: 240 },
+    position: { x: CX - 960, y: CY - 100 },
+    size: { width: 340, height: 220 },
     title: "Always From Teachers",
     subtitle: "Designed with teachers, for teachers.",
     modalId: "always-from-teachers",
@@ -77,12 +77,12 @@ export const canvasItems: CanvasItem[] = [
     mobileOrder: 4,
   },
 
-  // 5. Illustrations — right of hero
+  // 5. Illustrations — right of hero (moved further right)
   {
     id: "illustration-reel",
     type: "illustration-reel",
-    position: { x: CX + 560, y: CY - 140 },
-    size: { width: 280, height: 300 },
+    position: { x: CX + 580, y: CY - 120 },
+    size: { width: 260, height: 280 },
     thumbnailSrc: "/images/illustration-thumb.svg",
     thumbnailAlt: "Illustrations",
     illustrations: [
@@ -106,11 +106,11 @@ export const canvasItems: CanvasItem[] = [
     mobileOrder: 5,
   },
 
-  // Teacher photos — clickable image gallery card, shuffles on click
+  // Teacher photos — clickable image gallery card
   {
     id: "image-teachers-classroom",
     type: "image-card",
-    position: { x: CX - 190, y: CY + 220 },
+    position: { x: CX - 190, y: CY + 250 },
     size: { width: 380, height: 220 },
     images: [
       {
@@ -136,13 +136,13 @@ export const canvasItems: CanvasItem[] = [
     mobileOrder: 9,
   },
 
-  // Bottom cards (flanking the photo)
+  // Bottom cards — spread widely to prevent overlap
   // 6. Voice & Tone — bottom-left
   {
     id: "card-voice-tone",
     type: "brand-card",
-    position: { x: CX - 760, y: CY + 240 },
-    size: { width: 380, height: 240 },
+    position: { x: CX - 840, y: CY + 280 },
+    size: { width: 360, height: 220 },
     title: "Voice & Tone",
     subtitle: "How we communicate — warm, clear, human.",
     modalId: "voice-tone",
@@ -150,12 +150,12 @@ export const canvasItems: CanvasItem[] = [
     mobileOrder: 6,
   },
 
-  // 7. Brand Principles — bottom-right
+  // 7. Brand Principles — bottom-right of photo
   {
     id: "card-brand-principles",
     type: "brand-card",
-    position: { x: CX + 380, y: CY + 280 },
-    size: { width: 400, height: 260 },
+    position: { x: CX + 280, y: CY + 300 },
+    size: { width: 380, height: 240 },
     title: "Brand Principles",
     subtitle: "Utility by Default, Kind at Surface, Calm Guidance, Light Weight.",
     modalId: "brand-principles",
@@ -164,12 +164,12 @@ export const canvasItems: CanvasItem[] = [
     mobileOrder: 7,
   },
 
-  // 8. Product Design Principles — far right, between Brand Principles and folders
+  // 8. Product Design Principles — far right, below illustration reel
   {
     id: "card-design-principles",
     type: "brand-card",
-    position: { x: CX + 560, y: CY + 220 },
-    size: { width: 380, height: 260 },
+    position: { x: CX + 760, y: CY + 260 },
+    size: { width: 360, height: 240 },
     title: "Product Design Principles",
     subtitle: "Seven principles that guide every product design decision.",
     modalId: "design-principles",
@@ -182,7 +182,7 @@ export const canvasItems: CanvasItem[] = [
   {
     id: "folder-colours",
     type: "folder",
-    position: { x: CX - 460, y: CY + 620 },
+    position: { x: CX - 460, y: CY + 640 },
     size: { width: 140, height: 160 },
     label: "COLOURS",
     panelId: "colours",
@@ -191,7 +191,7 @@ export const canvasItems: CanvasItem[] = [
   {
     id: "folder-imagery",
     type: "folder",
-    position: { x: CX - 230, y: CY + 620 },
+    position: { x: CX - 230, y: CY + 640 },
     size: { width: 140, height: 160 },
     label: "IMAGERY",
     panelId: "imagery",
@@ -200,7 +200,7 @@ export const canvasItems: CanvasItem[] = [
   {
     id: "folder-illustrations",
     type: "folder",
-    position: { x: CX - 0, y: CY + 620 },
+    position: { x: CX - 0, y: CY + 640 },
     size: { width: 140, height: 160 },
     label: "ILLUSTRATIONS",
     panelId: "illustrations",
@@ -209,7 +209,7 @@ export const canvasItems: CanvasItem[] = [
   {
     id: "folder-typography",
     type: "folder",
-    position: { x: CX + 230, y: CY + 620 },
+    position: { x: CX + 230, y: CY + 640 },
     size: { width: 140, height: 160 },
     label: "TYPOGRAPHY",
     panelId: "typography",
@@ -218,7 +218,7 @@ export const canvasItems: CanvasItem[] = [
   {
     id: "folder-use-cases",
     type: "folder",
-    position: { x: CX + 460, y: CY + 620 },
+    position: { x: CX + 460, y: CY + 640 },
     size: { width: 140, height: 160 },
     label: "USE CASES",
     panelId: "use-cases",

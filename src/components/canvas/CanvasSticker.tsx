@@ -262,7 +262,6 @@ export default function CanvasSticker({
             width: size,
             height: size,
             objectFit: "contain",
-            borderRadius: 8,
             userSelect: "none",
           }}
         />

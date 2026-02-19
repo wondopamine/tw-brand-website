@@ -50,6 +50,13 @@ export default function CanvasViewport() {
     }));
   }, []);
 
+  // Track which canvas item is hovered — drives minimap highlight (Intercom-style)
+  const [hoveredItemId, setHoveredItemId] = useState<string | null>(null);
+
+  const handleItemHover = useCallback((id: string | null) => {
+    setHoveredItemId(id);
+  }, []);
+
   const isOverlayOpen =
     openPanel !== null || illustrationPopup !== null || openModal !== null;
 
@@ -151,6 +158,7 @@ export default function CanvasViewport() {
           onFolderClick={handleFolderClick}
           onIllustrationClick={handleIllustrationClick}
           onCardClick={handleCardClick}
+          onItemHover={handleItemHover}
         />
 
         {/* Draggable stickers — rendered inside canvas-inner so they move with the canvas.
@@ -201,6 +209,7 @@ export default function CanvasViewport() {
         viewportHeight={viewportSize.height}
         zoom={zoom}
         onNavigate={panTo}
+        hoveredItemId={hoveredItemId}
       />
 
       {/* Zoom controls */}

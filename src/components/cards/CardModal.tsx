@@ -9,15 +9,22 @@ interface CardModalProps {
   onClose: () => void;
 }
 
+/* ------------------------------------------------------------------ */
+/*  Linear-inspired Section Renderer                                   */
+/*  Minimal, typography-driven hierarchy. No excessive color usage.     */
+/*  TW blue (--accent / #0064FF) used only for emphasis moments.       */
+/* ------------------------------------------------------------------ */
 function SectionRenderer({ section }: { section: ModalSection }) {
   switch (section.type) {
     case "heading":
       return (
         <h3
-          className="text-xl font-bold mt-4"
+          className="text-[20px] font-semibold tracking-tight"
           style={{
             fontFamily: "var(--font-display, 'Plus Jakarta Sans', sans-serif)",
             color: "var(--text-primary)",
+            lineHeight: 1.33,
+            letterSpacing: "-0.012em",
           }}
         >
           {section.title}
@@ -27,7 +34,7 @@ function SectionRenderer({ section }: { section: ModalSection }) {
     case "paragraph":
       return (
         <p
-          className="text-[15px] leading-relaxed"
+          className="text-[15px] leading-[1.7]"
           style={{ color: "var(--text-secondary)" }}
         >
           {section.content}
@@ -36,16 +43,16 @@ function SectionRenderer({ section }: { section: ModalSection }) {
 
     case "list":
       return (
-        <ul className="space-y-3">
+        <ul className="space-y-2.5 ml-0">
           {section.items?.map((item, i) => (
             <li
               key={i}
-              className="text-[15px] leading-relaxed flex items-start gap-3"
+              className="text-[15px] leading-[1.6] flex items-start gap-3"
               style={{ color: "var(--text-secondary)" }}
             >
               <span
-                className="mt-2 w-1.5 h-1.5 rounded-full shrink-0"
-                style={{ backgroundColor: "var(--accent)" }}
+                className="mt-[9px] w-1 h-1 rounded-full shrink-0"
+                style={{ backgroundColor: "var(--text-secondary)", opacity: 0.4 }}
               />
               {item}
             </li>
@@ -56,19 +63,19 @@ function SectionRenderer({ section }: { section: ModalSection }) {
     case "quote":
       return (
         <blockquote
-          className="border-l-2 pl-5 py-3 my-2"
+          className="border-l-[2px] pl-5 py-2"
           style={{ borderColor: "var(--accent)" }}
         >
           <p
-            className="text-[15px] italic leading-relaxed"
+            className="text-[15px] italic leading-[1.7]"
             style={{ color: "var(--text-primary)" }}
           >
             &ldquo;{section.content}&rdquo;
           </p>
           {section.title && (
             <p
-              className="text-xs mt-3 font-medium uppercase tracking-wider"
-              style={{ color: "var(--text-secondary)" }}
+              className="text-[13px] mt-3 font-medium"
+              style={{ color: "var(--text-secondary)", opacity: 0.7 }}
             >
               &mdash; {section.title}
             </p>
@@ -79,42 +86,43 @@ function SectionRenderer({ section }: { section: ModalSection }) {
     case "divider":
       return (
         <div
-          className="h-px my-4"
-          style={{ backgroundColor: "var(--card-border)" }}
+          className="my-2"
+          style={{
+            height: 1,
+            backgroundColor: "var(--card-border)",
+            opacity: 0.6,
+          }}
         />
       );
 
     case "highlight-box":
       return (
         <div
-          className="rounded-2xl p-6"
+          className="py-5 px-6 rounded-lg"
           style={{
             backgroundColor:
               section.variant === "accent"
-                ? "var(--accent-light)"
-                : "rgba(0,0,0,0.02)",
-            border: `1px solid ${
-              section.variant === "accent"
-                ? "rgba(0, 100, 255, 0.15)"
-                : "var(--card-border)"
-            }`,
+                ? "rgba(0, 100, 255, 0.04)"
+                : "rgba(0, 0, 0, 0.02)",
+            borderLeft: section.variant === "accent"
+              ? "3px solid var(--accent)"
+              : "3px solid var(--card-border)",
           }}
         >
           {section.title && (
             <h4
-              className="text-[15px] font-bold mb-2"
+              className="text-[15px] font-semibold mb-2 tracking-tight"
               style={{
-                color:
-                  section.variant === "accent"
-                    ? "var(--accent)"
-                    : "var(--text-primary)",
+                color: section.variant === "accent"
+                  ? "var(--accent)"
+                  : "var(--text-primary)",
               }}
             >
               {section.title}
             </h4>
           )}
           <p
-            className="text-sm leading-relaxed whitespace-pre-line"
+            className="text-[14px] leading-[1.7] whitespace-pre-line"
             style={{ color: "var(--text-secondary)" }}
           >
             {section.content}
@@ -124,27 +132,12 @@ function SectionRenderer({ section }: { section: ModalSection }) {
 
     case "two-column":
       return (
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-2 gap-8">
           {section.columns?.map((col, i) => (
-            <div
-              key={i}
-              className="rounded-xl p-5"
-              style={{
-                backgroundColor:
-                  i === 0
-                    ? "rgba(52, 211, 153, 0.06)"
-                    : "rgba(248, 113, 113, 0.06)",
-                border: `1px solid ${
-                  i === 0
-                    ? "rgba(52, 211, 153, 0.15)"
-                    : "rgba(248, 113, 113, 0.15)"
-                }`,
-              }}
-            >
+            <div key={i}>
               <span
-                className={`text-xs font-bold uppercase tracking-wider block mb-3 ${
-                  i === 0 ? "text-emerald-500" : "text-red-400"
-                }`}
+                className="text-[13px] font-semibold block mb-3 tracking-tight"
+                style={{ color: "var(--text-primary)" }}
               >
                 {col.title}
               </span>
@@ -152,9 +145,13 @@ function SectionRenderer({ section }: { section: ModalSection }) {
                 {col.items.map((item, j) => (
                   <li
                     key={j}
-                    className="text-sm leading-relaxed"
+                    className="text-[14px] leading-[1.6] flex items-start gap-2.5"
                     style={{ color: "var(--text-secondary)" }}
                   >
+                    <span
+                      className="mt-[8px] w-1 h-1 rounded-full shrink-0"
+                      style={{ backgroundColor: "var(--text-secondary)", opacity: 0.3 }}
+                    />
                     {item}
                   </li>
                 ))}
@@ -167,58 +164,58 @@ function SectionRenderer({ section }: { section: ModalSection }) {
     case "quadrant":
       if (!section.quadrantLabels) return null;
       return (
-        <div className="relative h-[280px] mx-auto max-w-[420px]">
+        <div className="relative h-[260px] mx-auto max-w-[400px]">
           <div
-            className="absolute left-1/2 top-2 bottom-2 w-px"
+            className="absolute left-1/2 top-4 bottom-4 w-px"
             style={{ backgroundColor: "var(--card-border)" }}
           />
           <div
-            className="absolute top-1/2 left-2 right-2 h-px"
+            className="absolute top-1/2 left-4 right-4 h-px"
             style={{ backgroundColor: "var(--card-border)" }}
           />
           <span
             className="absolute -top-1 left-1/2 -translate-x-1/2 text-[10px] font-semibold uppercase tracking-widest"
-            style={{ color: "var(--text-secondary)" }}
+            style={{ color: "var(--text-secondary)", opacity: 0.6 }}
           >
             {section.quadrantLabels.yAxis}
           </span>
           <span
             className="absolute top-1/2 -right-1 -translate-y-1/2 text-[10px] font-semibold uppercase tracking-widest rotate-90 origin-center"
-            style={{ color: "var(--text-secondary)" }}
+            style={{ color: "var(--text-secondary)", opacity: 0.6 }}
           >
             {section.quadrantLabels.xAxis}
           </span>
-          <div className="absolute top-3 left-3 right-1/2 bottom-1/2 flex items-center justify-center p-2">
+          <div className="absolute top-4 left-4 right-1/2 bottom-1/2 flex items-center justify-center p-3">
             <span
-              className="text-xs text-center whitespace-pre-line leading-tight"
-              style={{ color: "var(--text-secondary)" }}
+              className="text-[13px] text-center whitespace-pre-line leading-tight"
+              style={{ color: "var(--text-secondary)", opacity: 0.6 }}
             >
               {section.quadrantLabels.topLeft}
             </span>
           </div>
           <div
-            className="absolute top-3 left-1/2 right-3 bottom-1/2 flex items-center justify-center p-2 rounded-lg"
-            style={{ backgroundColor: "var(--accent-light)" }}
+            className="absolute top-4 left-1/2 right-4 bottom-1/2 flex items-center justify-center p-3 rounded-lg"
+            style={{ backgroundColor: "rgba(0, 100, 255, 0.05)" }}
           >
             <span
-              className="text-xs text-center whitespace-pre-line leading-tight font-bold"
+              className="text-[13px] text-center whitespace-pre-line leading-tight font-semibold"
               style={{ color: "var(--accent)" }}
             >
               {section.quadrantLabels.topRight}
             </span>
           </div>
-          <div className="absolute top-1/2 left-3 right-1/2 bottom-3 flex items-center justify-center p-2">
+          <div className="absolute top-1/2 left-4 right-1/2 bottom-4 flex items-center justify-center p-3">
             <span
-              className="text-xs text-center whitespace-pre-line leading-tight"
-              style={{ color: "var(--text-secondary)" }}
+              className="text-[13px] text-center whitespace-pre-line leading-tight"
+              style={{ color: "var(--text-secondary)", opacity: 0.6 }}
             >
               {section.quadrantLabels.bottomLeft}
             </span>
           </div>
-          <div className="absolute top-1/2 left-1/2 right-3 bottom-3 flex items-center justify-center p-2">
+          <div className="absolute top-1/2 left-1/2 right-4 bottom-4 flex items-center justify-center p-3">
             <span
-              className="text-xs text-center whitespace-pre-line leading-tight"
-              style={{ color: "var(--text-secondary)" }}
+              className="text-[13px] text-center whitespace-pre-line leading-tight"
+              style={{ color: "var(--text-secondary)", opacity: 0.6 }}
             >
               {section.quadrantLabels.bottomRight}
             </span>
@@ -258,54 +255,48 @@ export default function CardModal({ content, onClose }: CardModalProps) {
     <AnimatePresence>
       {isOpen && content && (
         <>
-          {/* Overlay — click to close */}
+          {/* Overlay */}
           <motion.div
             className="fixed inset-0 z-[60] cursor-default"
-            style={{ backgroundColor: "rgba(0, 0, 0, 0.6)", backdropFilter: "blur(4px)" }}
+            style={{ backgroundColor: "rgba(0, 0, 0, 0.5)", backdropFilter: "blur(8px)" }}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.25 }}
+            transition={{ duration: 0.2 }}
             onClick={onClose}
           />
 
-          {/* Centered modal — Stripe-style wide scrollable overlay */}
+          {/* Modal — Linear-inspired centered prose */}
           <motion.div
             className="fixed inset-0 z-[70] overflow-y-auto pointer-events-none"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
+            transition={{ duration: 0.15 }}
           >
-            {/* Centering wrapper — allows modal to be taller than viewport and scroll */}
-            <div className="min-h-full flex items-start justify-center py-12 sm:py-16 px-4 sm:px-6">
+            <div className="min-h-full flex items-start justify-center py-16 sm:py-20 px-4 sm:px-6">
               <motion.div
-                className="relative w-full max-w-[960px] flex flex-col rounded-2xl overflow-hidden pointer-events-auto cursor-default"
+                className="relative w-full max-w-[680px] flex flex-col pointer-events-auto cursor-default rounded-2xl overflow-hidden"
                 style={{
                   backgroundColor: "var(--card-bg)",
                   border: "1px solid var(--card-border)",
-                  boxShadow:
-                    "0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(0, 0, 0, 0.03)",
+                  boxShadow: "0 25px 60px -12px rgba(0, 0, 0, 0.2)",
                 }}
-                initial={{ opacity: 0, scale: 0.96, y: 30 }}
-                animate={{ opacity: 1, scale: 1, y: 0 }}
-                exit={{ opacity: 0, scale: 0.96, y: 30 }}
-                transition={{ type: "spring", damping: 30, stiffness: 400, mass: 0.8 }}
+                initial={{ opacity: 0, y: 24 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 24 }}
+                transition={{ type: "spring", damping: 32, stiffness: 400, mass: 0.7 }}
               >
-                {/* Close button — fixed in corner */}
+                {/* Close button */}
                 <button
                   onClick={onClose}
-                  className="absolute top-6 right-6 z-10 w-10 h-10 rounded-xl flex items-center justify-center transition-all hover:bg-black/5 cursor-pointer"
-                  style={{
-                    color: "var(--text-secondary)",
-                    border: "1px solid var(--card-border)",
-                    backgroundColor: "var(--card-bg)",
-                  }}
+                  className="absolute top-5 right-5 z-10 w-8 h-8 rounded-lg flex items-center justify-center transition-opacity hover:opacity-60 cursor-pointer"
+                  style={{ color: "var(--text-secondary)" }}
                   aria-label="Close modal"
                 >
                   <svg
-                    width="18"
-                    height="18"
+                    width="16"
+                    height="16"
                     viewBox="0 0 24 24"
                     fill="none"
                     stroke="currentColor"
@@ -317,20 +308,22 @@ export default function CardModal({ content, onClose }: CardModalProps) {
                   </svg>
                 </button>
 
-                {/* Header */}
-                <div className="px-12 pt-12 pb-8 shrink-0">
+                {/* Header — generous whitespace, no border below */}
+                <div className="px-10 pt-10 pb-2 shrink-0">
                   <h2
-                    className="text-3xl sm:text-4xl font-bold pr-14"
+                    className="text-[28px] sm:text-[32px] font-bold pr-10 tracking-tight"
                     style={{
                       fontFamily: "var(--font-display, 'Plus Jakarta Sans', sans-serif)",
                       color: "var(--text-primary)",
+                      lineHeight: 1.2,
+                      letterSpacing: "-0.022em",
                     }}
                   >
                     {content.title}
                   </h2>
                   {content.subtitle && (
                     <p
-                      className="text-base mt-3 leading-relaxed"
+                      className="text-[15px] mt-3 leading-[1.6]"
                       style={{ color: "var(--text-secondary)" }}
                     >
                       {content.subtitle}
@@ -338,12 +331,15 @@ export default function CardModal({ content, onClose }: CardModalProps) {
                   )}
                 </div>
 
-                {/* Divider */}
-                <div className="mx-12 h-px" style={{ backgroundColor: "var(--card-border)" }} />
+                {/* Thin separator */}
+                <div
+                  className="mx-10 mt-4"
+                  style={{ height: 1, backgroundColor: "var(--card-border)", opacity: 0.6 }}
+                />
 
-                {/* Content — all inline, scrolls with page */}
-                <div className="px-12 py-10">
-                  <div className="space-y-8">
+                {/* Content — Linear-style prose spacing */}
+                <div className="px-10 py-8">
+                  <div className="space-y-6">
                     {content.sections.map((section, i) => (
                       <SectionRenderer key={i} section={section} />
                     ))}

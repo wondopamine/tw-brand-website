@@ -15,6 +15,7 @@ interface CanvasLayoutProps {
   onFolderClick: (panelId: string) => void;
   onIllustrationClick: (slides: IllustrationSlide[], index: number) => void;
   onCardClick: (modalId: string) => void;
+  onItemHover?: (id: string | null) => void;
 }
 
 /** Spinner shown while canvas items are "loading" */
@@ -115,6 +116,7 @@ export default function CanvasLayout({
   onFolderClick,
   onIllustrationClick,
   onCardClick,
+  onItemHover,
 }: CanvasLayoutProps) {
   const [isLoading, setIsLoading] = useState(true);
 
@@ -162,6 +164,8 @@ export default function CanvasLayout({
               delay: isLoading ? 0 : delay,
               ease: style.ease,
             }}
+            onMouseEnter={() => onItemHover?.(item.id)}
+            onMouseLeave={() => onItemHover?.(null)}
           >
             <CanvasItem
               item={item}

@@ -15,30 +15,21 @@ interface MinimapProps {
   viewportHeight: number;
   zoom: number;
   onNavigate: (x: number, y: number) => void;
+  hoveredItemId?: string | null;
 }
 
 function getItemColor(type: string): string {
   switch (type) {
     case "hero-text":
       return "var(--accent)";
-    case "manifesto-card":
-      return "var(--accent)";
-    case "pillar-card":
-      return "var(--accent)";
-    case "text-card":
-      return "var(--text-secondary)";
-    case "quote-card":
-      return "var(--quote-highlight)";
-    case "utility-card":
+    case "brand-card":
       return "var(--accent)";
     case "illustration-reel":
       return "var(--accent)";
-    case "brand-card":
-      return "var(--accent)";
     case "image-card":
-      return "var(--accent-hover)";
+      return "var(--accent)";
     case "folder":
-      return "var(--folder-icon-bg)";
+      return "var(--text-secondary)";
     default:
       return "var(--text-secondary)";
   }
@@ -54,12 +45,12 @@ export default function Minimap({
   viewportHeight,
   zoom,
   onNavigate,
+  hoveredItemId,
 }: MinimapProps) {
   const scaleX = MINIMAP_WIDTH / canvasWidth;
   const scaleY = MINIMAP_HEIGHT / canvasHeight;
 
-  // Viewport indicator position (convert pan offset to minimap coordinates)
-  // Account for zoom: at higher zoom, the viewport covers less of the canvas
+  // Viewport indicator position
   const vpLeft = (-offsetX / zoom) * scaleX;
   const vpTop = (-offsetY / zoom) * scaleY;
   const vpWidth = (viewportWidth / zoom) * scaleX;
@@ -70,7 +61,6 @@ export default function Minimap({
     const clickX = e.clientX - rect.left;
     const clickY = e.clientY - rect.top;
 
-    // Convert minimap click to canvas coordinates, center viewport on that point
     const canvasX = clickX / scaleX;
     const canvasY = clickY / scaleY;
 
@@ -94,23 +84,31 @@ export default function Minimap({
       role="navigation"
       aria-label="Canvas minimap"
     >
-      {/* Item dots */}
-      {items.map((item) => (
-        <div
-          key={item.id}
-          className="absolute rounded-[2px]"
-          style={{
-            left: item.position.x * scaleX,
-            top: item.position.y * scaleY,
-            width: Math.max(item.size.width * scaleX, 3),
-            height: Math.max(item.size.height * scaleY, 2),
-            backgroundColor: getItemColor(item.type),
-            opacity: 0.6,
-          }}
-        />
-      ))}
+      {/* Item dots — highlighted when hovered on canvas */}
+      {items.map((item) => {
+        const isHovered = item.id === hoveredItemId;
+        return (
+          <div
+            key={item.id}
+            className="absolute rounded-[2px]"
+            style={{
+              left: item.position.x * scaleX,
+              top: item.position.y * scaleY,
+              width: Math.max(item.size.width * scaleX, 3),
+              height: Math.max(item.size.height * scaleY, 2),
+              backgroundColor: isHovered ? "var(--accent)" : getItemColor(item.type),
+              opacity: isHovered ? 1 : 0.4,
+              boxShadow: isHovered
+                ? "0 0 6px rgba(0, 100, 255, 0.5)"
+                : "none",
+              transition: "opacity 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease",
+              zIndex: isHovered ? 10 : 1,
+            }}
+          />
+        );
+      })}
 
-      {/* 2D Viewport indicator */}
+      {/* Viewport indicator */}
       <div
         className="absolute rounded-sm transition-all duration-100"
         style={{
