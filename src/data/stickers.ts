@@ -5,65 +5,35 @@ export interface StickerData {
   rotation?: number;
   /** Sticker width/height */
   size: number;
+  /** Image source for illustration stickers */
+  imageSrc?: string;
 }
 
-// Stickers placed around the canvas — users can drag them anywhere
-// Each sticker renders an SVG graphic with a die-cut white border
+// Illustration stickers placed around the canvas — users can drag them anywhere
+// Each sticker renders an illustration image with physics-based flip interaction
 export const defaultStickers: StickerData[] = [
   {
-    id: "sticker-butterfly",
-    label: "Butterfly",
-    defaultPosition: { x: 600, y: 350 },
-    rotation: -8,
-    size: 72,
-  },
-  {
-    id: "sticker-lightning",
-    label: "Lightning",
-    defaultPosition: { x: 2500, y: 400 },
-    rotation: 6,
-    size: 68,
-  },
-  {
-    id: "sticker-cloud",
-    label: "Cloud",
-    defaultPosition: { x: 700, y: 1200 },
-    rotation: 12,
-    size: 74,
-  },
-  {
-    id: "sticker-star",
-    label: "Star",
-    defaultPosition: { x: 2600, y: 850 },
+    id: "sticker-search",
+    label: "Discovery",
+    defaultPosition: { x: 580, y: 320 },
     rotation: -5,
-    size: 66,
+    size: 160,
+    imageSrc: "/images/illustrations/illustration-search.png",
   },
   {
-    id: "sticker-heart",
-    label: "Heart",
-    defaultPosition: { x: 2700, y: 1400 },
-    rotation: -10,
-    size: 64,
+    id: "sticker-together",
+    label: "Collaboration",
+    defaultPosition: { x: 2500, y: 380 },
+    rotation: 4,
+    size: 170,
+    imageSrc: "/images/illustrations/illustration-together.png",
   },
   {
-    id: "sticker-smiley",
-    label: "Smiley",
-    defaultPosition: { x: 550, y: 800 },
-    rotation: 8,
-    size: 70,
-  },
-  {
-    id: "sticker-flower",
-    label: "Flower",
-    defaultPosition: { x: 2400, y: 1700 },
-    rotation: -12,
-    size: 68,
-  },
-  {
-    id: "sticker-thumbsup",
-    label: "Thumbs Up",
-    defaultPosition: { x: 800, y: 1650 },
-    rotation: 15,
-    size: 66,
+    id: "sticker-focus",
+    label: "Focus",
+    defaultPosition: { x: 2550, y: 1350 },
+    rotation: -6,
+    size: 155,
+    imageSrc: "/images/illustrations/illustration-focus.png",
   },
 ];

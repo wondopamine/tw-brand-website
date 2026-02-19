@@ -530,4 +530,366 @@ export const modalContents: Record<string, ModalContent> = {
       },
     ],
   },
+
+  "design-principles": {
+    id: "design-principles",
+    title: "Product Design Principles",
+    subtitle: "Seven principles that guide every product design decision at Teacher Workspace",
+    sections: [
+      {
+        type: "paragraph",
+        content:
+          "These principles are compass headings, not railroad tracks. They guide direction while leaving room for judgment, context, and creativity. Each principle includes its inherent tension, common anti-patterns, and a quick litmus test.",
+      },
+      { type: "divider" },
+
+      // ===== Philosophy =====
+      {
+        type: "heading",
+        title: "Philosophy",
+      },
+      {
+        type: "paragraph",
+        content:
+          "Teacher Workspace exists to remove friction from teaching. Every design decision should be evaluated against a simple question: does this help a teacher do their job with less effort and more confidence?",
+      },
+      {
+        type: "paragraph",
+        content:
+          "These principles are ordered by priority. When principles conflict, the higher-priority principle wins. Not every screen will exercise every principle, and that\u2019s okay \u2014 what matters is that no screen violates any of them without conscious, documented reasoning.",
+      },
+      { type: "divider" },
+
+      // ===== Principle 1: Platform First =====
+      {
+        type: "highlight-box",
+        title: "01 \u2014 Platform First",
+        content:
+          "Design for the system, not the screen. Every component, pattern, and decision should strengthen the platform as a whole. A feature that solves one problem but fragments the experience is a net negative.",
+        variant: "accent",
+      },
+      {
+        type: "two-column",
+        columns: [
+          {
+            title: "The Tension",
+            items: [
+              "Moving fast on individual features vs. maintaining platform coherence",
+              "Team autonomy vs. shared patterns",
+            ],
+          },
+          {
+            title: "Anti-patterns",
+            items: [
+              "Building one-off solutions that can\u2019t be reused",
+              "Skipping the design system because \u201Cit\u2019s faster\u201D",
+              "Designing features in isolation without considering adjacent workflows",
+            ],
+          },
+        ],
+      },
+      {
+        type: "paragraph",
+        content:
+          "Litmus test: Could another team reuse what you just built? If not, why not?",
+      },
+      { type: "divider" },
+
+      // ===== Principle 2: Design for One Teacher =====
+      {
+        type: "highlight-box",
+        title: "02 \u2014 Design for One Teacher",
+        content:
+          "Anchor every design in a specific teacher\u2019s real workflow. Abstract \u201Cusers\u201D lead to abstract solutions. Name the teacher, describe their Tuesday afternoon, and design for that moment.",
+        variant: "accent",
+      },
+      {
+        type: "two-column",
+        columns: [
+          {
+            title: "The Tension",
+            items: [
+              "Specificity vs. scalability",
+              "Designing for one persona vs. serving a diverse user base",
+            ],
+          },
+          {
+            title: "Anti-patterns",
+            items: [
+              "Designing for \u201Cteachers\u201D instead of Ms. Lim who teaches P5 Math",
+              "Validating with stakeholder opinions instead of user observation",
+              "Building for edge cases before nailing the core path",
+            ],
+          },
+        ],
+      },
+      {
+        type: "paragraph",
+        content:
+          "Litmus test: Can you name the teacher and the specific moment this design serves?",
+      },
+      { type: "divider" },
+
+      // ===== Principle 3: Earn the Feature =====
+      {
+        type: "highlight-box",
+        title: "03 \u2014 Earn the Feature",
+        content:
+          "Every feature must justify its existence through observed need, not assumed value. The bar for adding is high; the bar for removing is low. When in doubt, leave it out.",
+        variant: "accent",
+      },
+      {
+        type: "two-column",
+        columns: [
+          {
+            title: "The Tension",
+            items: [
+              "Moving fast vs. being disciplined",
+              "Stakeholder requests vs. user evidence",
+            ],
+          },
+          {
+            title: "Anti-patterns",
+            items: [
+              "Building features because a stakeholder asked for them",
+              "Adding \u201Cjust in case\u201D options",
+              "Equating feature count with product value",
+            ],
+          },
+        ],
+      },
+      {
+        type: "paragraph",
+        content:
+          "Litmus test: What\u2019s the user evidence that this feature is needed? If you can\u2019t cite it, park it.",
+      },
+      { type: "divider" },
+
+      // ===== Principle 4: Name the Tradeoff =====
+      {
+        type: "highlight-box",
+        title: "04 \u2014 Name the Tradeoff",
+        content:
+          "Every design decision has a cost. Make that cost visible, document it, and own it. \u201CWe chose X because Y, knowing it means Z\u201D is better than \u201CWe didn\u2019t think about it.\u201D",
+        variant: "accent",
+      },
+      {
+        type: "two-column",
+        columns: [
+          {
+            title: "The Tension",
+            items: [
+              "Speed of decision vs. thoroughness of analysis",
+              "Optimism vs. intellectual honesty",
+            ],
+          },
+          {
+            title: "Anti-patterns",
+            items: [
+              "Presenting designs without listing what you gave up",
+              "Treating tradeoffs as failures instead of informed choices",
+              "Avoiding hard conversations about constraints",
+            ],
+          },
+        ],
+      },
+      {
+        type: "paragraph",
+        content:
+          "Litmus test: Can you articulate what this design sacrifices and why that\u2019s acceptable?",
+      },
+      { type: "divider" },
+
+      // ===== Principle 5: Coherence over Completeness =====
+      {
+        type: "highlight-box",
+        title: "05 \u2014 Coherence over Completeness",
+        content:
+          "A smaller, coherent experience beats a comprehensive but fragmented one. Ship less, but make what you ship feel like one product. Consistency is a feature.",
+        variant: "accent",
+      },
+      {
+        type: "two-column",
+        columns: [
+          {
+            title: "The Tension",
+            items: [
+              "Feature breadth vs. experience depth",
+              "Shipping fast vs. shipping together",
+            ],
+          },
+          {
+            title: "Anti-patterns",
+            items: [
+              "Launching features that feel like they belong to different products",
+              "Inconsistent terminology, patterns, or interaction models across modules",
+              "Prioritising coverage over craft",
+            ],
+          },
+        ],
+      },
+      {
+        type: "paragraph",
+        content:
+          "Litmus test: If a teacher used Feature A and then Feature B, would they feel like the same product?",
+      },
+      { type: "divider" },
+
+      // ===== Principle 6: Invisible Seams =====
+      {
+        type: "highlight-box",
+        title: "06 \u2014 Invisible Seams",
+        content:
+          "Teachers shouldn\u2019t see where one team\u2019s work ends and another\u2019s begins. Cross-module transitions, data handoffs, and navigation should feel seamless. The org chart should never leak into the UX.",
+        variant: "accent",
+      },
+      {
+        type: "two-column",
+        columns: [
+          {
+            title: "The Tension",
+            items: [
+              "Team ownership boundaries vs. user journey continuity",
+              "API design constraints vs. UX flow",
+            ],
+          },
+          {
+            title: "Anti-patterns",
+            items: [
+              "Users need to re-enter information when moving between modules",
+              "Visible loading states at module boundaries that break flow",
+              "Different teams using different navigation paradigms",
+            ],
+          },
+        ],
+      },
+      {
+        type: "paragraph",
+        content:
+          "Litmus test: Can a teacher complete a cross-module task without noticing the boundary?",
+      },
+      { type: "divider" },
+
+      // ===== Principle 7: Default to Less =====
+      {
+        type: "highlight-box",
+        title: "07 \u2014 Default to Less",
+        content:
+          "Reduce cognitive load relentlessly. Fewer options, fewer steps, fewer words. Every element on screen should earn its place. Progressive disclosure is a first principle, not a fallback.",
+        variant: "accent",
+      },
+      {
+        type: "two-column",
+        columns: [
+          {
+            title: "The Tension",
+            items: [
+              "Simplicity vs. power-user needs",
+              "Hiding features vs. making them discoverable",
+            ],
+          },
+          {
+            title: "Anti-patterns",
+            items: [
+              "Showing all options upfront because \u201Csome users might need them\u201D",
+              "Multi-step wizards when a smart default would suffice",
+              "Dense settings pages with rarely-changed options",
+            ],
+          },
+        ],
+      },
+      {
+        type: "paragraph",
+        content:
+          "Litmus test: Can you remove one more thing from this screen without losing essential function?",
+      },
+      { type: "divider" },
+
+      // ===== Decision Matrix =====
+      {
+        type: "heading",
+        title: "Decision Matrix: When Principles Conflict",
+      },
+      {
+        type: "paragraph",
+        content:
+          "Principles are prioritised 1\u20137. When they conflict, the higher-priority principle takes precedence. Always document why a lower-priority principle was deprioritised.",
+      },
+      {
+        type: "list",
+        items: [
+          "Platform First > any individual feature need",
+          "Design for One Teacher > abstract generalisations",
+          "Earn the Feature > stakeholder assumptions",
+          "Name the Tradeoff > sweeping decisions under the rug",
+          "Coherence > Completeness",
+          "Invisible Seams > team-boundary convenience",
+          "Default to Less > feature-cramming instincts",
+        ],
+      },
+      { type: "divider" },
+
+      // ===== Design Debt Taxonomy =====
+      {
+        type: "heading",
+        title: "Design Debt Taxonomy",
+      },
+      {
+        type: "paragraph",
+        content:
+          "Not all design debt is equal. Classify and triage using these three tiers:",
+      },
+      {
+        type: "two-column",
+        columns: [
+          {
+            title: "Critical Debt",
+            items: [
+              "Violates principles 1\u20133",
+              "Actively harms user experience",
+              "Must be addressed in current or next sprint",
+            ],
+          },
+          {
+            title: "Structural Debt",
+            items: [
+              "Violates principles 4\u20135",
+              "Creates compounding inconsistency",
+              "Should be scheduled within the quarter",
+            ],
+          },
+        ],
+      },
+      {
+        type: "highlight-box",
+        title: "Cosmetic Debt",
+        content:
+          "Violates principles 6\u20137. Noticeable but not harmful. Track and address opportunistically during related work.",
+        variant: "neutral",
+      },
+      { type: "divider" },
+
+      // ===== Quality Covenant =====
+      {
+        type: "heading",
+        title: "Quality Covenant",
+      },
+      {
+        type: "paragraph",
+        content:
+          "As a product design team, we commit to these standards:",
+      },
+      {
+        type: "list",
+        items: [
+          "No design ships without being evaluated against all 7 principles",
+          "Every design document includes a \u201CTradeoffs\u201D section",
+          "Design reviews explicitly reference principle numbers",
+          "Quarterly retros include a \u201Cprinciple health check\u201D",
+          "New team members are onboarded with real examples, not just this document",
+          "Principles are reviewed and updated annually based on what we\u2019ve learned",
+        ],
+      },
+    ],
+  },
 };

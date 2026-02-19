@@ -133,7 +133,7 @@ export const canvasItems: CanvasItem[] = [
       },
     ],
     rotation: -1,
-    mobileOrder: 8,
+    mobileOrder: 9,
   },
 
   // Bottom cards (flanking the photo)
@@ -164,6 +164,20 @@ export const canvasItems: CanvasItem[] = [
     mobileOrder: 7,
   },
 
+  // 8. Product Design Principles — far right, between Brand Principles and folders
+  {
+    id: "card-design-principles",
+    type: "brand-card",
+    position: { x: CX + 560, y: CY + 220 },
+    size: { width: 380, height: 260 },
+    title: "Product Design Principles",
+    subtitle: "Seven principles that guide every product design decision.",
+    modalId: "design-principles",
+    accentColor: "var(--accent)",
+    rotation: -2,
+    mobileOrder: 8,
+  },
+
   // ===== 5 FOLDERS — centered row below cards =====
   {
     id: "folder-colours",
@@ -172,7 +186,7 @@ export const canvasItems: CanvasItem[] = [
     size: { width: 140, height: 160 },
     label: "COLOURS",
     panelId: "colours",
-    mobileOrder: 9,
+    mobileOrder: 10,
   },
   {
     id: "folder-imagery",
@@ -181,7 +195,7 @@ export const canvasItems: CanvasItem[] = [
     size: { width: 140, height: 160 },
     label: "IMAGERY",
     panelId: "imagery",
-    mobileOrder: 10,
+    mobileOrder: 11,
   },
   {
     id: "folder-illustrations",
@@ -190,7 +204,7 @@ export const canvasItems: CanvasItem[] = [
     size: { width: 140, height: 160 },
     label: "ILLUSTRATIONS",
     panelId: "illustrations",
-    mobileOrder: 11,
+    mobileOrder: 12,
   },
   {
     id: "folder-typography",
@@ -199,7 +213,7 @@ export const canvasItems: CanvasItem[] = [
     size: { width: 140, height: 160 },
     label: "TYPOGRAPHY",
     panelId: "typography",
-    mobileOrder: 12,
+    mobileOrder: 13,
   },
   {
     id: "folder-use-cases",
@@ -208,6 +222,6 @@ export const canvasItems: CanvasItem[] = [
     size: { width: 140, height: 160 },
     label: "USE CASES",
     panelId: "use-cases",
-    mobileOrder: 13,
+    mobileOrder: 14,
   },
 ];

@@ -178,7 +178,8 @@ export default function CanvasViewport() {
                 rotation={sticker.rotation}
                 size={sticker.size}
                 zoom={zoom}
-                entranceDelay={2.2 + i * 0.12}
+                entranceDelay={2.2 + i * 0.15}
+                imageSrc={sticker.imageSrc}
                 onPositionChange={handleStickerMove}
               />
             );

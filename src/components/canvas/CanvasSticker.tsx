@@ -8,7 +8,6 @@ import {
   useSpring,
   type MotionValue,
 } from "motion/react";
-import { STICKER_COMPONENTS } from "./StickerGraphics";
 
 interface CanvasStickerProps {
   id: string;
@@ -19,21 +18,21 @@ interface CanvasStickerProps {
   size: number;
   zoom: number;
   entranceDelay?: number;
+  imageSrc?: string;
   onPositionChange: (id: string, x: number, y: number) => void;
 }
 
 /**
- * Physics-driven sticker with realistic fold/flip when dragged.
+ * Physics-driven illustration sticker with realistic fold/flip when dragged.
  *
- * The sticker uses a simple physics model:
+ * The sticker uses a physics model that simulates air resistance:
  * - Drag velocity is tracked per-frame via an exponential moving average.
- * - Velocity is mapped through springs to 3D transforms (rotateX/Y, skew)
- *   with high stiffness + moderate damping, giving the sticker the snappy
- *   "peel off the surface, flip in the direction of motion" effect seen in
- *   real die-cut vinyl stickers.
- * - On release the spring animates back to flat (all transforms → 0).
- * - A subtle "corner lift" scale-Y compression is added so the sticker
- *   looks like it buckles slightly when moved fast.
+ * - Velocity maps through springs to 3D transforms (rotateX/Y, skew)
+ *   giving the sticker a natural "caught by air" bend in the direction
+ *   opposite to motion — like holding paper out a car window.
+ * - On release the spring animates back to flat (all transforms -> 0).
+ * - A subtle compression on the cross-axis simulates the paper buckling
+ *   under air pressure.
  */
 export default function CanvasSticker({
   id,
@@ -44,6 +43,7 @@ export default function CanvasSticker({
   size,
   zoom,
   entranceDelay = 0.6,
+  imageSrc,
   onPositionChange,
 }: CanvasStickerProps) {
   const stickerRef = useRef<HTMLDivElement>(null);
@@ -57,27 +57,26 @@ export default function CanvasSticker({
   const dragVx = useMotionValue(0);
   const dragVy = useMotionValue(0);
 
-  // High stiffness + low mass = snappy response that overshoots slightly
-  const springCfg = { stiffness: 280, damping: 14, mass: 0.35 };
+  // Softer spring for illustration images — more natural paper-in-wind feel
+  const springCfg = { stiffness: 220, damping: 16, mass: 0.4 };
   const springVx = useSpring(dragVx, springCfg);
   const springVy = useSpring(dragVy, springCfg);
 
-  // Primary rotations — moving right flips the left edge up (rotateY)
-  //                      moving down curls the top edge forward (rotateX)
-  const rotateY = useTransform(springVx, [-40, 0, 40], [-35, 0, 35]);
-  const rotateX = useTransform(springVy, [-40, 0, 40], [30, 0, -30]);
+  // Primary rotations — moving right bends left edge up (like air pushing from right)
+  //                      moving down curls top edge forward
+  const rotateY = useTransform(springVx, [-40, 0, 40], [-28, 0, 28]);
+  const rotateX = useTransform(springVy, [-40, 0, 40], [24, 0, -24]);
 
-  // Paper warp — shear + compression for natural fold
-  const skewX = useTransform(springVx, [-40, 0, 40], [-6, 0, 6]);
-  const skewY = useTransform(springVy, [-40, 0, 40], [4, 0, -4]);
+  // Paper warp — shear deformation simulates flexible material catching wind
+  const skewX = useTransform(springVx, [-40, 0, 40], [-5, 0, 5]);
+  const skewY = useTransform(springVy, [-40, 0, 40], [3, 0, -3]);
 
-  // Buckle: fast motion compresses the sticker along the cross-axis
+  // Air resistance compression — fast motion compresses along cross-axis
+  // Like holding a sheet of paper in the wind, it buckles inward
   const absVx: MotionValue<number> = useTransform(springVx, (v: number) => Math.abs(v));
   const absVy: MotionValue<number> = useTransform(springVy, (v: number) => Math.abs(v));
-  const scaleY = useTransform(absVx, [0, 40], [1, 0.92]);
-  const scaleX = useTransform(absVy, [0, 40], [1, 0.92]);
-
-  const StickerSVG = STICKER_COMPONENTS[id];
+  const scaleY = useTransform(absVx, [0, 40], [1, 0.93]);
+  const scaleX = useTransform(absVy, [0, 40], [1, 0.93]);
 
   /* ---- drag handlers ---- */
   const handleMouseDown = useCallback(
@@ -205,7 +204,7 @@ export default function CanvasSticker({
     [id, x, y, zoom, onPositionChange, dragVx, dragVy]
   );
 
-  if (!StickerSVG) return null;
+  if (!imageSrc) return null;
 
   return (
     <motion.div
@@ -217,13 +216,13 @@ export default function CanvasSticker({
         top: y,
         zIndex: lifted ? 100 : 20,
         cursor: lifted ? "grabbing" : "grab",
-        perspective: 600,
+        perspective: 800,
         pointerEvents: "auto",
       }}
       initial={{ opacity: 0, scale: 0, rotate: rotation }}
       animate={{
         opacity: 1,
-        scale: lifted ? 1.15 : 1,
+        scale: lifted ? 1.08 : 1,
         rotate: rotation,
       }}
       transition={{
@@ -232,9 +231,9 @@ export default function CanvasSticker({
       }}
       onMouseDown={handleMouseDown}
       onTouchStart={handleTouchStart}
-      aria-label={`Sticker: ${label}`}
+      aria-label={`Illustration: ${label}`}
     >
-      {/* 3D fold/flip wrapper — physics-driven transforms */}
+      {/* 3D fold/flip wrapper — physics-driven transforms simulate air resistance */}
       <motion.div
         style={{
           rotateX,
@@ -247,12 +246,26 @@ export default function CanvasSticker({
           width: size,
           height: size,
           filter: lifted
-            ? "drop-shadow(0 16px 24px rgba(0, 0, 0, 0.25)) drop-shadow(0 6px 8px rgba(0, 0, 0, 0.12))"
-            : "drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1)) drop-shadow(0 1px 2px rgba(0, 0, 0, 0.06))",
-          transition: "filter 0.2s ease",
+            ? "drop-shadow(0 20px 30px rgba(0, 0, 0, 0.2)) drop-shadow(0 8px 12px rgba(0, 0, 0, 0.1))"
+            : "drop-shadow(0 4px 8px rgba(0, 0, 0, 0.08)) drop-shadow(0 1px 3px rgba(0, 0, 0, 0.04))",
+          transition: "filter 0.25s ease",
         }}
       >
-        <StickerSVG size={size} />
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={imageSrc}
+          alt={label}
+          width={size}
+          height={size}
+          draggable={false}
+          style={{
+            width: size,
+            height: size,
+            objectFit: "contain",
+            borderRadius: 8,
+            userSelect: "none",
+          }}
+        />
       </motion.div>
     </motion.div>
   );

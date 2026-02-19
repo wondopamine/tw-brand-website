@@ -1,12 +1,30 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useRef } from "react";
 import { motion } from "motion/react";
 
 interface HeroTextProps {
   title: string;
   subtitle?: string;
 }
+
+/* ------------------------------------------------------------------ */
+/*  Design System Type Scale — user-centric labels inspired by ShadCN */
+/*  Each preset maps to a constrained size with appropriate weight    */
+/*  and letter-spacing for that scale level.                          */
+/* ------------------------------------------------------------------ */
+const TYPE_PRESETS = [
+  { label: "Display",   fontSize: 72, weight: 700, spacing: -2,   lineCount: 4 },
+  { label: "Heading 1", fontSize: 56, weight: 700, spacing: -1.5, lineCount: 4 },
+  { label: "Heading 2", fontSize: 40, weight: 600, spacing: -0.5, lineCount: 3 },
+  { label: "Heading 3", fontSize: 32, weight: 600, spacing: -0.3, lineCount: 3 },
+  { label: "Heading 4", fontSize: 24, weight: 600, spacing: 0,    lineCount: 3 },
+  { label: "Lead",      fontSize: 20, weight: 500, spacing: 0,    lineCount: 2 },
+  { label: "Large",     fontSize: 18, weight: 400, spacing: 0,    lineCount: 2 },
+  { label: "Body",      fontSize: 16, weight: 400, spacing: 0,    lineCount: 2 },
+  { label: "Small",     fontSize: 14, weight: 500, spacing: 0.3,  lineCount: 2 },
+  { label: "Muted",     fontSize: 12, weight: 500, spacing: 0.5,  lineCount: 2 },
+] as const;
 
 const WEIGHTS = [
   { label: "Light", value: 300 },
@@ -25,7 +43,6 @@ const ALIGNS = [
 
 /* ------------------------------------------------------------------ */
 /*  Cross (+) marker — exactly like Vercel Geist grid intersections.  */
-/*  Two 1px lines (21px long) overlapping at center to form a "+" .   */
 /* ------------------------------------------------------------------ */
 const CROSS_SIZE = 21;
 
@@ -33,13 +50,8 @@ function CrossMarker({ style }: { style?: React.CSSProperties }) {
   return (
     <div
       className="absolute pointer-events-none"
-      style={{
-        width: CROSS_SIZE,
-        height: CROSS_SIZE,
-        ...style,
-      }}
+      style={{ width: CROSS_SIZE, height: CROSS_SIZE, ...style }}
     >
-      {/* Vertical bar */}
       <div
         className="absolute"
         style={{
@@ -50,7 +62,6 @@ function CrossMarker({ style }: { style?: React.CSSProperties }) {
           borderRight: "1px solid rgb(168, 168, 168)",
         }}
       />
-      {/* Horizontal bar */}
       <div
         className="absolute"
         style={{
@@ -66,9 +77,7 @@ function CrossMarker({ style }: { style?: React.CSSProperties }) {
 }
 
 /* ------------------------------------------------------------------ */
-/*  Dashed guide line — matches Vercel Geist exactly:                 */
-/*  repeating-linear-gradient: 4px gray dash, 6px transparent gap     */
-/*  Color: rgb(168, 168, 168), height: 1px                            */
+/*  Dashed guide line — matches Vercel Geist exactly.                 */
 /* ------------------------------------------------------------------ */
 function GuideLine() {
   return (
@@ -83,12 +92,182 @@ function GuideLine() {
   );
 }
 
+/* ------------------------------------------------------------------ */
+/*  Snap Slider — draggable range input that snaps to preset indices  */
+/*  Shows tick marks and the current preset label.                    */
+/* ------------------------------------------------------------------ */
+function SnapSlider({
+  presetIndex,
+  onChange,
+}: {
+  presetIndex: number;
+  onChange: (index: number) => void;
+}) {
+  const trackRef = useRef<HTMLDivElement>(null);
+  const isDragging = useRef(false);
+  const total = TYPE_PRESETS.length;
+
+  const getIndexFromEvent = useCallback(
+    (clientX: number) => {
+      if (!trackRef.current) return presetIndex;
+      const rect = trackRef.current.getBoundingClientRect();
+      const ratio = Math.max(0, Math.min(1, (clientX - rect.left) / rect.width));
+      // Map ratio to index (0 = largest = Display, last = smallest = Muted)
+      return Math.round(ratio * (total - 1));
+    },
+    [presetIndex, total]
+  );
+
+  const handlePointerDown = useCallback(
+    (e: React.PointerEvent) => {
+      e.stopPropagation();
+      e.preventDefault();
+      isDragging.current = true;
+      (e.target as HTMLElement).setPointerCapture(e.pointerId);
+      onChange(getIndexFromEvent(e.clientX));
+    },
+    [onChange, getIndexFromEvent]
+  );
+
+  const handlePointerMove = useCallback(
+    (e: React.PointerEvent) => {
+      if (!isDragging.current) return;
+      e.stopPropagation();
+      onChange(getIndexFromEvent(e.clientX));
+    },
+    [onChange, getIndexFromEvent]
+  );
+
+  const handlePointerUp = useCallback(() => {
+    isDragging.current = false;
+  }, []);
+
+  // Percentage position of the thumb
+  const thumbPercent = total > 1 ? (presetIndex / (total - 1)) * 100 : 0;
+  const currentPreset = TYPE_PRESETS[presetIndex];
+
+  return (
+    <div
+      className="flex items-center gap-3"
+      style={{ pointerEvents: "auto" }}
+    >
+      {/* Preset label */}
+      <span
+        className="text-[10px] font-semibold tracking-wide tabular-nums whitespace-nowrap min-w-[64px] text-right"
+        style={{ color: "var(--accent)" }}
+      >
+        {currentPreset.label}
+      </span>
+
+      {/* Slider track */}
+      <div
+        ref={trackRef}
+        className="relative flex items-center cursor-pointer"
+        style={{ width: 140, height: 24, touchAction: "none" }}
+        onPointerDown={handlePointerDown}
+        onPointerMove={handlePointerMove}
+        onPointerUp={handlePointerUp}
+        onPointerCancel={handlePointerUp}
+      >
+        {/* Track line */}
+        <div
+          className="absolute"
+          style={{
+            left: 0,
+            right: 0,
+            height: 2,
+            background: "var(--card-border)",
+            borderRadius: 1,
+            top: "50%",
+            transform: "translateY(-50%)",
+          }}
+        />
+
+        {/* Active portion */}
+        <div
+          className="absolute"
+          style={{
+            left: 0,
+            width: `${thumbPercent}%`,
+            height: 2,
+            background: "var(--accent)",
+            borderRadius: 1,
+            top: "50%",
+            transform: "translateY(-50%)",
+          }}
+        />
+
+        {/* Tick marks */}
+        {TYPE_PRESETS.map((_, i) => {
+          const pct = total > 1 ? (i / (total - 1)) * 100 : 0;
+          return (
+            <div
+              key={i}
+              className="absolute"
+              style={{
+                left: `${pct}%`,
+                top: "50%",
+                transform: "translate(-50%, -50%)",
+                width: i === presetIndex ? 6 : 4,
+                height: i === presetIndex ? 6 : 4,
+                borderRadius: "50%",
+                background: i <= presetIndex ? "var(--accent)" : "var(--card-border)",
+                transition: "all 0.15s ease",
+              }}
+            />
+          );
+        })}
+
+        {/* Draggable thumb */}
+        <div
+          className="absolute"
+          style={{
+            left: `${thumbPercent}%`,
+            top: "50%",
+            transform: "translate(-50%, -50%)",
+            width: 14,
+            height: 14,
+            borderRadius: "50%",
+            background: "var(--accent)",
+            boxShadow: "0 1px 4px rgba(0,0,0,0.15)",
+            border: "2px solid white",
+            transition: "left 0.1s ease",
+            cursor: "grab",
+          }}
+        />
+      </div>
+
+      {/* Size readout */}
+      <span
+        className="text-[10px] font-semibold tabular-nums min-w-[28px]"
+        style={{ color: "var(--text-secondary)" }}
+      >
+        {currentPreset.fontSize}px
+      </span>
+    </div>
+  );
+}
+
+/* ================================================================== */
+/*  Main Component                                                     */
+/* ================================================================== */
 export default function HeroText({ title, subtitle }: HeroTextProps) {
-  const [weight, setWeight] = useState(700);
-  const [fontSize, setFontSize] = useState(72);
-  const [spacing, setSpacing] = useState(0);
-  const [align, setAlign] = useState<"left" | "center" | "right">("left");
+  const [activePreset, setActivePreset] = useState(0); // Display (largest) default
+  const [weight, setWeight] = useState<number>(TYPE_PRESETS[0].weight);
+  const [fontSize, setFontSize] = useState<number>(TYPE_PRESETS[0].fontSize);
+  const [spacing, setSpacing] = useState<number>(TYPE_PRESETS[0].spacing);
+  const [align, setAlign] = useState<"left" | "center" | "right">("center"); // center default
   const [italic, setItalic] = useState(false);
+  const [lineCount, setLineCount] = useState<number>(TYPE_PRESETS[0].lineCount);
+
+  const handlePresetSelect = useCallback((index: number) => {
+    const preset = TYPE_PRESETS[index];
+    setActivePreset(index);
+    setFontSize(preset.fontSize);
+    setWeight(preset.weight);
+    setSpacing(preset.spacing);
+    setLineCount(preset.lineCount);
+  }, []);
 
   const handleWeightChange = useCallback(
     (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -101,9 +280,14 @@ export default function HeroText({ title, subtitle }: HeroTextProps) {
     e.stopPropagation();
   }, []);
 
-  const lineCount = subtitle ? 2 : 1;
-  // Guide row height = fontSize (line-height: 1), matching Vercel Geist's --margin
   const guideRow = fontSize;
+
+  // Build the preview text — repeat lines to fill lineCount
+  const previewLines: string[] = [];
+  const sourceLines = subtitle ? [title, subtitle] : [title];
+  for (let i = 0; i < lineCount; i++) {
+    previewLines.push(sourceLines[i % sourceLines.length]);
+  }
 
   return (
     <div
@@ -120,7 +304,7 @@ export default function HeroText({ title, subtitle }: HeroTextProps) {
     >
       {/* ===== Controls Bar ===== */}
       <motion.div
-        className="relative flex items-center gap-3 px-0 pt-0 pb-4 flex-wrap"
+        className="relative flex items-center gap-2 px-0 pt-0 pb-4 flex-wrap"
         style={{ zIndex: 50, pointerEvents: "auto" }}
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
@@ -205,13 +389,9 @@ export default function HeroText({ title, subtitle }: HeroTextProps) {
               className="px-2 py-1.5 transition-colors"
               style={{
                 background:
-                  align === a.value
-                    ? "var(--text-primary)"
-                    : "var(--card-bg)",
+                  align === a.value ? "var(--text-primary)" : "var(--card-bg)",
                 color:
-                  align === a.value
-                    ? "var(--card-bg)"
-                    : "var(--text-secondary)",
+                  align === a.value ? "var(--card-bg)" : "var(--text-secondary)",
               }}
               title={a.label}
             >
@@ -245,63 +425,37 @@ export default function HeroText({ title, subtitle }: HeroTextProps) {
         {/* Spacer */}
         <div className="flex-1" />
 
-        {/* Size slider */}
-        <div className="flex items-center gap-2">
-          <span
-            className="text-[11px] font-medium uppercase tracking-wider"
-            style={{ color: "var(--text-secondary)" }}
-          >
-            Size
-          </span>
-          <span
-            className="text-[11px] font-semibold tabular-nums w-7 text-right"
-            style={{ color: "var(--text-primary)" }}
-          >
-            {fontSize}
-          </span>
-          <input
-            type="range"
-            min={40}
-            max={220}
-            value={fontSize}
-            onChange={(e) => setFontSize(Number(e.target.value))}
-            className="typo-slider"
-            style={{ width: 90 }}
-          />
-        </div>
+        {/* Snappable Size Slider */}
+        <SnapSlider
+          presetIndex={activePreset}
+          onChange={handlePresetSelect}
+        />
 
-        {/* Spacing slider */}
-        <div className="flex items-center gap-2">
+        {/* Spacing display */}
+        <div className="flex items-center gap-1">
           <span
-            className="text-[11px] font-medium uppercase tracking-wider"
+            className="text-[10px] font-medium uppercase tracking-wider"
             style={{ color: "var(--text-secondary)" }}
           >
             Spacing
           </span>
           <span
-            className="text-[11px] font-semibold tabular-nums w-8 text-right"
+            className="text-[10px] font-semibold tabular-nums"
             style={{ color: "var(--text-primary)" }}
           >
-            {spacing}%
+            {spacing > 0 ? "+" : ""}{spacing}%
           </span>
-          <input
-            type="range"
-            min={-10}
-            max={30}
-            value={spacing}
-            onChange={(e) => setSpacing(Number(e.target.value))}
-            className="typo-slider"
-            style={{ width: 90 }}
-          />
         </div>
 
         {/* Reset button */}
         <button
           onClick={() => {
-            setWeight(700);
-            setFontSize(72);
-            setSpacing(0);
-            setAlign("left");
+            setActivePreset(0);
+            setWeight(TYPE_PRESETS[0].weight);
+            setFontSize(TYPE_PRESETS[0].fontSize);
+            setSpacing(TYPE_PRESETS[0].spacing);
+            setLineCount(TYPE_PRESETS[0].lineCount);
+            setAlign("center");
             setItalic(false);
           }}
           className="p-1.5 rounded-md transition-colors hover:opacity-70"
@@ -331,10 +485,6 @@ export default function HeroText({ title, subtitle }: HeroTextProps) {
       </motion.div>
 
       {/* ===== Content area — Vercel Geist style ===== */}
-      {/* The content area uses CSS grid with grid-auto-rows set to the
-          current fontSize. Dashed guide lines sit between rows. The text
-          is positioned on top. Overflow is visible so large text can
-          bleed naturally beyond the bounding box. */}
       <motion.div
         className="relative flex-1 flex flex-col justify-center"
         initial={{ opacity: 0, y: 30 }}
@@ -352,30 +502,25 @@ export default function HeroText({ title, subtitle }: HeroTextProps) {
 
         {/* Textarea wrapper with guide lines */}
         <div className="relative w-full" style={{ lineHeight: 0 }}>
-          {/* Guide lines container — uses CSS Grid so rows = fontSize.
-              Each row boundary gets a dashed guide line. */}
+          {/* Guide lines — one per text line boundary (lineCount + 1 lines total) */}
           <div
             className="absolute inset-0 pointer-events-none"
             style={{
               display: "grid",
               gridAutoRows: `${guideRow}px`,
-              marginTop: guideRow,
               zIndex: 0,
             }}
           >
-            {/* Render guide lines: one per row boundary. The margin-top
-                on each line shifts it so it sits at the baseline position
-                within each row (approximately 85% down = cap height). */}
-            {Array.from({ length: lineCount + 2 }).map((_, i) => (
+            {/* Top border guide line */}
+            <div style={{ position: "relative" }}>
+              <div style={{ position: "absolute", top: 0, left: 0, right: 0 }}>
+                <GuideLine />
+              </div>
+            </div>
+            {/* One guide line per row boundary */}
+            {Array.from({ length: lineCount }).map((_, i) => (
               <div key={i} style={{ position: "relative" }}>
-                <div
-                  style={{
-                    position: "absolute",
-                    top: `${-guideRow * 0.15 - 1}px`,
-                    left: 0,
-                    right: 0,
-                  }}
-                >
+                <div style={{ position: "absolute", bottom: 0, left: 0, right: 0 }}>
                   <GuideLine />
                 </div>
               </div>
@@ -400,13 +545,7 @@ export default function HeroText({ title, subtitle }: HeroTextProps) {
               wordBreak: "break-word",
             }}
           >
-            {title}
-            {subtitle && (
-              <>
-                {"\n"}
-                {subtitle}
-              </>
-            )}
+            {previewLines.join("\n")}
           </div>
         </div>
 
