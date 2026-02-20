@@ -61,42 +61,6 @@ const COLOUR_PALETTE = [
 ] as const;
 
 /* ------------------------------------------------------------------ */
-/*  Cross (+) marker                                                   */
-/* ------------------------------------------------------------------ */
-const CROSS_SIZE = 21;
-const CROSS_COLOR = "rgb(200, 200, 200)";
-
-function CrossMarker({ style }: { style?: React.CSSProperties }) {
-  return (
-    <div
-      className="absolute pointer-events-none"
-      style={{ width: CROSS_SIZE, height: CROSS_SIZE, ...style }}
-    >
-      <div
-        className="absolute"
-        style={{
-          left: "50%",
-          top: 0,
-          width: 0,
-          height: CROSS_SIZE,
-          borderRight: `1px solid ${CROSS_COLOR}`,
-        }}
-      />
-      <div
-        className="absolute"
-        style={{
-          top: "50%",
-          left: 0,
-          width: CROSS_SIZE,
-          height: 0,
-          borderBottom: `1px solid ${CROSS_COLOR}`,
-        }}
-      />
-    </div>
-  );
-}
-
-/* ------------------------------------------------------------------ */
 /*  Dashed guide line                                                  */
 /* ------------------------------------------------------------------ */
 function GuideLine() {
@@ -655,32 +619,15 @@ export default function HeroText({ title, subtitle }: HeroTextProps) {
         transition={{ duration: 0.8, ease: "easeOut" }}
         style={{ overflow: "visible" }}
       >
-        {/* Outer border — FIXED boundary of the playground, does NOT resize with font */}
+        {/* Playground area — no border outline, just guide lines + centered text */}
         <div
           className="relative"
           style={{
-            border: "1px solid rgb(220, 220, 220)",
             height: "100%",
             overflow: "visible",
           }}
         >
-          {/* Cross (+) — top-left, centered on the corner of the border */}
-          <CrossMarker
-            style={{
-              top: -(CROSS_SIZE / 2),
-              left: -(CROSS_SIZE / 2),
-            }}
-          />
-
-          {/* Cross (+) — bottom-right, centered on the corner */}
-          <CrossMarker
-            style={{
-              bottom: -(CROSS_SIZE / 2),
-              right: -(CROSS_SIZE / 2),
-            }}
-          />
-
-          {/* Text + guide lines — vertically & horizontally centered within the fixed boundary */}
+          {/* Text + guide lines — vertically & horizontally centered within the fixed area */}
           <div
             className="absolute inset-0 flex items-center justify-center"
             style={{ overflow: "visible" }}
