@@ -9,9 +9,7 @@ interface HeroTextProps {
 }
 
 /* ------------------------------------------------------------------ */
-/*  Design System Type Scale — user-centric labels inspired by ShadCN */
-/*  Each preset maps to a constrained size with appropriate weight    */
-/*  and letter-spacing for that scale level.                          */
+/*  Design System Type Scale                                           */
 /* ------------------------------------------------------------------ */
 const TYPE_PRESETS = [
   { label: "Display",   fontSize: 72, weight: 700, spacing: -2,   lineCount: 4 },
@@ -41,10 +39,23 @@ const ALIGNS = [
   { label: "Right", value: "right", icon: "align-right" },
 ] as const;
 
+/* Brand colour palette for the colour picker */
+const COLOUR_PALETTE = [
+  { label: "TW Blue", value: "#0064FF" },
+  { label: "Blue 900", value: "#1E3A8A" },
+  { label: "Blue 700", value: "#1D4ED8" },
+  { label: "Blue 500", value: "#3B82F6" },
+  { label: "Blue 300", value: "#93C5FD" },
+  { label: "Blue 100", value: "#DBEAFE" },
+  { label: "Dark", value: "#1a1a1a" },
+  { label: "Gray", value: "#6B6B73" },
+] as const;
+
 /* ------------------------------------------------------------------ */
-/*  Cross (+) marker — exactly like Vercel Geist grid intersections.  */
+/*  Cross (+) marker                                                   */
 /* ------------------------------------------------------------------ */
 const CROSS_SIZE = 21;
+const CROSS_COLOR = "rgb(200, 200, 200)";
 
 function CrossMarker({ style }: { style?: React.CSSProperties }) {
   return (
@@ -59,7 +70,7 @@ function CrossMarker({ style }: { style?: React.CSSProperties }) {
           top: 0,
           width: 0,
           height: CROSS_SIZE,
-          borderRight: "1px solid rgb(168, 168, 168)",
+          borderRight: `1px solid ${CROSS_COLOR}`,
         }}
       />
       <div
@@ -69,7 +80,7 @@ function CrossMarker({ style }: { style?: React.CSSProperties }) {
           left: 0,
           width: CROSS_SIZE,
           height: 0,
-          borderBottom: "1px solid rgb(168, 168, 168)",
+          borderBottom: `1px solid ${CROSS_COLOR}`,
         }}
       />
     </div>
@@ -77,24 +88,22 @@ function CrossMarker({ style }: { style?: React.CSSProperties }) {
 }
 
 /* ------------------------------------------------------------------ */
-/*  Dashed guide line — matches Vercel Geist exactly.                 */
+/*  Dashed guide line                                                  */
 /* ------------------------------------------------------------------ */
 function GuideLine() {
   return (
     <div
       className="w-full pointer-events-none"
       style={{
-        height: 1,
-        backgroundImage:
-          "repeating-linear-gradient(90deg, rgb(168, 168, 168), rgb(168, 168, 168) 4px, transparent 4px, transparent 10px)",
+        height: 0,
+        borderBottom: "1px dashed rgb(200, 200, 200)",
       }}
     />
   );
 }
 
 /* ------------------------------------------------------------------ */
-/*  Snap Slider — draggable range input that snaps to preset indices  */
-/*  Shows tick marks and the current preset label.                    */
+/*  Snap Slider                                                        */
 /* ------------------------------------------------------------------ */
 function SnapSlider({
   presetIndex,
@@ -112,7 +121,6 @@ function SnapSlider({
       if (!trackRef.current) return presetIndex;
       const rect = trackRef.current.getBoundingClientRect();
       const ratio = Math.max(0, Math.min(1, (clientX - rect.left) / rect.width));
-      // Map ratio to index (0 = largest = Display, last = smallest = Muted)
       return Math.round(ratio * (total - 1));
     },
     [presetIndex, total]
@@ -142,61 +150,45 @@ function SnapSlider({
     isDragging.current = false;
   }, []);
 
-  // Percentage position of the thumb
   const thumbPercent = total > 1 ? (presetIndex / (total - 1)) * 100 : 0;
   const currentPreset = TYPE_PRESETS[presetIndex];
 
   return (
-    <div
-      className="flex items-center gap-3"
-      style={{ pointerEvents: "auto" }}
-    >
-      {/* Preset label */}
+    <div className="flex items-center gap-2.5" style={{ pointerEvents: "auto" }}>
       <span
-        className="text-[10px] font-semibold tracking-wide tabular-nums whitespace-nowrap min-w-[64px] text-right"
+        className="text-[10px] font-semibold tracking-wide whitespace-nowrap min-w-[56px] text-right"
         style={{ color: "var(--accent)" }}
       >
         {currentPreset.label}
       </span>
 
-      {/* Slider track */}
       <div
         ref={trackRef}
         className="relative flex items-center cursor-pointer"
-        style={{ width: 140, height: 24, touchAction: "none" }}
+        style={{ width: 120, height: 20, touchAction: "none" }}
         onPointerDown={handlePointerDown}
         onPointerMove={handlePointerMove}
         onPointerUp={handlePointerUp}
         onPointerCancel={handlePointerUp}
       >
-        {/* Track line */}
+        {/* Track */}
         <div
           className="absolute"
           style={{
-            left: 0,
-            right: 0,
-            height: 2,
+            left: 0, right: 0, height: 1,
             background: "var(--card-border)",
-            borderRadius: 1,
-            top: "50%",
-            transform: "translateY(-50%)",
+            top: "50%", transform: "translateY(-50%)",
           }}
         />
-
-        {/* Active portion */}
+        {/* Active fill */}
         <div
           className="absolute"
           style={{
-            left: 0,
-            width: `${thumbPercent}%`,
-            height: 2,
+            left: 0, width: `${thumbPercent}%`, height: 1,
             background: "var(--accent)",
-            borderRadius: 1,
-            top: "50%",
-            transform: "translateY(-50%)",
+            top: "50%", transform: "translateY(-50%)",
           }}
         />
-
         {/* Tick marks */}
         {TYPE_PRESETS.map((_, i) => {
           const pct = total > 1 ? (i / (total - 1)) * 100 : 0;
@@ -205,31 +197,24 @@ function SnapSlider({
               key={i}
               className="absolute"
               style={{
-                left: `${pct}%`,
-                top: "50%",
+                left: `${pct}%`, top: "50%",
                 transform: "translate(-50%, -50%)",
-                width: i === presetIndex ? 6 : 4,
-                height: i === presetIndex ? 6 : 4,
-                borderRadius: "50%",
+                width: 3, height: 3, borderRadius: "50%",
                 background: i <= presetIndex ? "var(--accent)" : "var(--card-border)",
                 transition: "all 0.15s ease",
               }}
             />
           );
         })}
-
-        {/* Draggable thumb */}
+        {/* Thumb */}
         <div
           className="absolute"
           style={{
-            left: `${thumbPercent}%`,
-            top: "50%",
+            left: `${thumbPercent}%`, top: "50%",
             transform: "translate(-50%, -50%)",
-            width: 14,
-            height: 14,
-            borderRadius: "50%",
+            width: 12, height: 12, borderRadius: "50%",
             background: "var(--accent)",
-            boxShadow: "0 1px 4px rgba(0,0,0,0.15)",
+            boxShadow: "0 1px 3px rgba(0,0,0,0.15)",
             border: "2px solid white",
             transition: "left 0.1s ease",
             cursor: "grab",
@@ -237,12 +222,11 @@ function SnapSlider({
         />
       </div>
 
-      {/* Size readout */}
       <span
-        className="text-[10px] font-semibold tabular-nums min-w-[28px]"
+        className="text-[10px] font-medium tabular-nums min-w-[24px]"
         style={{ color: "var(--text-secondary)" }}
       >
-        {currentPreset.fontSize}px
+        {currentPreset.fontSize}
       </span>
     </div>
   );
@@ -252,13 +236,14 @@ function SnapSlider({
 /*  Main Component                                                     */
 /* ================================================================== */
 export default function HeroText({ title, subtitle }: HeroTextProps) {
-  const [activePreset, setActivePreset] = useState(0); // Display (largest) default
+  const [activePreset, setActivePreset] = useState(0);
   const [weight, setWeight] = useState<number>(TYPE_PRESETS[0].weight);
   const [fontSize, setFontSize] = useState<number>(TYPE_PRESETS[0].fontSize);
   const [spacing, setSpacing] = useState<number>(TYPE_PRESETS[0].spacing);
-  const [align, setAlign] = useState<"left" | "center" | "right">("center"); // center default
+  const [align, setAlign] = useState<"left" | "center" | "right">("center");
   const [italic, setItalic] = useState(false);
   const [lineCount, setLineCount] = useState<number>(TYPE_PRESETS[0].lineCount);
+  const [textColor, setTextColor] = useState("#0064FF");
 
   const handlePresetSelect = useCallback((index: number) => {
     const preset = TYPE_PRESETS[index];
@@ -269,21 +254,11 @@ export default function HeroText({ title, subtitle }: HeroTextProps) {
     setLineCount(preset.lineCount);
   }, []);
 
-  const handleWeightChange = useCallback(
-    (e: React.ChangeEvent<HTMLSelectElement>) => {
-      setWeight(Number(e.target.value));
-    },
-    []
-  );
-
   const stopProp = useCallback((e: React.MouseEvent | React.TouchEvent) => {
     e.stopPropagation();
   }, []);
 
-  const guideRow = fontSize;
-
-  // Build the preview text — split title + subtitle into individual lines
-  // then show exactly lineCount lines from the pool
+  // Build preview lines: split title + subtitle by newlines
   const allSourceLines: string[] = [title];
   if (subtitle) {
     allSourceLines.push(...subtitle.split("\n"));
@@ -292,6 +267,9 @@ export default function HeroText({ title, subtitle }: HeroTextProps) {
   for (let i = 0; i < lineCount; i++) {
     previewLines.push(allSourceLines[i % allSourceLines.length]);
   }
+
+  // Total content height = lineCount * fontSize (line-height: 1)
+  const contentHeight = lineCount * fontSize;
 
   return (
     <div
@@ -306,17 +284,17 @@ export default function HeroText({ title, subtitle }: HeroTextProps) {
       onMouseDown={stopProp}
       onTouchStart={stopProp}
     >
-      {/* ===== Controls Bar ===== */}
+      {/* ===== Controls Bar — center-aligned ===== */}
       <motion.div
-        className="relative flex items-center gap-2 px-0 pt-0 pb-4 flex-wrap"
+        className="relative flex items-center justify-center gap-2 px-0 pt-0 pb-5 flex-wrap"
         style={{ zIndex: 50, pointerEvents: "auto" }}
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.4 }}
       >
-        {/* Weight selector */}
+        {/* Weight selector — using native select with proper pointer events */}
         <div
-          className="relative flex items-center rounded-md px-3 py-1.5"
+          className="relative flex items-center rounded-md px-2.5 py-1"
           style={{
             background: "var(--card-bg)",
             border: "1px solid var(--card-border)",
@@ -324,9 +302,10 @@ export default function HeroText({ title, subtitle }: HeroTextProps) {
         >
           <select
             value={weight}
-            onChange={handleWeightChange}
-            className="appearance-none bg-transparent text-xs font-medium pr-4 cursor-pointer outline-none"
-            style={{ color: "var(--text-primary)", pointerEvents: "auto" }}
+            onChange={(e) => setWeight(Number(e.target.value))}
+            onMouseDown={(e) => e.stopPropagation()}
+            className="appearance-none bg-transparent text-[11px] font-medium pr-4 cursor-pointer outline-none"
+            style={{ color: "var(--text-primary)", pointerEvents: "auto", position: "relative", zIndex: 10 }}
           >
             {WEIGHTS.map((w) => (
               <option key={w.value} value={w.value}>
@@ -335,31 +314,23 @@ export default function HeroText({ title, subtitle }: HeroTextProps) {
             ))}
           </select>
           <svg
-            width="10"
-            height="10"
-            viewBox="0 0 10 10"
-            fill="none"
-            className="absolute right-2.5 pointer-events-none"
+            width="10" height="10" viewBox="0 0 10 10" fill="none"
+            className="absolute right-2 pointer-events-none"
             style={{ color: "var(--text-secondary)" }}
           >
-            <path
-              d="M2.5 4L5 6.5L7.5 4"
-              stroke="currentColor"
-              strokeWidth="1.2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
+            <path d="M2.5 4L5 6.5L7.5 4" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
         </div>
 
-        {/* Italic toggles */}
+        {/* Italic toggle */}
         <div
           className="flex items-center rounded-md overflow-hidden"
           style={{ border: "1px solid var(--card-border)" }}
         >
           <button
+            onMouseDown={(e) => e.stopPropagation()}
             onClick={() => setItalic(false)}
-            className="px-2.5 py-1.5 text-xs font-semibold transition-colors"
+            className="px-2 py-1 text-[11px] font-semibold transition-colors"
             style={{
               background: !italic ? "var(--text-primary)" : "var(--card-bg)",
               color: !italic ? "var(--card-bg)" : "var(--text-secondary)",
@@ -368,20 +339,20 @@ export default function HeroText({ title, subtitle }: HeroTextProps) {
             I
           </button>
           <button
+            onMouseDown={(e) => e.stopPropagation()}
             onClick={() => setItalic(true)}
-            className="px-2.5 py-1.5 text-xs transition-colors"
+            className="px-2 py-1 text-[11px] transition-colors"
             style={{
               background: italic ? "var(--text-primary)" : "var(--card-bg)",
               color: italic ? "var(--card-bg)" : "var(--text-secondary)",
-              fontStyle: "italic",
-              fontFamily: "serif",
+              fontStyle: "italic", fontFamily: "serif",
             }}
           >
             I
           </button>
         </div>
 
-        {/* Alignment buttons */}
+        {/* Alignment */}
         <div
           className="flex items-center rounded-md overflow-hidden"
           style={{ border: "1px solid var(--card-border)" }}
@@ -389,17 +360,16 @@ export default function HeroText({ title, subtitle }: HeroTextProps) {
           {ALIGNS.map((a) => (
             <button
               key={a.value}
+              onMouseDown={(e) => e.stopPropagation()}
               onClick={() => setAlign(a.value as "left" | "center" | "right")}
-              className="px-2 py-1.5 transition-colors"
+              className="px-1.5 py-1 transition-colors"
               style={{
-                background:
-                  align === a.value ? "var(--text-primary)" : "var(--card-bg)",
-                color:
-                  align === a.value ? "var(--card-bg)" : "var(--text-secondary)",
+                background: align === a.value ? "var(--text-primary)" : "var(--card-bg)",
+                color: align === a.value ? "var(--card-bg)" : "var(--text-secondary)",
               }}
               title={a.label}
             >
-              <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+              <svg width="12" height="12" viewBox="0 0 14 14" fill="none">
                 {a.icon === "align-left" && (
                   <>
                     <line x1="1" y1="3" x2="13" y2="3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
@@ -426,33 +396,36 @@ export default function HeroText({ title, subtitle }: HeroTextProps) {
           ))}
         </div>
 
-        {/* Spacer */}
-        <div className="flex-1" />
-
-        {/* Snappable Size Slider */}
-        <SnapSlider
-          presetIndex={activePreset}
-          onChange={handlePresetSelect}
-        />
-
-        {/* Spacing display */}
-        <div className="flex items-center gap-1">
-          <span
-            className="text-[10px] font-medium uppercase tracking-wider"
-            style={{ color: "var(--text-secondary)" }}
-          >
-            Spacing
-          </span>
-          <span
-            className="text-[10px] font-semibold tabular-nums"
-            style={{ color: "var(--text-primary)" }}
-          >
-            {spacing > 0 ? "+" : ""}{spacing}%
-          </span>
+        {/* Colour picker — small swatches */}
+        <div className="flex items-center gap-1 ml-1">
+          {COLOUR_PALETTE.map((c) => (
+            <button
+              key={c.value}
+              onMouseDown={(e) => e.stopPropagation()}
+              onClick={() => setTextColor(c.value)}
+              className="rounded-full transition-all"
+              style={{
+                width: textColor === c.value ? 16 : 12,
+                height: textColor === c.value ? 16 : 12,
+                background: c.value,
+                border: textColor === c.value
+                  ? "2px solid var(--text-primary)"
+                  : "1.5px solid var(--card-border)",
+                cursor: "pointer",
+              }}
+              title={c.label}
+            />
+          ))}
         </div>
 
-        {/* Reset button */}
+        {/* Size slider */}
+        <div className="ml-1">
+          <SnapSlider presetIndex={activePreset} onChange={handlePresetSelect} />
+        </div>
+
+        {/* Reset */}
         <button
+          onMouseDown={(e) => e.stopPropagation()}
           onClick={() => {
             setActivePreset(0);
             setWeight(TYPE_PRESETS[0].weight);
@@ -461,8 +434,9 @@ export default function HeroText({ title, subtitle }: HeroTextProps) {
             setLineCount(TYPE_PRESETS[0].lineCount);
             setAlign("center");
             setItalic(false);
+            setTextColor("#0064FF");
           }}
-          className="p-1.5 rounded-md transition-colors hover:opacity-70"
+          className="p-1 rounded-md transition-colors hover:opacity-60"
           style={{
             background: "var(--card-bg)",
             border: "1px solid var(--card-border)",
@@ -470,70 +444,75 @@ export default function HeroText({ title, subtitle }: HeroTextProps) {
           }}
           title="Reset"
         >
-          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-            <path
-              d="M2 7a5 5 0 1 1 1 3"
-              stroke="currentColor"
-              strokeWidth="1.3"
-              strokeLinecap="round"
-            />
-            <path
-              d="M2 3v4h4"
-              stroke="currentColor"
-              strokeWidth="1.3"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
+          <svg width="12" height="12" viewBox="0 0 14 14" fill="none">
+            <path d="M2 7a5 5 0 1 1 1 3" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" />
+            <path d="M2 3v4h4" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
         </button>
       </motion.div>
 
-      {/* ===== Content area — Vercel Geist style ===== */}
+      {/* ===== Typography Playground Content ===== */}
+      {/*
+        Layout from the reference screenshot:
+        - Outer border (1px solid light gray) wraps the entire playground
+        - Cross (+) at top-left corner and bottom-right corner, sitting ON the border
+        - Dashed horizontal guide lines: one at the top of each text line
+          and one at the bottom of the last line = lineCount + 1 total
+        - Text sits within the guide lines, line-height: 1
+      */}
       <motion.div
-        className="relative flex-1 flex flex-col justify-center"
+        className="relative flex-1"
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, ease: "easeOut" }}
         style={{ overflow: "visible" }}
       >
-        {/* Cross (+) marker — top-left corner */}
-        <CrossMarker
+        {/* Outer border — wraps the text content area precisely */}
+        <div
+          className="relative"
           style={{
-            top: -(CROSS_SIZE / 2),
-            left: -(CROSS_SIZE / 2),
+            border: "1px solid rgb(220, 220, 220)",
+            height: contentHeight,
+            overflow: "visible",
           }}
-        />
-
-        {/* Textarea wrapper with guide lines */}
-        <div className="relative w-full" style={{ lineHeight: 0 }}>
-          {/* Guide lines — one per text line boundary (lineCount + 1 lines total) */}
-          <div
-            className="absolute inset-0 pointer-events-none"
+        >
+          {/* Cross (+) — top-left, centered on the corner of the border */}
+          <CrossMarker
             style={{
-              display: "grid",
-              gridAutoRows: `${guideRow}px`,
-              zIndex: 0,
+              top: -(CROSS_SIZE / 2),
+              left: -(CROSS_SIZE / 2),
             }}
-          >
-            {/* Top border guide line */}
-            <div style={{ position: "relative" }}>
-              <div style={{ position: "absolute", top: 0, left: 0, right: 0 }}>
-                <GuideLine />
-              </div>
-            </div>
-            {/* One guide line per row boundary */}
-            {Array.from({ length: lineCount }).map((_, i) => (
-              <div key={i} style={{ position: "relative" }}>
-                <div style={{ position: "absolute", bottom: 0, left: 0, right: 0 }}>
-                  <GuideLine />
-                </div>
-              </div>
-            ))}
-          </div>
+          />
 
-          {/* Text */}
+          {/* Cross (+) — bottom-right, centered on the corner */}
+          <CrossMarker
+            style={{
+              bottom: -(CROSS_SIZE / 2),
+              right: -(CROSS_SIZE / 2),
+            }}
+          />
+
+          {/* Dashed guide lines — exactly lineCount + 1 horizontal lines
+              evenly spaced within the content height.
+              Top line at y=0, bottom line at y=contentHeight,
+              intermediate lines at y = i * fontSize */}
+          {Array.from({ length: lineCount + 1 }).map((_, i) => (
+            <div
+              key={i}
+              className="absolute pointer-events-none"
+              style={{
+                top: i * fontSize,
+                left: 0,
+                right: 0,
+              }}
+            >
+              <GuideLine />
+            </div>
+          ))}
+
+          {/* Text content — positioned inside the bordered area */}
           <div
-            className="relative w-full"
+            className="absolute inset-0"
             style={{
               fontSize: `${fontSize}px`,
               fontWeight: weight,
@@ -541,25 +520,17 @@ export default function HeroText({ title, subtitle }: HeroTextProps) {
               letterSpacing: `${spacing * 0.01}em`,
               lineHeight: 1,
               textAlign: align,
-              color: "var(--accent)",
-              fontFamily:
-                "var(--font-display, 'Plus Jakarta Sans', sans-serif)",
-              zIndex: 1,
+              color: textColor,
+              fontFamily: "var(--font-display, 'Plus Jakarta Sans', sans-serif)",
               whiteSpace: "pre-wrap",
               wordBreak: "break-word",
+              padding: 0,
+              margin: 0,
             }}
           >
             {previewLines.join("\n")}
           </div>
         </div>
-
-        {/* Cross (+) marker — bottom-right corner */}
-        <CrossMarker
-          style={{
-            bottom: -(CROSS_SIZE / 2),
-            right: -(CROSS_SIZE / 2),
-          }}
-        />
       </motion.div>
     </div>
   );
