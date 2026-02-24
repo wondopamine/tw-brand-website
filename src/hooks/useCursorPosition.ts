@@ -39,11 +39,12 @@ export function useCursorPosition(
       canvas.style.setProperty("--cursor-x", `${canvasX}px`);
       canvas.style.setProperty("--cursor-y", `${canvasY}px`);
 
-      // Scale the mask and glow radii inversely with zoom so they appear
-      // the same on-screen size regardless of zoom level.
-      // At zoom 1 → 400px / 250px. At zoom 0.5 → 800px. At zoom 1.5 → 267px.
+      // Scale radii inversely with zoom so they appear the same on-screen size.
       canvas.style.setProperty("--cursor-radius", `${Math.round(400 / zoom)}px`);
       canvas.style.setProperty("--cursor-glow-radius", `${Math.round(250 / zoom)}px`);
+      // Ink-bloom radii — core (tight) and halo (wide)
+      canvas.style.setProperty("--cursor-bloom-r1", `${Math.round(180 / zoom)}px`);
+      canvas.style.setProperty("--cursor-bloom-r2", `${Math.round(320 / zoom)}px`);
     };
 
     const handleMouseLeave = () => {

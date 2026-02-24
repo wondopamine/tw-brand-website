@@ -3,14 +3,63 @@
 interface BrandCardProps {
   title: string;
   subtitle?: string;
+  variant?: "default" | "featured";
   onClick: () => void;
 }
 
 export default function BrandCard({
   title,
   subtitle,
+  variant = "default",
   onClick,
 }: BrandCardProps) {
+  if (variant === "featured") {
+    return (
+      <button
+        onClick={onClick}
+        className="h-full w-full text-left cursor-pointer"
+        style={{
+          background: "#0064FF",
+          borderRadius: 24,
+          position: "relative",
+          overflow: "hidden",
+          border: "none",
+          outline: "none",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "flex-end",
+          padding: "28px 28px 32px",
+        }}
+        aria-label={`Open ${title}`}
+      >
+        <div
+          style={{
+            fontFamily: "var(--font-display, 'Plus Jakarta Sans', sans-serif)",
+            color: "#fff",
+            lineHeight: 1.05,
+          }}
+        >
+          <div style={{ fontSize: 48, fontWeight: 300, letterSpacing: "-1.5px" }}>
+            Why
+          </div>
+          <div style={{ fontSize: 48, fontWeight: 300, letterSpacing: "-1.5px" }}>
+            Aesthetics
+          </div>
+          <div
+            style={{
+              fontSize: 48,
+              fontWeight: 800,
+              fontStyle: "italic",
+              letterSpacing: "-1.5px",
+            }}
+          >
+            matters?
+          </div>
+        </div>
+      </button>
+    );
+  }
+
   return (
     <button
       onClick={onClick}
