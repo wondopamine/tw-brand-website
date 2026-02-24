@@ -27,7 +27,6 @@ const GLOW_CARD_TYPES = new Set([
   "manifesto-card",
   "pillar-card",
   "text-card",
-  "quote-card",
   "utility-card",
   "illustration-reel",
   "brand-card",
@@ -68,6 +67,7 @@ export default function CanvasItem({
             quote={item.quote}
             highlight={item.highlight}
             attribution={item.attribution}
+            source={item.source}
           />
         );
       case "utility-card":
@@ -92,6 +92,7 @@ export default function CanvasItem({
           <BrandCard
             title={item.title}
             subtitle={item.subtitle}
+            variant={item.variant}
             onClick={() => onCardClick(item.modalId)}
           />
         );
@@ -114,7 +115,9 @@ export default function CanvasItem({
     }
   })();
 
-  const wrapped = GLOW_CARD_TYPES.has(item.type) ? (
+  // Featured brand cards handle their own background — skip GlowCard wrapper
+  const skipGlow = item.type === "brand-card" && item.variant === "featured";
+  const wrapped = GLOW_CARD_TYPES.has(item.type) && !skipGlow ? (
     <GlowCard>{content}</GlowCard>
   ) : (
     content
