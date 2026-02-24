@@ -5,7 +5,7 @@ import Link from "next/link";
 
 export default function Home() {
   return (
-    <div className="min-h-screen canvas-grid canvas-grid-lines">
+    <div className="min-h-screen">
       {/* Top-left navigation hint */}
       <div className="fixed top-4 left-6 z-10">
         <span
