@@ -12,8 +12,8 @@ export const canvasItems: CanvasItem[] = [
   {
     id: "hero",
     type: "hero-text",
-    position: { x: CX - 460, y: CY - 200 },
-    size: { width: 920, height: 400 },
+    position: { x: CX - 460, y: CY - 260 },
+    size: { width: 920, height: 520 },
     title: "Teacher",
     subtitle: "Workspace\nBrand\nGuidelines",
     zIndex: 0,
@@ -28,10 +28,11 @@ export const canvasItems: CanvasItem[] = [
     id: "card-aesthetics",
     type: "brand-card",
     position: { x: CX - 820, y: CY - 500 },
-    size: { width: 360, height: 220 },
+    size: { width: 360, height: 340 },
     title: "Why Aesthetic Matters?",
     subtitle: "Good design builds trust and signals reliability.",
     modalId: "aesthetics",
+    variant: "featured",
     rotation: -1.5,
     mobileOrder: 1,
   },
@@ -63,17 +64,16 @@ export const canvasItems: CanvasItem[] = [
     mobileOrder: 3,
   },
 
-  // Side cards (flanking hero) — pushed further out
-  // 4. Always From Teachers — left of hero
+  // Quote 1 — far left of hero, clear gap between aesthetics (ends x=1140) and left edge
   {
-    id: "card-teachers",
-    type: "brand-card",
-    position: { x: CX - 960, y: CY - 100 },
-    size: { width: 340, height: 220 },
-    title: "Always From Teachers",
-    subtitle: "Designed with teachers, for teachers.",
-    modalId: "always-from-teachers",
-    rotation: -2,
+    id: "quote-teacher-1",
+    type: "quote-card",
+    position: { x: CX - 1080, y: CY - 60 },
+    size: { width: 280, height: 160 },
+    quote: "I need something that just works. I don't have time to figure out complicated software.",
+    highlight: "just works",
+    attribution: "Middle school teacher",
+    rotation: -1.5,
     mobileOrder: 4,
   },
 
@@ -176,6 +176,32 @@ export const canvasItems: CanvasItem[] = [
     accentColor: "var(--accent)",
     rotation: -2,
     mobileOrder: 8,
+  },
+
+  // ===== QUOTES — editorial pull-quotes, no card background =====
+  // Quote 2 — right side, above illustration reel, clear of manifesto and reel
+  {
+    id: "quote-intercom",
+    type: "quote-card",
+    position: { x: CX + 860, y: CY - 200 },
+    size: { width: 280, height: 160 },
+    quote: "You can feel the shape of what's coming — even if the tools are still clunky, the future is clearly starting to boot up.",
+    highlight: "the future is clearly starting to boot up",
+    attribution: "A teacher",
+    rotation: -1,
+    mobileOrder: 15,
+  },
+  // Quote 3 — bottom-center, between image card and folders row
+  {
+    id: "quote-teacher-2",
+    type: "quote-card",
+    position: { x: CX - 160, y: CY + 510 },
+    size: { width: 280, height: 160 },
+    quote: "The best tools feel like they were made by someone who understands what my day actually looks like.",
+    highlight: "understands what my day actually looks like",
+    attribution: "High school teacher",
+    rotation: 1,
+    mobileOrder: 16,
   },
 
   // ===== 5 FOLDERS — centered row below cards =====

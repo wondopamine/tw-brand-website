@@ -67,6 +67,7 @@ export interface QuoteCardItem extends CanvasItemBase {
   quote: string;
   highlight?: string;
   attribution?: string;
+  source?: string;
 }
 
 export interface UtilityCardItem extends CanvasItemBase {
@@ -96,6 +97,7 @@ export interface BrandCardItem extends CanvasItemBase {
   subtitle?: string;
   modalId: string;
   accentColor?: string;
+  variant?: "default" | "featured";
 }
 
 // Image card — photo gallery that shuffles on click, shows description on hover

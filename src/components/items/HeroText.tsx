@@ -12,6 +12,7 @@ interface HeroTextProps {
 /*  Design System Type Scale                                           */
 /* ------------------------------------------------------------------ */
 const TYPE_PRESETS = [
+  { label: "Hero",      fontSize: 96, weight: 900, spacing: -3,   lineCount: 4 },
   { label: "Display",   fontSize: 72, weight: 700, spacing: -2,   lineCount: 4 },
   { label: "Heading 1", fontSize: 56, weight: 700, spacing: -1.5, lineCount: 4 },
   { label: "Heading 2", fontSize: 40, weight: 600, spacing: -0.5, lineCount: 3 },
@@ -61,15 +62,62 @@ const COLOUR_PALETTE = [
 ] as const;
 
 /* ------------------------------------------------------------------ */
-/*  Dashed guide line                                                  */
+/*  Opacity tokens — Geist-style subtleness                            */
+/*  Outline is very faint. Guide lines are noticeably darker.          */
 /* ------------------------------------------------------------------ */
+const OUTLINE_COLOR = "rgba(0, 0, 0, 0.08)";     // 8% black — very faint
+const GUIDE_COLOR  = "rgba(0, 0, 0, 0.16)";      // 16% — 2× darker than outline
+const CROSS_COLOR  = "rgba(0, 0, 0, 0.16)";      // matches guide lines
+
+/* ------------------------------------------------------------------ */
+/*  Cross / plus marker                                               */
+/* ------------------------------------------------------------------ */
+const CROSS_SIZE = 21;
+
+function CrossMarker({ style }: { style?: React.CSSProperties }) {
+  return (
+    <div
+      className="absolute pointer-events-none"
+      style={{ width: CROSS_SIZE, height: CROSS_SIZE, ...style }}
+    >
+      <div
+        className="absolute"
+        style={{
+          left: "50%",
+          top: 0,
+          width: 0,
+          height: CROSS_SIZE,
+          borderRight: `1px solid ${CROSS_COLOR}`,
+        }}
+      />
+      <div
+        className="absolute"
+        style={{
+          top: "50%",
+          left: 0,
+          width: CROSS_SIZE,
+          height: 0,
+          borderBottom: `1px solid ${CROSS_COLOR}`,
+        }}
+      />
+    </div>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/*  Dashed guide line — extends beyond outline (overflow visible)      */
+/* ------------------------------------------------------------------ */
+const GUIDE_OVERSHOOT = 40; // px the dashed line bleeds past the outline
+
 function GuideLine() {
   return (
     <div
-      className="w-full pointer-events-none"
+      className="pointer-events-none"
       style={{
         height: 0,
-        borderBottom: "1px dashed rgb(200, 200, 200)",
+        borderBottom: `1px dashed ${GUIDE_COLOR}`,
+        marginLeft: -GUIDE_OVERSHOOT,
+        marginRight: -GUIDE_OVERSHOOT,
       }}
     />
   );
@@ -402,16 +450,26 @@ function ColourPicker({
 }
 
 /* ================================================================== */
-/*  Main Component                                                     */
+/*  Main Component — Geist-style typography playground                 */
+/*                                                                     */
+/*  Layout: single outlined box contains everything:                   */
+/*    ┌─ controls bar (top, inside the outline) ─────────────────────┐ */
+/*    │                                                               │ */
+/*    │              centered text + guide lines                      │ */
+/*    │   ─ ─ ─ ─ guide lines bleed past outline edges ─ ─ ─ ─ ─   │ */
+/*    │                                                               │ */
+/*    └─ + cross markers at corners ─────────────────────────────────┘ */
 /* ================================================================== */
 export default function HeroText({ title, subtitle }: HeroTextProps) {
-  const [activePreset, setActivePreset] = useState(0);
-  const [weight, setWeight] = useState<number>(TYPE_PRESETS[0].weight);
-  const [fontSize, setFontSize] = useState<number>(TYPE_PRESETS[0].fontSize);
-  const [spacing, setSpacing] = useState<number>(TYPE_PRESETS[0].spacing);
+  const DEFAULT_PRESET = 0; // Hero
+  const DEFAULT_WEIGHT = 900; // Black
+  const [activePreset, setActivePreset] = useState(DEFAULT_PRESET);
+  const [weight, setWeight] = useState<number>(DEFAULT_WEIGHT);
+  const [fontSize, setFontSize] = useState<number>(TYPE_PRESETS[DEFAULT_PRESET].fontSize);
+  const [spacing, setSpacing] = useState<number>(TYPE_PRESETS[DEFAULT_PRESET].spacing);
   const [align, setAlign] = useState<"left" | "center" | "right">("center");
   const [italic, setItalic] = useState(false);
-  const [lineCount, setLineCount] = useState<number>(TYPE_PRESETS[0].lineCount);
+  const [lineCount, setLineCount] = useState<number>(TYPE_PRESETS[DEFAULT_PRESET].lineCount);
   const [textColor, setTextColor] = useState("#0064FF");
 
   const handlePresetSelect = useCallback((index: number) => {
@@ -442,7 +500,7 @@ export default function HeroText({ title, subtitle }: HeroTextProps) {
 
   return (
     <div
-      className="flex flex-col h-full"
+      className="h-full"
       style={{
         fontFamily: "var(--font-display, 'Plus Jakarta Sans', sans-serif)",
         backgroundColor: "var(--canvas-bg)",
@@ -453,186 +511,180 @@ export default function HeroText({ title, subtitle }: HeroTextProps) {
       onMouseDown={stopProp}
       onTouchStart={stopProp}
     >
-      {/* ===== Controls Bar — center-aligned ===== */}
+      {/* ===== Single outlined container — Geist style ===== */}
       <motion.div
-        className="relative flex items-center justify-center gap-2 px-0 pt-0 pb-5 flex-wrap"
-        style={{ zIndex: 50, pointerEvents: "auto" }}
-        initial={{ opacity: 0, y: -10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.4 }}
-      >
-        {/* Weight selector — using native select with proper pointer events */}
-        <div
-          className="relative flex items-center rounded-md px-2.5 py-1"
-          style={{
-            background: "var(--card-bg)",
-            border: "1px solid var(--card-border)",
-          }}
-        >
-          <select
-            value={weight}
-            onChange={(e) => setWeight(Number(e.target.value))}
-            onMouseDown={(e) => e.stopPropagation()}
-            className="appearance-none bg-transparent text-[11px] font-medium pr-4 cursor-pointer outline-none"
-            style={{ color: "var(--text-primary)", pointerEvents: "auto", position: "relative", zIndex: 10 }}
-          >
-            {WEIGHTS.map((w) => (
-              <option key={w.value} value={w.value}>
-                {w.label}
-              </option>
-            ))}
-          </select>
-          <svg
-            width="10" height="10" viewBox="0 0 10 10" fill="none"
-            className="absolute right-2 pointer-events-none"
-            style={{ color: "var(--text-secondary)" }}
-          >
-            <path d="M2.5 4L5 6.5L7.5 4" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
-        </div>
-
-        {/* Italic toggle */}
-        <div
-          className="flex items-center rounded-md overflow-hidden"
-          style={{ border: "1px solid var(--card-border)" }}
-        >
-          <button
-            onMouseDown={(e) => e.stopPropagation()}
-            onClick={() => setItalic(false)}
-            className="px-2 py-1 text-[11px] font-semibold transition-colors"
-            style={{
-              background: !italic ? "var(--text-primary)" : "var(--card-bg)",
-              color: !italic ? "var(--card-bg)" : "var(--text-secondary)",
-            }}
-          >
-            I
-          </button>
-          <button
-            onMouseDown={(e) => e.stopPropagation()}
-            onClick={() => setItalic(true)}
-            className="px-2 py-1 text-[11px] transition-colors"
-            style={{
-              background: italic ? "var(--text-primary)" : "var(--card-bg)",
-              color: italic ? "var(--card-bg)" : "var(--text-secondary)",
-              fontStyle: "italic", fontFamily: "serif",
-            }}
-          >
-            I
-          </button>
-        </div>
-
-        {/* Alignment */}
-        <div
-          className="flex items-center rounded-md overflow-hidden"
-          style={{ border: "1px solid var(--card-border)" }}
-        >
-          {ALIGNS.map((a) => (
-            <button
-              key={a.value}
-              onMouseDown={(e) => e.stopPropagation()}
-              onClick={() => setAlign(a.value as "left" | "center" | "right")}
-              className="px-1.5 py-1 transition-colors"
-              style={{
-                background: align === a.value ? "var(--text-primary)" : "var(--card-bg)",
-                color: align === a.value ? "var(--card-bg)" : "var(--text-secondary)",
-              }}
-              title={a.label}
-            >
-              <svg width="12" height="12" viewBox="0 0 14 14" fill="none">
-                {a.icon === "align-left" && (
-                  <>
-                    <line x1="1" y1="3" x2="13" y2="3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-                    <line x1="1" y1="7" x2="9" y2="7" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-                    <line x1="1" y1="11" x2="11" y2="11" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-                  </>
-                )}
-                {a.icon === "align-center" && (
-                  <>
-                    <line x1="1" y1="3" x2="13" y2="3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-                    <line x1="3" y1="7" x2="11" y2="7" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-                    <line x1="2" y1="11" x2="12" y2="11" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-                  </>
-                )}
-                {a.icon === "align-right" && (
-                  <>
-                    <line x1="1" y1="3" x2="13" y2="3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-                    <line x1="5" y1="7" x2="13" y2="7" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-                    <line x1="3" y1="11" x2="13" y2="11" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-                  </>
-                )}
-              </svg>
-            </button>
-          ))}
-        </div>
-
-        {/* Colour picker — Figma-style dropdown */}
-        <ColourPicker
-          selectedColor={textColor}
-          onSelect={setTextColor}
-          stopProp={stopProp}
-        />
-
-        {/* Size slider */}
-        <div className="ml-1">
-          <SnapSlider presetIndex={activePreset} onChange={handlePresetSelect} />
-        </div>
-
-        {/* Reset */}
-        <button
-          onMouseDown={(e) => e.stopPropagation()}
-          onClick={() => {
-            setActivePreset(0);
-            setWeight(TYPE_PRESETS[0].weight);
-            setFontSize(TYPE_PRESETS[0].fontSize);
-            setSpacing(TYPE_PRESETS[0].spacing);
-            setLineCount(TYPE_PRESETS[0].lineCount);
-            setAlign("center");
-            setItalic(false);
-            setTextColor("#0064FF");
-          }}
-          className="p-1 rounded-md transition-colors hover:opacity-60 cursor-pointer"
-          style={{
-            background: "var(--card-bg)",
-            border: "1px solid var(--card-border)",
-            color: "var(--text-secondary)",
-          }}
-          title="Reset"
-        >
-          <svg width="12" height="12" viewBox="0 0 14 14" fill="none">
-            <path d="M2 7a5 5 0 1 1 1 3" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" />
-            <path d="M2 3v4h4" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
-        </button>
-      </motion.div>
-
-      {/* ===== Typography Playground Content ===== */}
-      {/*
-        FIXED BOUNDARY: The outer border stays as the full playground area.
-        It uses flex-1 to fill all remaining vertical space.
-        Only the dashed guide lines inside are responsive to font size.
-        Text is always vertically + horizontally centered.
-      */}
-      <motion.div
-        className="relative flex-1"
+        className="relative h-full flex flex-col"
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, ease: "easeOut" }}
-        style={{ overflow: "visible" }}
+        style={{
+          overflow: "visible",
+        }}
       >
-        {/* Playground area — no border outline, just guide lines + centered text */}
-        <div
-          className="relative"
-          style={{
-            height: "100%",
-            overflow: "visible",
-          }}
+
+        {/* ===== Controls Bar — inside the outline, top ===== */}
+        <motion.div
+          className="relative flex items-center justify-center gap-2 px-5 py-4 flex-wrap"
+          style={{ zIndex: 50, pointerEvents: "auto" }}
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.4 }}
         >
-          {/* Text + guide lines — vertically & horizontally centered within the fixed area */}
+          {/* Weight selector */}
+          <div
+            className="relative flex items-center rounded-md px-2.5 py-1"
+            style={{
+              background: "var(--card-bg)",
+              border: "1px solid var(--card-border)",
+            }}
+          >
+            <select
+              value={weight}
+              onChange={(e) => setWeight(Number(e.target.value))}
+              onMouseDown={(e) => e.stopPropagation()}
+              className="appearance-none bg-transparent text-[11px] font-medium pr-4 cursor-pointer outline-none"
+              style={{ color: "var(--text-primary)", pointerEvents: "auto", position: "relative", zIndex: 10 }}
+            >
+              {WEIGHTS.map((w) => (
+                <option key={w.value} value={w.value}>
+                  {w.label}
+                </option>
+              ))}
+            </select>
+            <svg
+              width="10" height="10" viewBox="0 0 10 10" fill="none"
+              className="absolute right-2 pointer-events-none"
+              style={{ color: "var(--text-secondary)" }}
+            >
+              <path d="M2.5 4L5 6.5L7.5 4" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </div>
+
+          {/* Italic toggle */}
+          <div
+            className="flex items-center rounded-md overflow-hidden"
+            style={{ border: "1px solid var(--card-border)" }}
+          >
+            <button
+              onMouseDown={(e) => e.stopPropagation()}
+              onClick={() => setItalic(false)}
+              className="px-2 py-1 text-[11px] font-semibold transition-colors"
+              style={{
+                background: !italic ? "var(--text-primary)" : "var(--card-bg)",
+                color: !italic ? "var(--card-bg)" : "var(--text-secondary)",
+              }}
+            >
+              I
+            </button>
+            <button
+              onMouseDown={(e) => e.stopPropagation()}
+              onClick={() => setItalic(true)}
+              className="px-2 py-1 text-[11px] transition-colors"
+              style={{
+                background: italic ? "var(--text-primary)" : "var(--card-bg)",
+                color: italic ? "var(--card-bg)" : "var(--text-secondary)",
+                fontStyle: "italic", fontFamily: "serif",
+              }}
+            >
+              I
+            </button>
+          </div>
+
+          {/* Alignment */}
+          <div
+            className="flex items-center rounded-md overflow-hidden"
+            style={{ border: "1px solid var(--card-border)" }}
+          >
+            {ALIGNS.map((a) => (
+              <button
+                key={a.value}
+                onMouseDown={(e) => e.stopPropagation()}
+                onClick={() => setAlign(a.value as "left" | "center" | "right")}
+                className="px-1.5 py-1 transition-colors"
+                style={{
+                  background: align === a.value ? "var(--text-primary)" : "var(--card-bg)",
+                  color: align === a.value ? "var(--card-bg)" : "var(--text-secondary)",
+                }}
+                title={a.label}
+              >
+                <svg width="12" height="12" viewBox="0 0 14 14" fill="none">
+                  {a.icon === "align-left" && (
+                    <>
+                      <line x1="1" y1="3" x2="13" y2="3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+                      <line x1="1" y1="7" x2="9" y2="7" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+                      <line x1="1" y1="11" x2="11" y2="11" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+                    </>
+                  )}
+                  {a.icon === "align-center" && (
+                    <>
+                      <line x1="1" y1="3" x2="13" y2="3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+                      <line x1="3" y1="7" x2="11" y2="7" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+                      <line x1="2" y1="11" x2="12" y2="11" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+                    </>
+                  )}
+                  {a.icon === "align-right" && (
+                    <>
+                      <line x1="1" y1="3" x2="13" y2="3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+                      <line x1="5" y1="7" x2="13" y2="7" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+                      <line x1="3" y1="11" x2="13" y2="11" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+                    </>
+                  )}
+                </svg>
+              </button>
+            ))}
+          </div>
+
+          {/* Colour picker — Figma-style dropdown */}
+          <ColourPicker
+            selectedColor={textColor}
+            onSelect={setTextColor}
+            stopProp={stopProp}
+          />
+
+          {/* Size slider */}
+          <div className="ml-1">
+            <SnapSlider presetIndex={activePreset} onChange={handlePresetSelect} />
+          </div>
+
+          {/* Reset */}
+          <button
+            onMouseDown={(e) => e.stopPropagation()}
+            onClick={() => {
+              setActivePreset(DEFAULT_PRESET);
+              setWeight(DEFAULT_WEIGHT);
+              setFontSize(TYPE_PRESETS[DEFAULT_PRESET].fontSize);
+              setSpacing(TYPE_PRESETS[DEFAULT_PRESET].spacing);
+              setLineCount(TYPE_PRESETS[DEFAULT_PRESET].lineCount);
+              setAlign("center");
+              setItalic(false);
+              setTextColor("#0064FF");
+            }}
+            className="p-1 rounded-md transition-colors hover:opacity-60 cursor-pointer"
+            style={{
+              background: "var(--card-bg)",
+              border: "1px solid var(--card-border)",
+              color: "var(--text-secondary)",
+            }}
+            title="Reset"
+          >
+            <svg width="12" height="12" viewBox="0 0 14 14" fill="none">
+              <path d="M2 7a5 5 0 1 1 1 3" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" />
+              <path d="M2 3v4h4" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </button>
+        </motion.div>
+
+        {/* ===== Typography Preview — fills remaining space ===== */}
+        <div
+          className="relative flex-1"
+          style={{ overflow: "visible" }}
+        >
+          {/* Text + guide lines — vertically & horizontally centered */}
           <div
             className="absolute inset-0 flex items-center justify-center"
             style={{ overflow: "visible" }}
           >
-            {/* Inner text block — sized to match the text content (lineCount * fontSize) */}
+            {/* Inner text block — sized to match the text content */}
             <div
               className="relative"
               style={{
@@ -640,9 +692,7 @@ export default function HeroText({ title, subtitle }: HeroTextProps) {
                 height: textBlockHeight,
               }}
             >
-              {/* Dashed guide lines — exactly lineCount + 1 horizontal lines
-                  evenly spaced within the text block height.
-                  These are RESPONSIVE to font size, positioned inside the centered text block. */}
+              {/* Dashed guide lines — bleed past outline edges */}
               {Array.from({ length: lineCount + 1 }).map((_, i) => (
                 <div
                   key={i}
@@ -657,7 +707,7 @@ export default function HeroText({ title, subtitle }: HeroTextProps) {
                 </div>
               ))}
 
-              {/* Text content — fills the text block, vertically filling from top */}
+              {/* Text content */}
               <div
                 className="absolute inset-0"
                 style={{
