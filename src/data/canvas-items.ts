@@ -27,7 +27,7 @@ export const canvasItems: CanvasItem[] = [
   {
     id: "card-aesthetics",
     type: "brand-card",
-    position: { x: CX - 820, y: CY - 500 },
+    position: { x: CX - 840, y: CY - 500 },
     size: { width: 360, height: 340 },
     title: "Why Aesthetic Matters?",
     subtitle: "Good design builds trust and signals reliability.",
@@ -54,7 +54,7 @@ export const canvasItems: CanvasItem[] = [
   {
     id: "card-manifesto",
     type: "brand-card",
-    position: { x: CX + 440, y: CY - 500 },
+    position: { x: CX + 480, y: CY - 520 },
     size: { width: 360, height: 240 },
     title: "Manifesto",
     subtitle: "Pillars of Kind Utility — our brand philosophy.",
@@ -68,7 +68,7 @@ export const canvasItems: CanvasItem[] = [
   {
     id: "quote-teacher-1",
     type: "quote-card",
-    position: { x: CX - 1080, y: CY - 60 },
+    position: { x: CX - 760, y: CY - 40 },
     size: { width: 280, height: 160 },
     quote: "I need something that just works. I don't have time to figure out complicated software.",
     highlight: "just works",
@@ -77,40 +77,12 @@ export const canvasItems: CanvasItem[] = [
     mobileOrder: 4,
   },
 
-  // 5. Illustrations — right of hero (moved further right)
-  {
-    id: "illustration-reel",
-    type: "illustration-reel",
-    position: { x: CX + 580, y: CY - 120 },
-    size: { width: 260, height: 280 },
-    thumbnailSrc: "/images/illustration-thumb.svg",
-    thumbnailAlt: "Illustrations",
-    illustrations: [
-      {
-        src: "/images/illustration-1.svg",
-        alt: "Teacher at desk illustration",
-        caption: "Warm, human-centered illustrations",
-      },
-      {
-        src: "/images/illustration-2.svg",
-        alt: "Classroom scene illustration",
-        caption: "Natural settings, real moments",
-      },
-      {
-        src: "/images/illustration-3.svg",
-        alt: "Collaboration illustration",
-        caption: "Connection and collaboration",
-      },
-    ],
-    rotation: 2,
-    mobileOrder: 5,
-  },
 
   // Teacher photos — clickable image gallery card
   {
     id: "image-teachers-classroom",
     type: "image-card",
-    position: { x: CX - 190, y: CY + 250 },
+    position: { x: CX - 190, y: CY + 280 },
     size: { width: 380, height: 220 },
     images: [
       {
@@ -208,7 +180,7 @@ export const canvasItems: CanvasItem[] = [
   {
     id: "folder-colours",
     type: "folder",
-    position: { x: CX - 460, y: CY + 640 },
+    position: { x: CX - 460, y: CY + 680 },
     size: { width: 140, height: 160 },
     label: "COLOURS",
     panelId: "colours",
@@ -217,7 +189,7 @@ export const canvasItems: CanvasItem[] = [
   {
     id: "folder-imagery",
     type: "folder",
-    position: { x: CX - 230, y: CY + 640 },
+    position: { x: CX - 230, y: CY + 680 },
     size: { width: 140, height: 160 },
     label: "IMAGERY",
     panelId: "imagery",
@@ -226,7 +198,7 @@ export const canvasItems: CanvasItem[] = [
   {
     id: "folder-illustrations",
     type: "folder",
-    position: { x: CX - 0, y: CY + 640 },
+    position: { x: CX - 0, y: CY + 680 },
     size: { width: 140, height: 160 },
     label: "ILLUSTRATIONS",
     panelId: "illustrations",
@@ -235,7 +207,7 @@ export const canvasItems: CanvasItem[] = [
   {
     id: "folder-typography",
     type: "folder",
-    position: { x: CX + 230, y: CY + 640 },
+    position: { x: CX + 230, y: CY + 680 },
     size: { width: 140, height: 160 },
     label: "TYPOGRAPHY",
     panelId: "typography",
@@ -244,7 +216,7 @@ export const canvasItems: CanvasItem[] = [
   {
     id: "folder-use-cases",
     type: "folder",
-    position: { x: CX + 460, y: CY + 640 },
+    position: { x: CX + 460, y: CY + 680 },
     size: { width: 140, height: 160 },
     label: "USE CASES",
     panelId: "use-cases",

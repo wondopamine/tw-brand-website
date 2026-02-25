@@ -15,7 +15,7 @@ export const defaultStickers: StickerData[] = [
   {
     id: "sticker-search",
     label: "Discovery",
-    defaultPosition: { x: 580, y: 320 },
+    defaultPosition: { x: 2200, y: 590 },
     rotation: -5,
     size: 160,
     imageSrc: "/images/illustrations/illustration-search.png",
@@ -31,7 +31,7 @@ export const defaultStickers: StickerData[] = [
   {
     id: "sticker-focus",
     label: "Focus",
-    defaultPosition: { x: 2550, y: 1350 },
+    defaultPosition: { x: 2700, y: 1200 },
     rotation: -6,
     size: 155,
     imageSrc: "/images/illustrations/illustration-focus.png",

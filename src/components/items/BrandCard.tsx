@@ -4,13 +4,39 @@ interface BrandCardProps {
   title: string;
   subtitle?: string;
   onClick: () => void;
+  variant?: "default" | "featured";
 }
 
 export default function BrandCard({
   title,
   subtitle,
   onClick,
+  variant,
 }: BrandCardProps) {
+  if (variant === "featured") {
+    return (
+      <button
+        onClick={onClick}
+        className="canvas-card p-6 h-full min-h-[260px] flex flex-col text-left w-full cursor-pointer"
+        style={{ backgroundColor: "#0064FF" }}
+        aria-label={`Open ${title}`}
+      >
+        <div className="flex-1 flex items-end">
+          <h3
+            className="font-semibold leading-none"
+            style={{ color: "#FFFFFF", fontSize: "clamp(28px, 5vw, 42px)" }}
+          >
+            Why<br />
+            Aesthetic<br />
+            <span style={{ fontFamily: "Georgia, 'Times New Roman', serif" }}>
+              Matters?
+            </span>
+          </h3>
+        </div>
+      </button>
+    );
+  }
+
   return (
     <button
       onClick={onClick}

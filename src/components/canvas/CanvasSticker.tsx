@@ -263,6 +263,7 @@ export default function CanvasSticker({
             height: size,
             objectFit: "contain",
             userSelect: "none",
+            mixBlendMode: "multiply",
           }}
         />
       </motion.div>
