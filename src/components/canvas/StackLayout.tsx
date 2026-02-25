@@ -27,6 +27,7 @@ export default function StackLayout({
         <div key={item.id} className="w-full">
           <CanvasItem
             item={item}
+            stack
             onFolderClick={onFolderClick}
             onIllustrationClick={onIllustrationClick}
             onCardClick={onCardClick}

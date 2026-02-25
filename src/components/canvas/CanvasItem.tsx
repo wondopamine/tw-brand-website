@@ -18,6 +18,7 @@ import FolderIcon from "@/components/items/FolderIcon";
 
 interface CanvasItemProps {
   item: CanvasItemType;
+  stack?: boolean;
   onFolderClick: (panelId: string) => void;
   onIllustrationClick: (slides: IllustrationSlide[], index: number) => void;
   onCardClick: (modalId: string) => void;
@@ -35,6 +36,7 @@ const GLOW_CARD_TYPES = new Set([
 
 export default function CanvasItem({
   item,
+  stack,
   onFolderClick,
   onIllustrationClick,
   onCardClick,
@@ -42,7 +44,7 @@ export default function CanvasItem({
   const content = (() => {
     switch (item.type) {
       case "hero-text":
-        return <HeroText title={item.title} subtitle={item.subtitle} />;
+        return <HeroText title={item.title} subtitle={item.subtitle} stack={stack} />;
       case "manifesto-card":
         return (
           <ManifestoCard
