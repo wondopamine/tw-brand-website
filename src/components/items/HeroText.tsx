@@ -6,6 +6,7 @@ import { motion } from "motion/react";
 interface HeroTextProps {
   title: string;
   subtitle?: string;
+  stack?: boolean;
 }
 
 /* ------------------------------------------------------------------ */
@@ -461,6 +462,30 @@ function ColourPicker({
 /*    └─ + cross markers at corners ─────────────────────────────────┘ */
 /* ================================================================== */
 export default function HeroText({ title, subtitle }: HeroTextProps) {
+export default function HeroText({ title, subtitle, stack }: HeroTextProps) {
+  if (stack) {
+    const lines = [title, ...(subtitle ? subtitle.split("\n") : [])];
+    return (
+      <div
+        className="py-8 text-center overflow-hidden"
+        style={{ fontFamily: "var(--font-display, 'Plus Jakarta Sans', sans-serif)" }}
+      >
+        {lines.map((line, i) => (
+          <div
+            key={i}
+            className="font-black leading-none"
+            style={{
+              color: "var(--accent)",
+              fontSize: "clamp(36px, 14vw, 80px)",
+              letterSpacing: "-0.03em",
+            }}
+          >
+            {line}
+          </div>
+        ))}
+      </div>
+    );
+  }
   const DEFAULT_PRESET = 0; // Hero
   const DEFAULT_WEIGHT = 900; // Black
   const [activePreset, setActivePreset] = useState(DEFAULT_PRESET);

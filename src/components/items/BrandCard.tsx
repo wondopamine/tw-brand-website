@@ -5,6 +5,7 @@ interface BrandCardProps {
   subtitle?: string;
   variant?: "default" | "featured";
   onClick: () => void;
+  variant?: "default" | "featured";
 }
 
 export default function BrandCard({
@@ -12,6 +13,7 @@ export default function BrandCard({
   subtitle,
   variant = "default",
   onClick,
+  variant,
 }: BrandCardProps) {
   if (variant === "featured") {
     return (
@@ -55,6 +57,21 @@ export default function BrandCard({
           >
             matters?
           </div>
+        className="canvas-card p-6 h-full min-h-[260px] flex flex-col text-left w-full cursor-pointer"
+        style={{ backgroundColor: "#0064FF" }}
+        aria-label={`Open ${title}`}
+      >
+        <div className="flex-1 flex items-end">
+          <h3
+            className="font-semibold leading-none"
+            style={{ color: "#FFFFFF", fontSize: "clamp(28px, 5vw, 42px)" }}
+          >
+            Why<br />
+            Aesthetic<br />
+            <span style={{ fontFamily: "Georgia, 'Times New Roman', serif" }}>
+              Matters?
+            </span>
+          </h3>
         </div>
       </button>
     );

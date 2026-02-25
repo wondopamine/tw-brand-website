@@ -111,7 +111,7 @@ export default function CanvasViewport() {
   // Mobile: vertical stack with normal scroll
   if (!isDesktop) {
     return (
-      <div className="canvas-grid min-h-screen overflow-y-auto">
+      <div className="min-h-screen overflow-y-auto">
         <StackLayout
           items={canvasItems}
           onFolderClick={handleFolderClick}
@@ -143,6 +143,8 @@ export default function CanvasViewport() {
       ref={containerRef}
       className="canvas-grid fixed inset-0 overflow-hidden"
       style={{ touchAction: "none", cursor: "none" }}
+      className="fixed inset-0 overflow-hidden"
+      style={{ touchAction: "none" }}
     >
       {/* Canvas inner — oversized so grid never ends visually.
            Content is placed via absolute positioning within CANVAS_WIDTH x CANVAS_HEIGHT,

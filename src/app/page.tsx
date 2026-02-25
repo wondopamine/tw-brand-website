@@ -5,7 +5,7 @@ import Link from "next/link";
 
 export default function Home() {
   return (
-    <div className="min-h-screen canvas-grid canvas-grid-lines">
+    <div className="min-h-screen">
       {/* Top-left navigation hint */}
       <div className="fixed top-4 left-6 z-10">
         <span
@@ -50,7 +50,7 @@ export default function Home() {
 
           <div className="flex justify-center mt-4">
             <span
-              className="inline-block px-4 py-1.5 text-sm font-medium rounded-full"
+              className="inline-block px-4 py-1.5 text-sm font-medium rounded-lg"
               style={{
                 color: "var(--accent)",
                 border: "1px solid rgba(0, 100, 255, 0.2)",
@@ -171,56 +171,6 @@ export default function Home() {
                 Consistency builds trust. Brand is how we make the invisible
                 promise visible: this was made with you in mind.
               </p>
-
-              <div>
-                <p
-                  className="text-[15px] leading-relaxed mb-2"
-                  style={{ color: "var(--text-secondary)" }}
-                >
-                  Four principles guide every decision:
-                </p>
-                <ul
-                  className="list-disc pl-5 space-y-1 text-[15px] leading-relaxed"
-                  style={{ color: "var(--text-secondary)" }}
-                >
-                  <li>
-                    <span
-                      className="font-medium"
-                      style={{ color: "var(--text-primary)" }}
-                    >
-                      Utility by Default
-                    </span>{" "}
-                    &mdash; Function before form.
-                  </li>
-                  <li>
-                    <span
-                      className="font-medium"
-                      style={{ color: "var(--text-primary)" }}
-                    >
-                      Kind at Surface
-                    </span>{" "}
-                    &mdash; Familiar, gentle, never intimidating.
-                  </li>
-                  <li>
-                    <span
-                      className="font-medium"
-                      style={{ color: "var(--text-primary)" }}
-                    >
-                      Calm Guidance
-                    </span>{" "}
-                    &mdash; Elevate support when stakes are high.
-                  </li>
-                  <li>
-                    <span
-                      className="font-medium"
-                      style={{ color: "var(--text-primary)" }}
-                    >
-                      Light Weight
-                    </span>{" "}
-                    &mdash; Responsive, never sluggish.
-                  </li>
-                </ul>
-              </div>
 
               <p
                 className="text-[15px] leading-relaxed"
