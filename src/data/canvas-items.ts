@@ -27,6 +27,7 @@ export const canvasItems: CanvasItem[] = [
   {
     id: "card-aesthetics",
     type: "brand-card",
+    position: { x: CX - 820, y: CY - 500 },
     position: { x: CX - 840, y: CY - 500 },
     size: { width: 360, height: 340 },
     title: "Why Aesthetic Matters?",
@@ -68,6 +69,7 @@ export const canvasItems: CanvasItem[] = [
   {
     id: "quote-teacher-1",
     type: "quote-card",
+    position: { x: CX - 1080, y: CY - 60 },
     position: { x: CX - 760, y: CY - 40 },
     size: { width: 280, height: 160 },
     quote: "I need something that just works. I don't have time to figure out complicated software.",

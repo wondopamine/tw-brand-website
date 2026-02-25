@@ -17,6 +17,7 @@ import FolderModal from "@/components/panel/FolderModal";
 import CardModal from "@/components/cards/CardModal";
 import IllustrationPopup from "@/components/items/IllustrationPopup";
 import ZoomControls from "@/components/canvas/ZoomControls";
+import { useCanvasStamp, StampCursor, StampImprints } from "@/components/canvas/CanvasStamp";
 import type { IllustrationSlide } from "@/types/canvas";
 import type { PanelContent } from "@/types/panel";
 import type { ModalContent } from "@/data/modal-contents";
@@ -68,8 +69,17 @@ export default function CanvasViewport() {
     gridPadding: GRID_PADDING,
   });
 
-  // Cursor tracking for grid highlight (pass zoom so mask tracks correctly at all zoom levels)
+  // Cursor tracking (pass zoom so variables track correctly at all zoom levels)
   useCursorPosition(canvasInnerRef, offsetX, offsetY, zoom);
+
+  // Stamp cursor — click to leave temporary imprints on empty canvas background
+  const stampImprints = useCanvasStamp({
+    offsetX,
+    offsetY,
+    zoom,
+    gridPadding: GRID_PADDING,
+    disabled: isOverlayOpen,
+  });
 
   // Viewport dimensions for minimap
   const [viewportSize, setViewportSize] = useState({ width: 0, height: 0 });
@@ -131,6 +141,8 @@ export default function CanvasViewport() {
   return (
     <div
       ref={containerRef}
+      className="canvas-grid fixed inset-0 overflow-hidden"
+      style={{ touchAction: "none", cursor: "none" }}
       className="fixed inset-0 overflow-hidden"
       style={{ touchAction: "none" }}
     >
@@ -160,6 +172,9 @@ export default function CanvasViewport() {
           onCardClick={handleCardClick}
           onItemHover={handleItemHover}
         />
+
+        {/* Stamp imprints — inside canvas-inner so they pan/zoom with content */}
+        <StampImprints imprints={stampImprints} />
 
         {/* Draggable stickers — rendered inside canvas-inner so they move with the canvas.
              Container is pointer-events:none so it doesn't block clicks on items below (e.g. hero controls).
@@ -194,6 +209,9 @@ export default function CanvasViewport() {
           })}
         </div>
       </div>
+
+      {/* Stamp cursor — fixed to viewport, follows mouse */}
+      <StampCursor />
 
       {/* Edge vignette overlay */}
       <EdgeVignette />

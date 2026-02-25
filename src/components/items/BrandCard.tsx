@@ -3,6 +3,7 @@
 interface BrandCardProps {
   title: string;
   subtitle?: string;
+  variant?: "default" | "featured";
   onClick: () => void;
   variant?: "default" | "featured";
 }
@@ -10,6 +11,7 @@ interface BrandCardProps {
 export default function BrandCard({
   title,
   subtitle,
+  variant = "default",
   onClick,
   variant,
 }: BrandCardProps) {
@@ -17,6 +19,44 @@ export default function BrandCard({
     return (
       <button
         onClick={onClick}
+        className="h-full w-full text-left cursor-pointer"
+        style={{
+          background: "#0064FF",
+          borderRadius: 24,
+          position: "relative",
+          overflow: "hidden",
+          border: "none",
+          outline: "none",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "flex-end",
+          padding: "28px 28px 32px",
+        }}
+        aria-label={`Open ${title}`}
+      >
+        <div
+          style={{
+            fontFamily: "var(--font-display, 'Plus Jakarta Sans', sans-serif)",
+            color: "#fff",
+            lineHeight: 1.05,
+          }}
+        >
+          <div style={{ fontSize: 48, fontWeight: 300, letterSpacing: "-1.5px" }}>
+            Why
+          </div>
+          <div style={{ fontSize: 48, fontWeight: 300, letterSpacing: "-1.5px" }}>
+            Aesthetics
+          </div>
+          <div
+            style={{
+              fontSize: 48,
+              fontWeight: 800,
+              fontStyle: "italic",
+              letterSpacing: "-1.5px",
+            }}
+          >
+            matters?
+          </div>
         className="canvas-card p-6 h-full min-h-[260px] flex flex-col text-left w-full cursor-pointer"
         style={{ backgroundColor: "#0064FF" }}
         aria-label={`Open ${title}`}

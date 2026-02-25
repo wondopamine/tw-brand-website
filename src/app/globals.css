@@ -51,33 +51,12 @@ body {
 /* Subtle static dot grid on viewport */
 .canvas-grid {
   background-color: var(--canvas-bg);
-  background-image: radial-gradient(circle, rgba(0, 0, 0, 0.03) 1px, transparent 1px);
-  background-size: 24px 24px;
   cursor: default;
 }
 
-/* Static line grid — always visible, no cursor mask (used on landing page) */
+/* Static line grid — disabled to keep canvas clean */
 .canvas-grid-lines {
   position: relative;
-}
-
-.canvas-grid-lines::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background-image:
-    linear-gradient(to right, rgba(0, 0, 0, 0.04) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(0, 0, 0, 0.04) 1px, transparent 1px),
-    linear-gradient(to right, rgba(0, 0, 0, 0.08) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(0, 0, 0, 0.08) 1px, transparent 1px);
-  background-size:
-    32px 32px,
-    32px 32px,
-    128px 128px,
-    128px 128px;
-  pointer-events: none;
-  z-index: 0;
-  opacity: 0.5;
 }
 
 /* Card base styles — border handled by GlowCard wrapper */
@@ -87,9 +66,19 @@ body {
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
 }
 
-/* ===== CURSOR GRID HIGHLIGHT ===== */
+/* ===== CANVAS INNER — stamp cursor ===== */
 .canvas-inner {
   position: relative;
+  cursor: none;
+}
+
+/* Stamp imprint animation — appears on click, fades after 3s */
+@keyframes stamp-appear {
+  0%   { opacity: 0; transform: translate(-50%, -50%) rotate(var(--stamp-rot)) scale(1.15); }
+  8%   { opacity: 0.5; transform: translate(-50%, -50%) rotate(var(--stamp-rot)) scale(0.97); }
+  15%  { opacity: 0.35; transform: translate(-50%, -50%) rotate(var(--stamp-rot)) scale(1); }
+  70%  { opacity: 0.3; transform: translate(-50%, -50%) rotate(var(--stamp-rot)) scale(1); }
+  100% { opacity: 0; transform: translate(-50%, -50%) rotate(var(--stamp-rot)) scale(1); }
   cursor: default;
 }
 

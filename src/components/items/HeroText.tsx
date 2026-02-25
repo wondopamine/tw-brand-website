@@ -461,6 +461,7 @@ function ColourPicker({
 /*    │                                                               │ */
 /*    └─ + cross markers at corners ─────────────────────────────────┘ */
 /* ================================================================== */
+export default function HeroText({ title, subtitle }: HeroTextProps) {
 export default function HeroText({ title, subtitle, stack }: HeroTextProps) {
   if (stack) {
     const lines = [title, ...(subtitle ? subtitle.split("\n") : [])];
