@@ -143,8 +143,6 @@ export default function CanvasViewport() {
       ref={containerRef}
       className="canvas-grid fixed inset-0 overflow-hidden"
       style={{ touchAction: "none", cursor: "none" }}
-      className="fixed inset-0 overflow-hidden"
-      style={{ touchAction: "none" }}
     >
       {/* Canvas inner — oversized so grid never ends visually.
            Content is placed via absolute positioning within CANVAS_WIDTH x CANVAS_HEIGHT,

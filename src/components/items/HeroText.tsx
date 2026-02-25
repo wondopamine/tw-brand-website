@@ -461,7 +461,6 @@ function ColourPicker({
 /*    │                                                               │ */
 /*    └─ + cross markers at corners ─────────────────────────────────┘ */
 /* ================================================================== */
-export default function HeroText({ title, subtitle }: HeroTextProps) {
 export default function HeroText({ title, subtitle, stack }: HeroTextProps) {
   const DEFAULT_PRESET = 0; // Hero
   const DEFAULT_WEIGHT = 900; // Black
