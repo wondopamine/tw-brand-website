@@ -463,6 +463,17 @@ function ColourPicker({
 /* ================================================================== */
 export default function HeroText({ title, subtitle }: HeroTextProps) {
 export default function HeroText({ title, subtitle, stack }: HeroTextProps) {
+  const DEFAULT_PRESET = 0; // Hero
+  const DEFAULT_WEIGHT = 900; // Black
+  const [activePreset, setActivePreset] = useState(DEFAULT_PRESET);
+  const [weight, setWeight] = useState<number>(DEFAULT_WEIGHT);
+  const [fontSize, setFontSize] = useState<number>(TYPE_PRESETS[DEFAULT_PRESET].fontSize);
+  const [spacing, setSpacing] = useState<number>(TYPE_PRESETS[DEFAULT_PRESET].spacing);
+  const [align, setAlign] = useState<"left" | "center" | "right">("center");
+  const [italic, setItalic] = useState(false);
+  const [lineCount, setLineCount] = useState<number>(TYPE_PRESETS[DEFAULT_PRESET].lineCount);
+  const [textColor, setTextColor] = useState("#0064FF");
+
   if (stack) {
     const lines = [title, ...(subtitle ? subtitle.split("\n") : [])];
     return (
@@ -486,16 +497,6 @@ export default function HeroText({ title, subtitle, stack }: HeroTextProps) {
       </div>
     );
   }
-  const DEFAULT_PRESET = 0; // Hero
-  const DEFAULT_WEIGHT = 900; // Black
-  const [activePreset, setActivePreset] = useState(DEFAULT_PRESET);
-  const [weight, setWeight] = useState<number>(DEFAULT_WEIGHT);
-  const [fontSize, setFontSize] = useState<number>(TYPE_PRESETS[DEFAULT_PRESET].fontSize);
-  const [spacing, setSpacing] = useState<number>(TYPE_PRESETS[DEFAULT_PRESET].spacing);
-  const [align, setAlign] = useState<"left" | "center" | "right">("center");
-  const [italic, setItalic] = useState(false);
-  const [lineCount, setLineCount] = useState<number>(TYPE_PRESETS[DEFAULT_PRESET].lineCount);
-  const [textColor, setTextColor] = useState("#0064FF");
 
   const handlePresetSelect = useCallback((index: number) => {
     const preset = TYPE_PRESETS[index];
