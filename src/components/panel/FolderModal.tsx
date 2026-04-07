@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import type { PanelContent } from "@/types/panel";
 import PanelBody from "./PanelBody";
@@ -12,15 +12,43 @@ interface FolderModalProps {
 
 export default function FolderModal({ content, onClose }: FolderModalProps) {
   const isOpen = content !== null;
+  const modalRef = useRef<HTMLDivElement>(null);
+  const previousFocusRef = useRef<HTMLElement | null>(null);
+
+  const trapFocus = useCallback((e: KeyboardEvent) => {
+    if (e.key !== "Tab" || !modalRef.current) return;
+    const focusable = modalRef.current.querySelectorAll<HTMLElement>(
+      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+    );
+    if (focusable.length === 0) return;
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+    if (e.shiftKey && document.activeElement === first) {
+      e.preventDefault();
+      last.focus();
+    } else if (!e.shiftKey && document.activeElement === last) {
+      e.preventDefault();
+      first.focus();
+    }
+  }, []);
 
   useEffect(() => {
     if (!isOpen) return;
+    previousFocusRef.current = document.activeElement as HTMLElement;
     const handleKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
+      trapFocus(e);
     };
     window.addEventListener("keydown", handleKey);
-    return () => window.removeEventListener("keydown", handleKey);
-  }, [isOpen, onClose]);
+    requestAnimationFrame(() => {
+      const closeBtn = modalRef.current?.querySelector<HTMLElement>("button");
+      closeBtn?.focus();
+    });
+    return () => {
+      window.removeEventListener("keydown", handleKey);
+      previousFocusRef.current?.focus();
+    };
+  }, [isOpen, onClose, trapFocus]);
 
   useEffect(() => {
     if (isOpen) {
@@ -50,6 +78,10 @@ export default function FolderModal({ content, onClose }: FolderModalProps) {
 
           {/* Modal — Linear-inspired centered layout */}
           <motion.div
+            ref={modalRef}
+            role="dialog"
+            aria-modal="true"
+            aria-label={content.title}
             className="fixed inset-0 z-[70] overflow-y-auto pointer-events-none"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}

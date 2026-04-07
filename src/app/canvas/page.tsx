@@ -1,9 +1,12 @@
 import CanvasViewport from "@/components/canvas/CanvasViewport";
+import ErrorBoundary from "@/components/ErrorBoundary";
 
 export default function CanvasPage() {
   return (
     <main>
-      <CanvasViewport />
+      <ErrorBoundary>
+        <CanvasViewport />
+      </ErrorBoundary>
     </main>
   );
 }

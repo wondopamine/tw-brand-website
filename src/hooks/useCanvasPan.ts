@@ -137,6 +137,20 @@ export function useCanvasPan({
     [applyOffset]
   );
 
+  // Calculate velocity from mouse/touch history for momentum scrolling
+  const calcVelocityFromHistory = useCallback((): { vx: number; vy: number } | null => {
+    const history = mouseHistoryRef.current;
+    if (history.length < 2) return null;
+    const recent = history[history.length - 1];
+    const older = history[0];
+    const dt = recent.t - older.t;
+    if (dt <= 0 || dt >= 200) return null;
+    const vx = ((recent.x - older.x) / dt) * 16;
+    const vy = ((recent.y - older.y) / dt) * 16;
+    if (Math.abs(vx) <= 1 && Math.abs(vy) <= 1) return null;
+    return { vx, vy };
+  }, []);
+
   // Stop any running momentum
   const stopMomentum = useCallback(() => {
     if (momentumRafRef.current) {
@@ -284,21 +298,8 @@ export function useCanvasPan({
       container.classList.remove("is-dragging");
 
       // Calculate velocity for momentum
-      const history = mouseHistoryRef.current;
-      if (history.length >= 2) {
-        const recent = history[history.length - 1];
-        const older = history[0];
-        const dt = recent.t - older.t;
-
-        if (dt > 0 && dt < 200) {
-          const vx = ((recent.x - older.x) / dt) * 16; // Scale to ~60fps frame
-          const vy = ((recent.y - older.y) / dt) * 16;
-
-          if (Math.abs(vx) > 1 || Math.abs(vy) > 1) {
-            startMomentum(vx, vy);
-          }
-        }
-      }
+      const velocity = calcVelocityFromHistory();
+      if (velocity) startMomentum(velocity.vx, velocity.vy);
     };
 
     // Wheel / trackpad — with zoom on ctrl/meta
@@ -394,20 +395,8 @@ export function useCanvasPan({
       if (!isDraggingRef.current) return;
       isDraggingRef.current = false;
 
-      const history = mouseHistoryRef.current;
-      if (history.length >= 2) {
-        const recent = history[history.length - 1];
-        const older = history[0];
-        const dt = recent.t - older.t;
-
-        if (dt > 0 && dt < 200) {
-          const vx = ((recent.x - older.x) / dt) * 16;
-          const vy = ((recent.y - older.y) / dt) * 16;
-          if (Math.abs(vx) > 1 || Math.abs(vy) > 1) {
-            startMomentum(vx, vy);
-          }
-        }
-      }
+      const velocity = calcVelocityFromHistory();
+      if (velocity) startMomentum(velocity.vx, velocity.vy);
     };
 
     container.addEventListener("touchstart", handleTouchStart, { passive: true });
@@ -429,7 +418,7 @@ export function useCanvasPan({
       if (syncRafRef.current) cancelAnimationFrame(syncRafRef.current);
       stopMomentum();
     };
-  }, [disabled, applyOffset, applyZoom, startMomentum, stopMomentum]);
+  }, [disabled, applyOffset, applyZoom, startMomentum, stopMomentum, calcVelocityFromHistory]);
 
   // Set initial offset on mount — center the canvas content in the viewport
   useEffect(() => {

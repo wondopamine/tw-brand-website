@@ -21,7 +21,6 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.1.6",
-    "made-refine": "^0.2.2",
     "made-refine": "^0.2.6",
     "tailwindcss": "^4",
     "typescript": "5.9.3"

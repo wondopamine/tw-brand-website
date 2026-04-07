@@ -60,8 +60,8 @@ export default function ImageCard({ images, caption }: ImageCardProps) {
             <Image
               src={activeImage.src}
               alt={activeImage.alt}
-              width={2000}
-              height={1000}
+              width={760}
+              height={412}
               className="w-full h-auto object-cover"
               sizes="380px"
             />

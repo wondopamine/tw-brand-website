@@ -92,6 +92,9 @@ export default function Home() {
                   muted
                   playsInline
                   className="w-full h-full object-contain"
+                  onError={(e) => {
+                    (e.currentTarget as HTMLVideoElement).style.display = "none";
+                  }}
                 />
               </div>
             </div>
@@ -185,17 +188,7 @@ export default function Home() {
             <div className="flex justify-center mt-10">
               <Link
                 href="/canvas"
-                className="inline-flex items-center px-6 py-3 text-sm font-medium text-white rounded-full transition-colors"
-                style={{
-                  backgroundColor: "var(--accent)",
-                }}
-                onMouseEnter={(e) =>
-                  (e.currentTarget.style.backgroundColor =
-                    "var(--accent-hover)")
-                }
-                onMouseLeave={(e) =>
-                  (e.currentTarget.style.backgroundColor = "var(--accent)")
-                }
+                className="inline-flex items-center px-6 py-3 text-sm font-medium text-white rounded-full transition-colors bg-accent hover:bg-accent-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
               >
                 Open Brand Workspace
               </Link>
