@@ -2,6 +2,7 @@
 
 import { motion } from "motion/react";
 import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
 export default function Home() {
   return (
@@ -186,12 +187,11 @@ export default function Home() {
 
             {/* CTA Button */}
             <div className="flex justify-center mt-10">
-              <Link
-                href="/canvas"
-                className="inline-flex items-center px-6 py-3 text-sm font-medium text-white rounded-full transition-colors bg-accent hover:bg-accent-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
-              >
-                Open Brand Workspace
-              </Link>
+              <Button
+                size="cta"
+                variant="default"
+                render={<Link href="/canvas">Open Brand Workspace</Link>}
+              />
             </div>
           </div>
         </motion.div>
