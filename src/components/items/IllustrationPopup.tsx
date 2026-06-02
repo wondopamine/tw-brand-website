@@ -2,7 +2,11 @@
 
 import { useState, useEffect, useCallback } from "react";
 import type { IllustrationSlide } from "@/types/canvas";
-import { Dialog } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 interface IllustrationPopupProps {
   slides: IllustrationSlide[];
@@ -38,13 +42,13 @@ export default function IllustrationPopup({
   const slide = slides[currentIndex];
 
   return (
-    <Dialog
-      open={true}
-      onClose={onClose}
-      ariaLabel="Illustration viewer"
-      popupClassName="items-center justify-center p-4"
-    >
-      <div className="relative max-w-4xl w-full">
+    <Dialog open={true} onOpenChange={(o) => !o && onClose()}>
+      <DialogContent
+        showCloseButton={false}
+        className="max-w-4xl sm:max-w-4xl w-full p-4 bg-transparent border-0 ring-0 shadow-none"
+      >
+        <DialogTitle className="sr-only">Illustration viewer</DialogTitle>
+        <div className="relative w-full">
         {/* Close button */}
         <button
           onClick={onClose}
@@ -141,6 +145,7 @@ export default function IllustrationPopup({
           </div>
         )}
       </div>
+      </DialogContent>
     </Dialog>
   );
 }

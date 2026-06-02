@@ -33,9 +33,9 @@ const buttonVariants = cva(
         "icon-sm":
           "size-7 rounded-[min(var(--radius-md),12px)] in-data-[slot=button-group]:rounded-lg",
         "icon-lg": "size-9",
-        /** Custom CTA size for hero/page-level Buttons (e.g., homepage "Open Brand Workspace") */
+        /** CTA size for hero/page-level Buttons (e.g., homepage "Open Brand Workspace") */
         cta: "h-auto rounded-full px-6 py-3 text-sm font-medium gap-2",
-        /** Custom featured-card size — overrides height so featured BrandCard can fill container */
+        /** Featured-card size — h-auto w-full so featured BrandCard fills its grid cell */
         featured: "h-auto w-full text-base",
       },
     },

@@ -1,7 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { Dialog } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 interface QuoteCardProps {
   quote: string;
@@ -44,13 +48,15 @@ function QuoteModal({
   };
 
   return (
-    <Dialog
-      open={open}
-      onClose={onClose}
-      ariaLabel={attribution ? `Quote by ${attribution}` : "Quote"}
-      popupClassName="items-center justify-center p-6"
-    >
-      <div className="relative max-w-2xl w-full">
+    <Dialog open={open} onOpenChange={(o) => !o && onClose()}>
+      <DialogContent
+        showCloseButton={false}
+        className="max-w-2xl sm:max-w-2xl w-full p-6 bg-transparent border-0 ring-0 shadow-none"
+      >
+        <DialogTitle className="sr-only">
+          {attribution ? `Quote by ${attribution}` : "Quote"}
+        </DialogTitle>
+        <div className="relative w-full">
         {/* Large open-quote mark */}
         <div
           className="text-[120px] leading-none select-none mb-[-24px]"
@@ -97,6 +103,7 @@ function QuoteModal({
           Close ✕
         </button>
       </div>
+      </DialogContent>
     </Dialog>
   );
 }

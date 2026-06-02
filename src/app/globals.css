@@ -316,28 +316,6 @@ body {
   }
 }
 
-/* ===== DIALOG (Base UI) ===== */
-.tw-dialog-backdrop {
-  background-color: var(--overlay-bg);
-  backdrop-filter: blur(8px);
-  opacity: 1;
-  transition: opacity 0.2s ease;
-}
-.tw-dialog-backdrop[data-starting-style],
-.tw-dialog-backdrop[data-ending-style] {
-  opacity: 0;
-}
-
-.tw-dialog-popup {
-  opacity: 1;
-  transition: opacity 0.2s ease, transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-.tw-dialog-popup[data-starting-style],
-.tw-dialog-popup[data-ending-style] {
-  opacity: 0;
-  transform: translateY(12px);
-}
-
 /* Scrollbar styling */
 ::-webkit-scrollbar {
   width: 8px;
