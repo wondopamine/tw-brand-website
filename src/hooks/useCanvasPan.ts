@@ -325,84 +325,6 @@ export function useCanvasPan({
     window.addEventListener("mouseup", handleMouseUp);
     container.addEventListener("wheel", handleWheel, { passive: false });
 
-    // Touch handlers
-    let touchStartX = 0;
-    let touchStartY = 0;
-    let touchStartOffsetX = 0;
-    let touchStartOffsetY = 0;
-    let lastPinchDist = 0;
-
-    const handleTouchStart = (e: TouchEvent) => {
-      const target = e.target as HTMLElement;
-      if (target.closest("button") || target.closest("a") || target.closest("input") || target.closest("select") || target.closest("[data-sticker]")) return;
-
-      stopMomentum();
-
-      if (e.touches.length === 2) {
-        // Pinch zoom start
-        const dx = e.touches[0].clientX - e.touches[1].clientX;
-        const dy = e.touches[0].clientY - e.touches[1].clientY;
-        lastPinchDist = Math.sqrt(dx * dx + dy * dy);
-        return;
-      }
-
-      if (e.touches.length !== 1) return;
-
-      const touch = e.touches[0];
-      touchStartX = touch.clientX;
-      touchStartY = touch.clientY;
-      touchStartOffsetX = offsetXRef.current;
-      touchStartOffsetY = offsetYRef.current;
-      isDraggingRef.current = true;
-      mouseHistoryRef.current = [{ x: touch.clientX, y: touch.clientY, t: Date.now() }];
-    };
-
-    const handleTouchMove = (e: TouchEvent) => {
-      if (e.touches.length === 2) {
-        // Pinch zoom
-        e.preventDefault();
-        const dx = e.touches[0].clientX - e.touches[1].clientX;
-        const dy = e.touches[0].clientY - e.touches[1].clientY;
-        const dist = Math.sqrt(dx * dx + dy * dy);
-        if (lastPinchDist > 0) {
-          const centerX = (e.touches[0].clientX + e.touches[1].clientX) / 2;
-          const centerY = (e.touches[0].clientY + e.touches[1].clientY) / 2;
-          const scale = dist / lastPinchDist;
-          applyZoom(zoomRef.current * scale, centerX, centerY);
-        }
-        lastPinchDist = dist;
-        return;
-      }
-
-      if (!isDraggingRef.current || e.touches.length !== 1) return;
-      e.preventDefault();
-
-      const touch = e.touches[0];
-      const tdx = touch.clientX - touchStartX;
-      const tdy = touch.clientY - touchStartY;
-
-      applyOffset(touchStartOffsetX + tdx, touchStartOffsetY + tdy);
-
-      const now = Date.now();
-      mouseHistoryRef.current.push({ x: touch.clientX, y: touch.clientY, t: now });
-      if (mouseHistoryRef.current.length > 5) {
-        mouseHistoryRef.current.shift();
-      }
-    };
-
-    const handleTouchEnd = () => {
-      lastPinchDist = 0;
-      if (!isDraggingRef.current) return;
-      isDraggingRef.current = false;
-
-      const velocity = calcVelocityFromHistory();
-      if (velocity) startMomentum(velocity.vx, velocity.vy);
-    };
-
-    container.addEventListener("touchstart", handleTouchStart, { passive: true });
-    container.addEventListener("touchmove", handleTouchMove, { passive: false });
-    container.addEventListener("touchend", handleTouchEnd);
-
     // Default cursor — cards/folders handle their own pointer cursor
     container.style.cursor = "default";
 
@@ -411,9 +333,6 @@ export function useCanvasPan({
       window.removeEventListener("mousemove", handleMouseMove);
       window.removeEventListener("mouseup", handleMouseUp);
       container.removeEventListener("wheel", handleWheel);
-      container.removeEventListener("touchstart", handleTouchStart);
-      container.removeEventListener("touchmove", handleTouchMove);
-      container.removeEventListener("touchend", handleTouchEnd);
 
       if (syncRafRef.current) cancelAnimationFrame(syncRafRef.current);
       stopMomentum();
