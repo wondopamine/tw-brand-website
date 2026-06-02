@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { createPortal } from "react-dom";
+import { Dialog } from "@/components/ui/dialog";
 
 interface QuoteCardProps {
   quote: string;
@@ -15,8 +15,9 @@ function QuoteModal({
   highlight,
   attribution,
   source,
+  open,
   onClose,
-}: QuoteCardProps & { onClose: () => void }) {
+}: QuoteCardProps & { open: boolean; onClose: () => void }) {
   const renderQuote = (large = false) => {
     if (!highlight) return <span>{quote}</span>;
 
@@ -42,16 +43,14 @@ function QuoteModal({
     );
   };
 
-  return createPortal(
-    <div
-      className="fixed inset-0 z-[9999] flex items-center justify-center p-6"
-      style={{ backgroundColor: "var(--overlay-bg)" }}
-      onClick={onClose}
+  return (
+    <Dialog
+      open={open}
+      onClose={onClose}
+      ariaLabel={attribution ? `Quote by ${attribution}` : "Quote"}
+      popupClassName="items-center justify-center p-6"
     >
-      <div
-        className="relative max-w-2xl w-full"
-        onClick={(e) => e.stopPropagation()}
-      >
+      <div className="relative max-w-2xl w-full">
         {/* Large open-quote mark */}
         <div
           className="text-[120px] leading-none select-none mb-[-24px]"
@@ -92,14 +91,13 @@ function QuoteModal({
         {/* Close */}
         <button
           onClick={onClose}
-          className="absolute -top-10 right-0 text-xs font-medium uppercase tracking-widest opacity-50 hover:opacity-100 transition-opacity"
+          className="absolute -top-10 right-0 text-xs font-medium uppercase tracking-widest opacity-50 hover:opacity-100 transition-opacity focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
           style={{ color: "var(--text-primary)" }}
         >
           Close ✕
         </button>
       </div>
-    </div>,
-    document.body
+    </Dialog>
   );
 }
 
@@ -194,15 +192,14 @@ export default function QuoteCard({
         </p>
       </div>
 
-      {open && (
-        <QuoteModal
-          quote={quote}
-          highlight={highlight}
-          attribution={attribution}
-          source={source}
-          onClose={() => setOpen(false)}
-        />
-      )}
+      <QuoteModal
+        quote={quote}
+        highlight={highlight}
+        attribution={attribution}
+        source={source}
+        open={open}
+        onClose={() => setOpen(false)}
+      />
     </>
   );
 }
