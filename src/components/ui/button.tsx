@@ -18,6 +18,8 @@ const buttonVariants = cva(
         destructive:
           "bg-destructive/10 text-destructive hover:bg-destructive/20 focus-visible:border-destructive/40 focus-visible:ring-destructive/20 dark:bg-destructive/20 dark:hover:bg-destructive/30 dark:focus-visible:ring-destructive/40",
         link: "text-primary underline-offset-4 hover:underline",
+        featured:
+          "bg-accent text-white rounded-3xl border-none px-7 py-8 flex flex-col items-start justify-end text-left font-display hover:bg-accent-hover [&_*]:font-display",
       },
       size: {
         default:
@@ -31,6 +33,10 @@ const buttonVariants = cva(
         "icon-sm":
           "size-7 rounded-[min(var(--radius-md),12px)] in-data-[slot=button-group]:rounded-lg",
         "icon-lg": "size-9",
+        /** Custom CTA size for hero/page-level Buttons (e.g., homepage "Open Brand Workspace") */
+        cta: "h-auto rounded-full px-6 py-3 text-sm font-medium gap-2",
+        /** Custom featured-card size — overrides height so featured BrandCard can fill container */
+        featured: "h-auto w-full text-base",
       },
     },
     defaultVariants: {
