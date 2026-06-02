@@ -1,5 +1,7 @@
 "use client";
 
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+
 interface PillarCardProps {
   number: string;
   title: string;
@@ -12,16 +14,18 @@ export default function PillarCard({
   description,
 }: PillarCardProps) {
   return (
-    <div className="canvas-card p-6 h-full flex flex-col">
-      <span className="text-xs font-bold uppercase tracking-widest mb-2 text-accent">
-        {number}
-      </span>
-      <h3 className="font-display text-xl font-bold mb-3 text-text-primary">
-        {title}
-      </h3>
-      <p className="text-sm leading-relaxed flex-1 text-text-secondary">
-        {description}
-      </p>
-    </div>
+    <Card className="h-full">
+      <CardHeader>
+        <span className="text-xs font-bold uppercase tracking-widest text-accent">
+          {number}
+        </span>
+        <CardTitle>{title}</CardTitle>
+      </CardHeader>
+      <CardContent className="flex-1">
+        <p className="text-sm leading-relaxed text-text-secondary">
+          {description}
+        </p>
+      </CardContent>
+    </Card>
   );
 }
