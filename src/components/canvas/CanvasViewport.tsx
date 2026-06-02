@@ -20,7 +20,7 @@ import ZoomControls from "@/components/canvas/ZoomControls";
 import { useCanvasStamp, StampCursor, StampImprints } from "@/components/canvas/CanvasStamp";
 import type { IllustrationSlide } from "@/types/canvas";
 import type { PanelContent } from "@/types/panel";
-import type { ModalContent } from "@/data/modal-contents";
+import type { ModalContent } from "@/types/modal";
 
 const GRID_PADDING = 2000;
 

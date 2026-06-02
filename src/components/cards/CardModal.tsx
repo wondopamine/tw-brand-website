@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import type { ModalContent, ModalSection } from "@/data/modal-contents";
+import type { ModalContent, ModalSection } from "@/types/modal";
 
 interface CardModalProps {
   content: ModalContent | null;
