@@ -32,6 +32,7 @@
   --color-card-border: var(--card-border);
   --color-text-primary: var(--text-primary);
   --color-text-secondary: var(--text-secondary);
+  --color-text-slate: var(--text-slate);
   --color-accent: var(--accent);
   --color-accent-light: var(--accent-light);
   --color-accent-hover: var(--accent-hover);

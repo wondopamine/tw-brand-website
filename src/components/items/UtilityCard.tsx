@@ -16,19 +16,10 @@ export default function UtilityCard({
       <span className="text-4xl mb-4" role="img" aria-hidden="true">
         {icon}
       </span>
-      <h3
-        className="text-lg font-bold mb-2"
-        style={{
-          fontFamily: "var(--font-display, 'Plus Jakarta Sans', sans-serif)",
-          color: "var(--text-primary)",
-        }}
-      >
+      <h3 className="font-display text-lg font-bold mb-2 text-text-primary">
         {title}
       </h3>
-      <p
-        className="text-sm leading-relaxed"
-        style={{ color: "var(--text-secondary)" }}
-      >
+      <p className="text-sm leading-relaxed text-text-secondary">
         {description}
       </p>
     </div>
