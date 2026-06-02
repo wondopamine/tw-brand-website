@@ -143,31 +143,20 @@ export default function QuoteCard({
 
   return (
     <>
-      <div
-        className="h-full flex flex-col justify-between cursor-pointer group"
-        style={{ transition: "transform 0.2s ease" }}
+      <button
+        type="button"
+        className="h-full w-full flex flex-col justify-between cursor-pointer group text-left transition-transform duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent rounded-md"
         onClick={() => setOpen(true)}
       >
         {/* Tiny label */}
-        <p
-          className="text-[10px] font-semibold uppercase tracking-[0.18em] mb-3 opacity-40"
-          style={{ color: "var(--text-primary)" }}
-        >
+        <p className="text-[10px] font-semibold uppercase tracking-[0.18em] mb-3 opacity-40 text-text-primary">
           Quote
         </p>
 
-        {/* The quote — no card background, raw editorial text */}
-        <blockquote
-          className="flex-1 text-xl md:text-2xl font-semibold leading-snug tracking-tight"
-          style={{
-            color: "var(--text-primary)",
-            fontFamily: "var(--font-display, 'Plus Jakarta Sans', sans-serif)",
-            transition: "transform 0.2s ease",
-          }}
-        >
+        {/* The quote — no card background, raw editorial text (intentional) */}
+        <blockquote className="font-display flex-1 text-xl md:text-2xl font-semibold leading-snug tracking-tight text-text-primary transition-transform duration-200">
           <span
-            className="block group-hover:scale-[1.03] origin-top-left"
-            style={{ transition: "transform 0.25s cubic-bezier(0.34,1.56,0.64,1)" }}
+            className="block group-hover:scale-[1.03] origin-top-left transition-transform duration-[250ms] ease-[cubic-bezier(0.34,1.56,0.64,1)]"
           >
             &ldquo;{renderQuote()}&rdquo;
           </span>
@@ -176,28 +165,21 @@ export default function QuoteCard({
         {/* Attribution row */}
         {attribution && (
           <div className="mt-4 flex items-center gap-2">
-            <div
-              className="w-5 h-px shrink-0"
-              style={{ backgroundColor: "var(--text-secondary)" }}
-            />
-            <p
-              className="text-xs font-medium"
-              style={{ color: "var(--text-secondary)" }}
-            >
+            <div className="w-5 h-px shrink-0 bg-text-secondary" />
+            <p className="text-xs font-medium text-text-secondary">
               {attribution}
-              {source && <span className="font-normal opacity-60">, {source}</span>}
+              {source && (
+                <span className="font-normal opacity-60">, {source}</span>
+              )}
             </p>
           </div>
         )}
 
         {/* Read more hint */}
-        <p
-          className="mt-3 text-[10px] font-semibold uppercase tracking-widest opacity-0 group-hover:opacity-40 transition-opacity duration-200"
-          style={{ color: "var(--accent)" }}
-        >
+        <p className="mt-3 text-[10px] font-semibold uppercase tracking-widest opacity-0 group-hover:opacity-40 transition-opacity duration-200 text-accent">
           Read more
         </p>
-      </div>
+      </button>
 
       <QuoteModal
         quote={quote}
