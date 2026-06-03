@@ -1,13 +1,52 @@
 # tw-brand-website
 
-Brand guidelines and design system showcase for Teacher Workspace by TransformX.
+**Brand operating system for the Teacher & School portfolio.** Governance + tools for product builders working on Teacher Workspace (the flagship) and the rest of the T&S portfolio. Not a static brand guideline — a living document that links to working artifacts.
+
+> The repo name `tw-brand-website` is historical (from when this site was scoped to Teacher Workspace only). The site now represents the **Teacher & School** portfolio brand at large.
+
+## What this is
+
+- A 2-page site: a manifesto landing page and a 2D pannable canvas of brand surfaces.
+- Source of truth for the T&S portfolio's visual + verbal identity.
+- A jumping-off point to **tangible on-brand tools** (icon generator, etc.) — that's the "operating system" part of the framing.
+- Audience: product builders — primarily designers and PMs. Leadership and MOE stakeholders may visit; not the writing target.
+
+## Portfolio context
+
+The T&S portfolio is one of four sibling domains:
+
+- **Teacher & School** ← this site documents
+- Student
+- Parent
+- Corporate
+
+Each domain has (or will have) its own brand operating system. This repo is T&S only.
+
+Brand ownership belongs to **Teacher & School itself**. It is NOT DXD's brand (DXD has its own brand identity) and is independent of MOE today, even though products in the T&S portfolio (which includes Schools Division of MOE products) follow it.
+
+## Products in T&S today
+
+- **Teacher Workspace** — flagship super-app
+- CaseSync
+- ReleifCher
+- Glow
+- COVAA
+- (more in the pipeline)
+
+A Products surface on the canvas is reserved for future work — the format will be logo + name lockups, not a descriptive product directory.
+
+## Tools & Resources
+
+Surfaced on the canvas under the **TOOLS** folder. Source of truth: `src/data/portfolio.ts`. To add a tool, append a `ToolEntry` to that file.
+
+- [Icon Generator](https://github.com/wondopamine/icon-generator) — generates on-brand iconography for T&S products.
 
 ## Tech stack
 
 - Next.js 16 (App Router) + React 19 + TypeScript (strict)
 - Tailwind CSS v4 + PostCSS
-- **shadcn/ui (Base UI primitives)** — Button, Card, Dialog generated via `npx shadcn add`, restyled to TW brand tokens
-- **Base UI** (`@base-ui-components/react`) — provides the accessible primitives behind shadcn's components (focus traps, scroll lock, portal, dialog lifecycle)
+- **shadcn/ui (Base UI primitives)** — `Button`, `Card`, `Dialog` generated via `npx shadcn add`, restyled to T&S brand tokens
+- **Base UI** (`@base-ui-components/react`) — accessible primitives behind shadcn's components (focus traps, scroll lock, portal, dialog lifecycle)
 - **lucide-react** — generic icons (X, Chevrons, ZoomIn/Out, etc.)
 - Motion (Framer Motion) — page entry animations, ImageCard cross-fade, FolderIcon hover/tap
 - Deployed on Vercel
@@ -26,18 +65,18 @@ The repo follows a three-tier component model:
 
 | Tier | What it is | Examples |
 |------|-----------|----------|
-| **shadcn/ui (Base UI)** | Library primitives generated via `npx shadcn add`. Restyled to TW brand tokens. | `Button`, `Card`, `Dialog` — in `src/components/ui/` |
-| **TW icons** | lucide-react for generic icons, hand-rolled SVGs for brand marks. | `src/components/icons/index.ts` re-exports lucide + `FolderMark`, `IllustrationStack` |
+| **shadcn/ui (Base UI)** | Library primitives generated via `npx shadcn add`. Restyled to T&S brand tokens. | `Button`, `Card`, `Dialog` — in `src/components/ui/` |
+| **T&S icons** | lucide-react for generic icons, hand-rolled SVGs for brand marks. | `src/components/icons/index.ts` re-exports lucide + `FolderMark`, `IllustrationStack` |
 | **Bespoke** | Components that have no library analogue and would lose visual identity in migration. | Canvas pan/zoom, stickers, stamp cursor, minimap, `GlowCard`, `EdgeVignette`, typography playground |
 
 ### What's deliberately bespoke (and why)
 
 - **Canvas system** (`src/components/canvas/CanvasViewport`, `CanvasLayout`, `useCanvasPan` hook) — 2D pannable workspace with zoom. No shadcn analogue.
-- **`GlowCard`** (`src/components/items/GlowCard.tsx`) — cursor-tracking blob border, a deliberate signature effect. Replacing with shadcn Card would lose the effect.
+- **`GlowCard`** — cursor-tracking blob border, a signature effect.
 - **`CanvasStamp`** — interactive ink-stamp cursor; brand-specific delight detail.
 - **`CanvasSticker`, `Minimap`, `EdgeVignette`** — brand-specific canvas chrome.
-- **`FolderMark`** (in `src/components/icons/FolderMark.tsx`) — two-tone TW blue folder shape using `--folder-icon-bg` / `--folder-icon-front` tokens.
-- **`IllustrationStack`** (in `src/components/icons/IllustrationStack.tsx`) — three angled accent cards as the illustration-reel entry preview.
+- **`FolderMark`** — two-tone Teacher & School Blue folder shape using `--folder-icon-bg` / `--folder-icon-front` tokens.
+- **`IllustrationStack`** — three angled accent cards as the illustration-reel entry preview.
 - **`HeroText`** typography playground — color picker, weight selector, alignment triggers, range slider; all bespoke chrome with no library equivalent.
 - **`PanelBody`** content-block renderers (color-swatch, asset-list, guideline, divider) — variant-conditional logic where shadcn primitives don't fit.
 - **`QuoteCard` preview** — deliberately card-less raw editorial typography. Wrapping in `<Card>` would destroy the editorial moment.
@@ -46,10 +85,15 @@ The repo follows a three-tier component model:
 
 CSS custom properties in `src/app/globals.css` are the single source of truth:
 
-- **TW Accent (#0064FF)** is the primary brand color — exposed to Tailwind as `bg-accent`, `text-accent`, `border-accent`
-- shadcn's semantic tokens (`--primary`, `--background`, `--card`, etc.) are mapped to TW brand tokens at init, so shadcn-generated components inherit brand colors out of the box
-- Type tokens: `--font-display` (Plus Jakarta Sans) / `--font-body` (Inter) — exposed as `font-display`, `font-body`
-- Brand-specific tokens (`--folder-icon-bg`, `--folder-icon-front`, `--quote-highlight`, etc.) are used directly via inline `style={{ }}` where needed
+- **Teacher & School Blue (`#0064FF`)** is the portfolio primary — anchored on Teacher Workspace as the flagship, carries across every other T&S product. Exposed to Tailwind as `bg-accent`, `text-accent`, `border-accent`. The CSS variable is named `--accent` (technical name preserved for code stability).
+- shadcn's semantic tokens (`--primary`, `--background`, `--card`, etc.) are mapped to T&S brand tokens at init, so shadcn-generated components inherit brand colors out of the box.
+- Type tokens: `--font-display` (Plus Jakarta Sans) / `--font-body` (Inter) — exposed as `font-display`, `font-body`.
+- Brand-specific tokens (`--folder-icon-bg`, `--folder-icon-front`, `--quote-highlight`, etc.) are used directly via inline `style={{ }}` where needed.
+
+## Plans on file
+
+- `docs/plans/2026-06-02-001-refactor-shadcn-base-ui-migration-plan.md` — completed (shadcn/Base UI primitives shipped)
+- `docs/plans/2026-06-03-001-feat-ts-portfolio-brand-os-plan.md` — completed (portfolio reframe; this PR)
 
 ## Skill routing
 

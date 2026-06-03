@@ -46,7 +46,7 @@ const ALIGNS = [
 /*  Full TW blue ramp (matches color/twblue in Figma library)          */
 /* ------------------------------------------------------------------ */
 const COLOUR_PALETTE = [
-  { label: "TW Accent", value: "#0064FF" },
+  { label: "Teacher & School Blue", value: "#0064FF" },
   { label: "Blue 50",   value: "#EFF6FF" },
   { label: "Blue 100",  value: "#DBEAFE" },
   { label: "Blue 200",  value: "#BFDBFE" },
