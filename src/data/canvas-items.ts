@@ -15,7 +15,7 @@ export const canvasItems: CanvasItem[] = [
     position: { x: CX - 460, y: CY - 260 },
     size: { width: 920, height: 520 },
     title: "Teacher",
-    subtitle: "Workspace\nBrand\nGuidelines",
+    subtitle: "& School\nBrand\nOperating System",
     zIndex: 0,
     mobileOrder: 0,
   },
@@ -37,13 +37,13 @@ export const canvasItems: CanvasItem[] = [
     mobileOrder: 1,
   },
 
-  // 2. About TW Brand Guidelines — top-center
+  // 2. About this Brand OS — top-center
   {
     id: "card-about",
     type: "brand-card",
     position: { x: CX - 180, y: CY - 520 },
     size: { width: 360, height: 220 },
-    title: "About TW Brand Guidelines",
+    title: "About this Brand OS",
     subtitle: "What this document is — and what it isn't.",
     modalId: "about-guidelines",
     rotation: 1,
@@ -77,36 +77,6 @@ export const canvasItems: CanvasItem[] = [
     mobileOrder: 4,
   },
 
-
-  // Teacher photos — clickable image gallery card
-  {
-    id: "image-teachers-classroom",
-    type: "image-card",
-    position: { x: CX - 190, y: CY + 280 },
-    size: { width: 380, height: 220 },
-    images: [
-      {
-        src: "/images/teachers-classroom.jpg",
-        alt: "Teacher guiding students with tablets in classroom",
-        description:
-          "Real classrooms, real teachers — every design decision starts here.",
-      },
-      {
-        src: "/images/teachers-classroom-2.png",
-        alt: "Teacher leaning in to help two students with tablets",
-        description:
-          "Designed alongside educators who use technology daily.",
-      },
-      {
-        src: "/images/teachers-classroom-3.png",
-        alt: "Teacher engaging with students using tablets at desk",
-        description:
-          "Warm, human moments that inspire our brand aesthetic.",
-      },
-    ],
-    rotation: -1,
-    mobileOrder: 9,
-  },
 
   // Bottom cards — spread widely to prevent overlap
   // 6. Voice & Tone — bottom-left
@@ -161,7 +131,7 @@ export const canvasItems: CanvasItem[] = [
     highlight: "the future is clearly starting to boot up",
     attribution: "A teacher",
     rotation: -1,
-    mobileOrder: 15,
+    mobileOrder: 16,
   },
   // Quote 3 — bottom-center, between image card and folders row
   {
@@ -173,7 +143,7 @@ export const canvasItems: CanvasItem[] = [
     highlight: "understands what my day actually looks like",
     attribution: "High school teacher",
     rotation: 1,
-    mobileOrder: 16,
+    mobileOrder: 17,
   },
 
   // ===== 5 FOLDERS — centered row below cards =====
@@ -185,15 +155,6 @@ export const canvasItems: CanvasItem[] = [
     label: "COLOURS",
     panelId: "colours",
     mobileOrder: 10,
-  },
-  {
-    id: "folder-imagery",
-    type: "folder",
-    position: { x: CX - 230, y: CY + 680 },
-    size: { width: 140, height: 160 },
-    label: "IMAGERY",
-    panelId: "imagery",
-    mobileOrder: 11,
   },
   {
     id: "folder-illustrations",
@@ -221,5 +182,16 @@ export const canvasItems: CanvasItem[] = [
     label: "USE CASES",
     panelId: "use-cases",
     mobileOrder: 14,
+  },
+  // 6th folder — Tools & Resources. The "operating system" half of the
+  // Brand OS framing: links to tangible on-brand tools, not just docs.
+  {
+    id: "folder-tools",
+    type: "folder",
+    position: { x: CX + 690, y: CY + 680 },
+    size: { width: 140, height: 160 },
+    label: "TOOLS",
+    panelId: "tools",
+    mobileOrder: 15,
   },
 ];

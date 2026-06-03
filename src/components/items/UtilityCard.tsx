@@ -1,5 +1,7 @@
 "use client";
 
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+
 interface UtilityCardProps {
   title: string;
   description: string;
@@ -12,25 +14,18 @@ export default function UtilityCard({
   icon,
 }: UtilityCardProps) {
   return (
-    <div className="canvas-card p-6 h-full flex flex-col items-center text-center">
-      <span className="text-4xl mb-4" role="img" aria-hidden="true">
-        {icon}
-      </span>
-      <h3
-        className="text-lg font-bold mb-2"
-        style={{
-          fontFamily: "var(--font-display, 'Plus Jakarta Sans', sans-serif)",
-          color: "var(--text-primary)",
-        }}
-      >
-        {title}
-      </h3>
-      <p
-        className="text-sm leading-relaxed"
-        style={{ color: "var(--text-secondary)" }}
-      >
-        {description}
-      </p>
-    </div>
+    <Card className="h-full">
+      <CardHeader className="items-center text-center [&>*]:justify-self-center">
+        <span className="text-4xl mb-2" role="img" aria-hidden="true">
+          {icon}
+        </span>
+        <CardTitle className="text-lg">{title}</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <p className="text-sm leading-relaxed text-text-secondary text-center">
+          {description}
+        </p>
+      </CardContent>
+    </Card>
   );
 }

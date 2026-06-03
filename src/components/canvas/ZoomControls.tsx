@@ -1,5 +1,8 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
+import { Minus, Plus } from "lucide-react";
+
 interface ZoomControlsProps {
   zoom: number;
   onZoomIn: () => void;
@@ -16,49 +19,36 @@ export default function ZoomControls({
   const percentage = Math.round(zoom * 100);
 
   return (
-    <div
-      className="fixed bottom-4 left-48 z-30 flex items-center gap-1 rounded-xl px-1 py-1"
-      style={{
-        backgroundColor: "rgba(255, 255, 255, 0.85)",
-        border: "1px solid rgba(0, 0, 0, 0.08)",
-        backdropFilter: "blur(10px)",
-      }}
-    >
-      {/* Zoom out */}
-      <button
+    <div className="fixed bottom-4 right-4 z-30 flex items-center gap-1 rounded-xl px-1 py-1 bg-white/85 border border-black/10 backdrop-blur-md">
+      <Button
+        variant="ghost"
+        size="icon"
         onClick={onZoomOut}
-        className="w-8 h-8 rounded-lg flex items-center justify-center transition-colors hover:bg-black/5 cursor-pointer"
-        style={{ color: "var(--text-secondary)" }}
         aria-label="Zoom out"
+        className="text-text-secondary"
       >
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-          <line x1="5" y1="12" x2="19" y2="12" />
-        </svg>
-      </button>
+        <Minus />
+      </Button>
 
-      {/* Percentage / reset */}
-      <button
+      <Button
+        variant="ghost"
         onClick={onResetZoom}
-        className="min-w-[52px] h-8 rounded-lg flex items-center justify-center transition-colors hover:bg-black/5 cursor-pointer text-xs font-medium tabular-nums"
-        style={{ color: "var(--text-primary)" }}
         aria-label="Reset zoom to 100%"
         title="Reset to 100%"
+        className="min-w-[52px] text-xs font-medium tabular-nums text-text-primary"
       >
         {percentage}%
-      </button>
+      </Button>
 
-      {/* Zoom in */}
-      <button
+      <Button
+        variant="ghost"
+        size="icon"
         onClick={onZoomIn}
-        className="w-8 h-8 rounded-lg flex items-center justify-center transition-colors hover:bg-black/5 cursor-pointer"
-        style={{ color: "var(--text-secondary)" }}
         aria-label="Zoom in"
+        className="text-text-secondary"
       >
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-          <line x1="12" y1="5" x2="12" y2="19" />
-          <line x1="5" y1="12" x2="19" y2="12" />
-        </svg>
-      </button>
+        <Plus />
+      </Button>
     </div>
   );
 }

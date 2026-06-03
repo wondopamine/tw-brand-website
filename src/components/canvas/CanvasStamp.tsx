@@ -109,7 +109,7 @@ export function useCanvasStamp({
         target.closest("a") ||
         target.closest("[data-sticker]") ||
         target.closest(".glow-card-outer") ||
-        target.closest(".canvas-card")
+        target.closest('[data-slot="card"]')
       ) {
         return;
       }
@@ -160,7 +160,7 @@ export function StampCursor() {
         !!target.closest("a") ||
         !!target.closest("[data-sticker]") ||
         !!target.closest(".glow-card-outer") ||
-        !!target.closest(".canvas-card");
+        !!target.closest('[data-slot="card"]');
 
       ref.current.style.opacity = overInteractive ? "0" : "0.9";
     };

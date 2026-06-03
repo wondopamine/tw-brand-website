@@ -1,36 +1,116 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# tw-brand-website
 
-## Getting Started
+**Brand operating system for the Teacher & School portfolio.** Governance + tools for product builders working on Teacher Workspace (the flagship) and the rest of the T&S portfolio. Not a static brand guideline — a living document that links to working artifacts.
 
-First, run the development server:
+> The repo name `tw-brand-website` is historical (from when this site was scoped to Teacher Workspace only). The site now represents the **Teacher & School** portfolio brand at large.
+
+## What this is
+
+- A 2-page site: a manifesto landing page and a 2D pannable canvas of brand surfaces.
+- Source of truth for the T&S portfolio's visual + verbal identity.
+- A jumping-off point to **tangible on-brand tools** (icon generator, etc.) — that's the "operating system" part of the framing.
+- Audience: product builders — primarily designers and PMs. Leadership and MOE stakeholders may visit; not the writing target.
+
+## Portfolio context
+
+The T&S portfolio is one of four sibling domains:
+
+- **Teacher & School** ← this site documents
+- Student
+- Parent
+- Corporate
+
+Each domain has (or will have) its own brand operating system. This repo is T&S only.
+
+Brand ownership belongs to **Teacher & School itself**. It is NOT DXD's brand (DXD has its own brand identity) and is independent of MOE today, even though products in the T&S portfolio (which includes Schools Division of MOE products) follow it.
+
+## Products in T&S today
+
+- **Teacher Workspace** — flagship super-app
+- CaseSync
+- ReleifCher
+- Glow
+- COVAA
+- (more in the pipeline)
+
+A Products surface on the canvas is reserved for future work — the format will be logo + name lockups, not a descriptive product directory.
+
+## Tools & Resources
+
+Surfaced on the canvas under the **TOOLS** folder. Source of truth: `src/data/portfolio.ts`. To add a tool, append a `ToolEntry` to that file.
+
+- [Icon Generator](https://github.com/wondopamine/icon-generator) — generates on-brand iconography for T&S products.
+
+## Tech stack
+
+- Next.js 16 (App Router) + React 19 + TypeScript (strict)
+- Tailwind CSS v4 + PostCSS
+- **shadcn/ui (Base UI primitives)** — `Button`, `Card`, `Dialog` generated via `npx shadcn add`, restyled to T&S brand tokens
+- **Base UI** (`@base-ui-components/react`) — accessible primitives behind shadcn's components (focus traps, scroll lock, portal, dialog lifecycle)
+- **lucide-react** — generic icons (X, Chevrons, ZoomIn/Out, etc.)
+- Motion (Framer Motion) — page entry animations, ImageCard cross-fade, FolderIcon hover/tap
+- Deployed on Vercel
+
+## Development
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm run dev    # Start dev server
+npm run build  # Production build
+npm run lint   # ESLint
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Component architecture
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+The repo follows a three-tier component model:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Tier | What it is | Examples |
+|------|-----------|----------|
+| **shadcn/ui (Base UI)** | Library primitives generated via `npx shadcn add`. Restyled to T&S brand tokens. | `Button`, `Card`, `Dialog` — in `src/components/ui/` |
+| **T&S icons** | lucide-react for generic icons, hand-rolled SVGs for brand marks. | `src/components/icons/index.ts` re-exports lucide + `FolderMark`, `IllustrationStack` |
+| **Bespoke** | Components that have no library analogue and would lose visual identity in migration. | Canvas pan/zoom, stickers, stamp cursor, minimap, `GlowCard`, `EdgeVignette`, typography playground |
 
-## Learn More
+### What's deliberately bespoke (and why)
 
-To learn more about Next.js, take a look at the following resources:
+- **Canvas system** (`src/components/canvas/CanvasViewport`, `CanvasLayout`, `useCanvasPan` hook) — 2D pannable workspace with zoom. No shadcn analogue.
+- **`GlowCard`** — cursor-tracking blob border, a signature effect.
+- **`CanvasStamp`** — interactive ink-stamp cursor; brand-specific delight detail.
+- **`CanvasSticker`, `Minimap`, `EdgeVignette`** — brand-specific canvas chrome.
+- **`FolderMark`** — two-tone Teacher & School Blue folder shape using `--folder-icon-bg` / `--folder-icon-front` tokens.
+- **`IllustrationStack`** — three angled accent cards as the illustration-reel entry preview.
+- **`HeroText`** typography playground — color picker, weight selector, alignment triggers, range slider; all bespoke chrome with no library equivalent.
+- **`PanelBody`** content-block renderers (color-swatch, asset-list, guideline, divider) — variant-conditional logic where shadcn primitives don't fit.
+- **`QuoteCard` preview** — deliberately card-less raw editorial typography. Wrapping in `<Card>` would destroy the editorial moment.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Design tokens
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+CSS custom properties in `src/app/globals.css` are the single source of truth:
 
-## Deploy on Vercel
+- **Teacher & School Blue (`#0064FF`)** is the portfolio primary — anchored on Teacher Workspace as the flagship, carries across every other T&S product. Exposed to Tailwind as `bg-accent`, `text-accent`, `border-accent`. The CSS variable is named `--accent` (technical name preserved for code stability).
+- shadcn's semantic tokens (`--primary`, `--background`, `--card`, etc.) are mapped to T&S brand tokens at init, so shadcn-generated components inherit brand colors out of the box.
+- Type tokens: `--font-display` (Plus Jakarta Sans) / `--font-body` (Inter) — exposed as `font-display`, `font-body`.
+- Brand-specific tokens (`--folder-icon-bg`, `--folder-icon-front`, `--quote-highlight`, etc.) are used directly via inline `style={{ }}` where needed.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Plans on file
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- `docs/plans/2026-06-02-001-refactor-shadcn-base-ui-migration-plan.md` — completed (shadcn/Base UI primitives shipped)
+- `docs/plans/2026-06-03-001-feat-ts-portfolio-brand-os-plan.md` — completed (portfolio reframe; this PR)
+
+## Skill routing
+
+When the user's request matches an available skill, ALWAYS invoke it using the Skill
+tool as your FIRST action. Do NOT answer directly, do NOT use other tools first.
+The skill has specialized workflows that produce better results than ad-hoc answers.
+
+Key routing rules:
+- Product ideas, "is this worth building", brainstorming → invoke office-hours
+- Bugs, errors, "why is this broken", 500 errors → invoke investigate
+- Ship, deploy, push, create PR → invoke ship
+- QA, test the site, find bugs → invoke qa
+- Code review, check my diff → invoke review
+- Update docs after shipping → invoke document-release
+- Weekly retro → invoke retro
+- Design system, brand → invoke design-consultation
+- Visual audit, design polish → invoke design-review
+- Architecture review → invoke plan-eng-review
+- Save progress, checkpoint, resume → invoke checkpoint
+- Code quality, health check → invoke health

@@ -1,5 +1,8 @@
 "use client";
 
+import { Card, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+
 interface BrandCardProps {
   title: string;
   subtitle?: string;
@@ -15,74 +18,37 @@ export default function BrandCard({
 }: BrandCardProps) {
   if (variant === "featured") {
     return (
-      <button
+      <Button
+        variant="featured"
+        size="featured"
         onClick={onClick}
-        className="h-full w-full text-left cursor-pointer"
-        style={{
-          background: "#0064FF",
-          borderRadius: 24,
-          position: "relative",
-          overflow: "hidden",
-          border: "none",
-          outline: "none",
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "flex-end",
-          padding: "28px 28px 32px",
-        }}
         aria-label={`Open ${title}`}
       >
-        <div
-          style={{
-            fontFamily: "var(--font-display, 'Plus Jakarta Sans', sans-serif)",
-            color: "#fff",
-            lineHeight: 1.05,
-          }}
-        >
-          <div style={{ fontSize: 48, fontWeight: 300, letterSpacing: "-1.5px" }}>
-            Why
-          </div>
-          <div style={{ fontSize: 48, fontWeight: 300, letterSpacing: "-1.5px" }}>
+        <div className="leading-[1.05]">
+          <div className="text-5xl font-light tracking-[-1.5px]">Why</div>
+          <div className="text-5xl font-light tracking-[-1.5px]">
             Aesthetics
           </div>
-          <div
-            style={{
-              fontSize: 48,
-              fontWeight: 800,
-              fontStyle: "italic",
-              letterSpacing: "-1.5px",
-            }}
-          >
+          <div className="text-5xl font-extrabold italic tracking-[-1.5px]">
             matters?
           </div>
         </div>
-      </button>
+      </Button>
     );
   }
 
   return (
     <button
       onClick={onClick}
-      className="canvas-card p-6 h-full flex flex-col text-left w-full cursor-pointer"
+      className="text-left h-full w-full cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent rounded-2xl"
       aria-label={`Open ${title}`}
     >
-      <h3
-        className="text-xl font-semibold mb-2"
-        style={{
-          fontFamily: "var(--font-display, 'Plus Jakarta Sans', sans-serif)",
-          color: "var(--text-slate)",
-        }}
-      >
-        {title}
-      </h3>
-      {subtitle && (
-        <p
-          className="text-sm leading-relaxed flex-1"
-          style={{ color: "var(--text-secondary)" }}
-        >
-          {subtitle}
-        </p>
-      )}
+      <Card className="h-full">
+        <CardHeader>
+          <CardTitle className="text-xl text-text-slate">{title}</CardTitle>
+          {subtitle && <CardDescription>{subtitle}</CardDescription>}
+        </CardHeader>
+      </Card>
     </button>
   );
 }

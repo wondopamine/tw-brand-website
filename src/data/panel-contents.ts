@@ -1,15 +1,16 @@
 import type { PanelContent } from "@/types/panel";
+import { tools } from "@/data/portfolio";
 
 export const panelContents: Record<string, PanelContent> = {
   colours: {
     id: "colours",
     title: "Colours",
     description:
-      "The TW colour system anchored in a single primary blue. Click any swatch to copy its HEX value.",
+      "The Teacher & School colour system anchored in a single primary blue. Click any swatch to copy its HEX value.",
     items: [
       {
         type: "text",
-        title: "TW Accent — #0064FF",
+        title: "Teacher & School Blue — #0064FF",
         content:
           "Our primary brand colour. A confident, approachable blue that balances professionalism with warmth.",
       },
@@ -17,14 +18,14 @@ export const panelContents: Record<string, PanelContent> = {
         type: "text",
         title: "Why We Picked This",
         content:
-          "Blue signals trust, reliability, and calm — exactly what teachers need from a daily tool. TW Accent (#0064FF) is inspired by MOE Singapore\u2019s institutional blue, grounding Teacher Workspace in a colour teachers already associate with education. We shifted the hue slightly brighter to feel more modern and energetic, aligning with the Kind Utility philosophy: familiar enough to feel safe, polished enough to feel premium. It works across light and dark contexts, meets WCAG AA contrast on white, and scales cleanly into a full shade ramp for UI states.",
+          "Blue signals trust, reliability, and calm — exactly what teachers need from a daily tool. Teacher & School Blue (#0064FF) draws on the colour Singapore teachers already associate with education, grounding the portfolio in something familiar. It\u2019s anchored on Teacher Workspace as the flagship product and carries across every other product in the portfolio. We shifted the hue slightly brighter to feel more modern and energetic, aligning with the Kind Utility philosophy: familiar enough to feel safe, polished enough to feel premium. It works across light and dark contexts, meets WCAG AA contrast on white, and scales cleanly into a full shade ramp for UI states.",
       },
       { type: "divider" },
       {
         type: "color-swatch",
         title: "Primary",
         colors: [
-          { name: "TW Accent", hex: "#0064FF", isPrimary: true },
+          { name: "Teacher & School Blue", hex: "#0064FF", isPrimary: true },
         ],
       },
       { type: "divider" },
@@ -50,74 +51,7 @@ export const panelContents: Record<string, PanelContent> = {
         type: "text",
         title: "Usage",
         content:
-          "Use TW Accent (#0064FF) as the primary brand colour across UI, marketing, and communications. The blue shade ramp provides supporting tones for backgrounds, borders, hover states, and text emphasis. Refer to FlowDS for the full design system palette.",
-      },
-    ],
-  },
-
-  imagery: {
-    id: "imagery",
-    title: "Imagery",
-    description:
-      "Photography guidelines and assets for Teacher Workspace.",
-    items: [
-      {
-        type: "text",
-        title: "Photography Style",
-        content:
-          "Authentic, warm images of real teachers in real classrooms. Our photography captures the everyday moments of teaching — focus, collaboration, connection, and joy.",
-      },
-      {
-        type: "text",
-        title: "Why We Picked This",
-        content:
-          "Teachers are the heart of Teacher Workspace. Stock photography feels impersonal and generic — exactly the opposite of Kind Utility. Real photography signals that we see teachers as real people, not abstract users. Warm, natural lighting evokes approachability. Candid moments (not staged poses) build trust because they mirror the reality teachers live. This visual honesty is how we make the brand promise tangible: we understand your world because we\u2019ve been there.",
-      },
-      { type: "divider" },
-      {
-        type: "asset-list",
-        title: "Image Library",
-        assets: [
-          {
-            name: "teacher-classroom-01.jpg",
-            thumbnailColor: "#E8D5B7",
-            description: "Teacher helping student at desk",
-            link: "https://unsplash.com/photos/teacher-classroom",
-          },
-          {
-            name: "teacher-collaboration-02.jpg",
-            thumbnailColor: "#C4D9A0",
-            description: "Teachers collaborating in staff room",
-            link: "https://unsplash.com/photos/teacher-collaboration",
-          },
-          {
-            name: "classroom-environment-03.jpg",
-            thumbnailColor: "#A7C7E7",
-            description: "Warm classroom environment",
-            link: "https://unsplash.com/photos/classroom-environment",
-          },
-          {
-            name: "teacher-tech-04.jpg",
-            thumbnailColor: "#D4B8E0",
-            description: "Teacher using technology in class",
-            link: "https://unsplash.com/photos/teacher-tech",
-          },
-          {
-            name: "student-engagement-05.jpg",
-            thumbnailColor: "#F5D0A9",
-            description: "Students engaged in group activity",
-            link: "https://unsplash.com/photos/student-engagement",
-          },
-        ],
-      },
-      { type: "divider" },
-      {
-        type: "guideline",
-        title: "Photography Guidelines",
-        doText:
-          "Real teachers in real classrooms. Natural lighting. Candid moments of teaching, collaboration, and connection. Diverse representation.",
-        dontText:
-          "Overly staged stock photos. Cold, clinical lighting. Generic office settings. Lack of diversity.",
+          "Use Teacher & School Blue (#0064FF) as the primary brand colour across every product in the portfolio — UI, marketing, and communications. The blue shade ramp provides supporting tones for backgrounds, borders, hover states, and text emphasis. Refer to FlowDS for the full design system palette.",
       },
     ],
   },
@@ -126,7 +60,7 @@ export const panelContents: Record<string, PanelContent> = {
     id: "illustrations",
     title: "Illustrations",
     description:
-      "Illustration style and assets for Teacher Workspace.",
+      "Illustration style and assets for the Teacher & School portfolio.",
     items: [
       {
         type: "text",
@@ -138,7 +72,7 @@ export const panelContents: Record<string, PanelContent> = {
         type: "text",
         title: "Why We Picked This",
         content:
-          "Illustrations fill the gap where photography can\u2019t reach — explaining abstract concepts, adding moments of delight, and softening the interface. A hand-drawn, slightly imperfect style reinforces Kind Utility: it signals that a real person made this with care, not a machine. The rounded, soft aesthetic lowers cognitive load and reduces intimidation, making complex features feel approachable. We anchor the palette in TW blue to maintain brand consistency while using warm accent colours to add life. The result is an illustration system that feels like a kind colleague sketching something out on a whiteboard to help you understand.",
+          "Illustrations fill the gap where photography can\u2019t reach — explaining abstract concepts, adding moments of delight, and softening the interface. A hand-drawn, slightly imperfect style reinforces Kind Utility: it signals that a real person made this with care, not a machine. The rounded, soft aesthetic lowers cognitive load and reduces intimidation, making complex features feel approachable. We anchor the palette in Teacher & School Blue to maintain brand consistency across the portfolio while using warm accent colours to add life. The result is an illustration system that feels like a kind colleague sketching something out on a whiteboard to help you understand.",
       },
       { type: "divider" },
       {
@@ -182,7 +116,7 @@ export const panelContents: Record<string, PanelContent> = {
         type: "guideline",
         title: "Illustration Guidelines",
         doText:
-          "Warm color palette anchored in TW blue. Human figures with natural proportions. Soft edges and rounded forms. Subtle textures and hand-drawn quality.",
+          "Warm color palette anchored in Teacher & School Blue. Human figures with natural proportions. Soft edges and rounded forms. Subtle textures and hand-drawn quality.",
         dontText:
           "Overly corporate or flat illustrations. Cartoonish proportions. Sharp, aggressive angles. Neon or harsh colors.",
       },
@@ -193,7 +127,7 @@ export const panelContents: Record<string, PanelContent> = {
     id: "typography",
     title: "Typography",
     description:
-      "The typographic system for Teacher Workspace — two fonts, clearly defined roles.",
+      "The typographic system for the Teacher & School portfolio — two fonts, clearly defined roles.",
     items: [
       {
         type: "text",
@@ -298,6 +232,38 @@ export const panelContents: Record<string, PanelContent> = {
         title: "More Use Cases (Coming Soon)",
         content:
           "Additional use cases including email templates, notification copy, error message patterns, empty state design, and onboarding flows will be documented here.",
+      },
+    ],
+  },
+
+  tools: {
+    id: "tools",
+    title: "Tools & Resources",
+    description:
+      "Tangible, on-brand tools that product builders in the T&S portfolio can pick up and use. This is the 'operating system' half of the Brand OS — not docs about brand, but actual working artifacts. Pick them up; use them; contribute back.",
+    items: [
+      {
+        type: "text",
+        title: "Why this exists",
+        content:
+          "A brand isn't real until builders can produce on-brand artifacts without re-reading the guidelines. The tools below codify the brand into working software so the design system stays consistent across every product in the portfolio, by default.",
+      },
+      { type: "divider" },
+      {
+        type: "tool-list",
+        title: "Available Tools",
+        tools: tools.map((tool) => ({
+          name: tool.name,
+          description: tool.description,
+          href: tool.href,
+        })),
+      },
+      { type: "divider" },
+      {
+        type: "text",
+        title: "Contributing",
+        content:
+          "Found something missing? Built an on-brand tool that should live here? Open an issue or PR on the repo. The list grows with the portfolio.",
       },
     ],
   },
