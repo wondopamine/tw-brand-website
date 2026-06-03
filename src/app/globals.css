@@ -228,3 +228,30 @@ body {
     @apply font-sans;
   }
 }
+
+/* Desktop sky background — borrowed from String-sg/marketing-teacher-workspace */
+.hero-sky-bg {
+  background-image: url("/hero/hero-bg.webp");
+  background-size: cover;
+  background-position: top center;
+  background-repeat: no-repeat;
+}
+
+@keyframes cloud-drift-a {
+  from { transform: translate3d(-8%, 0, 0); }
+  to   { transform: translate3d(8%, 0, 0); }
+}
+@keyframes cloud-drift-b {
+  from { transform: translate3d(5%, 0, 0); }
+  to   { transform: translate3d(-5%, 0, 0); }
+}
+@keyframes cloud-drift-c {
+  from { transform: translate3d(-12%, 0, 0); }
+  to   { transform: translate3d(12%, 0, 0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cloud-drift {
+    animation: none !important;
+  }
+}

@@ -1,6 +1,6 @@
 "use client";
 
-import type { ReactNode } from "react";
+import { useState, type ReactNode } from "react";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 
 interface WindowProps {
@@ -16,14 +16,14 @@ interface WindowProps {
 }
 
 /**
- * OS-style window overlay. Wraps shadcn Dialog with a title bar that
- * carries the doc/folder name and a single close X. Inherits the
- * Dialog's accessibility (focus trap, Escape, scroll lock, portal).
+ * OS-style window overlay. Wraps shadcn Dialog with a macOS-style title bar
+ * (red/yellow/green traffic lights on the left, centered title). Inherits
+ * the Dialog's accessibility (focus trap, Escape, scroll lock, portal).
  *
- * Default width: 680px (matches the prior FolderModal / CardModal feel).
- * Default max-height: 90vh with internal scroll for long content.
- * Pass className with a wider max-w to override (e.g., the Typography
- * Playground needs more room — pass "max-w-[960px] sm:max-w-[960px]").
+ * Traffic lights:
+ *   • red    — close (same as Escape / overlay click)
+ *   • yellow — minimize (closes the window for now; no taskbar yet)
+ *   • green  — maximize (toggles to a near-fullscreen size)
  */
 export function Window({
   open,
@@ -33,40 +33,57 @@ export function Window({
   className,
   children,
 }: WindowProps) {
+  const [maximized, setMaximized] = useState(false);
+
   return (
-    <Dialog open={open} onOpenChange={(o) => !o && onClose()}>
+    <Dialog
+      open={open}
+      onOpenChange={(o) => {
+        if (!o) {
+          setMaximized(false);
+          onClose();
+        }
+      }}
+    >
       <DialogContent
         showCloseButton={false}
-        className={`w-full max-w-[680px] sm:max-w-[680px] max-h-[90vh] p-0 bg-card-bg border border-card-border rounded-xl shadow-[0_25px_60px_-12px_rgba(0,0,0,0.2)] gap-0 ring-0 overflow-hidden flex flex-col ${
-          className ?? ""
+        className={`p-0 bg-card-bg border border-card-border shadow-[0_25px_60px_-12px_rgba(0,0,0,0.2)] gap-0 ring-0 overflow-hidden flex flex-col ${
+          maximized
+            ? "w-[96vw] max-w-[96vw] sm:max-w-[96vw] h-[92vh] max-h-[92vh] rounded-lg"
+            : `w-full max-w-[680px] sm:max-w-[680px] max-h-[90vh] rounded-xl ${className ?? ""}`
         }`}
       >
-        {/* OS-style title bar */}
-        <header className="flex items-center justify-between gap-3 px-4 py-3 border-b border-card-border shrink-0 bg-card-bg">
-          <DialogTitle className="font-display text-sm font-semibold text-text-primary truncate">
+        {/* macOS-style title bar */}
+        <header className="relative flex items-center gap-3 px-4 h-10 border-b border-card-border shrink-0 bg-card-bg">
+          {/* Traffic lights (left) */}
+          <div className="flex items-center gap-2 shrink-0">
+            <TrafficLight
+              color="red"
+              label={`Close ${title}`}
+              onClick={() => {
+                setMaximized(false);
+                onClose();
+              }}
+            />
+            <TrafficLight
+              color="yellow"
+              label={`Minimize ${title}`}
+              onClick={() => {
+                setMaximized(false);
+                onClose();
+              }}
+            />
+            <TrafficLight
+              color="green"
+              label={maximized ? `Restore ${title}` : `Maximize ${title}`}
+              onClick={() => setMaximized((m) => !m)}
+            />
+          </div>
+
+          {/* Centered title — absolutely positioned so traffic lights don't shift it */}
+          <DialogTitle className="absolute left-1/2 -translate-x-1/2 max-w-[60%] font-display text-sm font-semibold text-text-primary truncate pointer-events-none">
             {title}
           </DialogTitle>
-          <button
-            type="button"
-            onClick={onClose}
-            aria-label={`Close ${title}`}
-            className="shrink-0 inline-flex items-center justify-center w-6 h-6 rounded-md text-text-secondary hover:bg-card-border focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent transition-colors cursor-pointer"
-          >
-            <svg
-              width="14"
-              height="14"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              aria-hidden="true"
-            >
-              <line x1="18" y1="6" x2="6" y2="18" />
-              <line x1="6" y1="6" x2="18" y2="18" />
-            </svg>
-          </button>
         </header>
 
         {/* Optional subtitle row */}
@@ -82,5 +99,62 @@ export function Window({
         <div className="overflow-y-auto flex-1 px-6 py-5">{children}</div>
       </DialogContent>
     </Dialog>
+  );
+}
+
+const TRAFFIC_LIGHT_STYLES = {
+  red: {
+    base: "bg-[#ff5f57] border-[#e0443e]",
+    glyph: (
+      <>
+        <line x1="3.5" y1="3.5" x2="8.5" y2="8.5" />
+        <line x1="8.5" y1="3.5" x2="3.5" y2="8.5" />
+      </>
+    ),
+  },
+  yellow: {
+    base: "bg-[#febc2e] border-[#dea123]",
+    glyph: <line x1="3" y1="6" x2="9" y2="6" />,
+  },
+  green: {
+    base: "bg-[#28c840] border-[#1aab29]",
+    glyph: (
+      <>
+        <line x1="6" y1="3" x2="6" y2="9" />
+        <line x1="3" y1="6" x2="9" y2="6" />
+      </>
+    ),
+  },
+} as const;
+
+function TrafficLight({
+  color,
+  label,
+  onClick,
+}: {
+  color: keyof typeof TRAFFIC_LIGHT_STYLES;
+  label: string;
+  onClick: () => void;
+}) {
+  const { base, glyph } = TRAFFIC_LIGHT_STYLES[color];
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      aria-label={label}
+      className={`group relative w-3 h-3 rounded-full border ${base} focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent cursor-pointer`}
+    >
+      <svg
+        viewBox="0 0 12 12"
+        className="absolute inset-0 w-full h-full opacity-0 group-hover:opacity-100 transition-opacity text-black/55"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.25"
+        strokeLinecap="round"
+        aria-hidden="true"
+      >
+        {glyph}
+      </svg>
+    </button>
   );
 }
