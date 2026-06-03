@@ -1,8 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useMotionValue } from "motion/react";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { desktopItems } from "@/data/desktop-items";
+import type { DesktopItem } from "@/types/desktop";
 import { modalContents } from "@/data/modal-contents";
 import { panelContents } from "@/data/panel-contents";
 import MobileDesktop from "./MobileDesktop";
@@ -12,7 +14,7 @@ import PanelBody from "@/components/panel/PanelBody";
 import HeroText from "@/components/items/HeroText";
 import FolderIcon from "./icons/FolderIcon";
 import DocIcon from "./icons/DocIcon";
-import AppIcon from "./icons/AppIcon";
+import Dock from "./Dock";
 import StickyWidget from "./widgets/StickyWidget";
 import IllustrationWidget from "./widgets/IllustrationWidget";
 import { FolderMark } from "@/components/icons";
@@ -34,6 +36,18 @@ export default function Desktop() {
   const [activeWindow, setActiveWindow] = useState<ActiveWindow>(null);
   const closeWindow = () => setActiveWindow(null);
 
+  // Shared viewport pointer position, driving the sticky-note parallax tilt.
+  const pointerX = useMotionValue(0);
+  const pointerY = useMotionValue(0);
+  useEffect(() => {
+    const handle = (e: PointerEvent) => {
+      pointerX.set(e.clientX);
+      pointerY.set(e.clientY);
+    };
+    window.addEventListener("pointermove", handle, { passive: true });
+    return () => window.removeEventListener("pointermove", handle);
+  }, [pointerX, pointerY]);
+
   if (!isDesktop) {
     return (
       <MobileDesktop
@@ -47,10 +61,17 @@ export default function Desktop() {
   const widgetItems = desktopItems.filter(
     (i) => i.type === "sticky" || i.type === "illustration-widget"
   );
-  const fileItems = desktopItems.filter(
-    (i) => i.type === "doc" || i.type === "folder"
+  // Tidied like macOS "Clean Up By Kind": documents first, then folders.
+  // Colours is excluded here because it lives in the dock as an app.
+  const fileItems = desktopItems
+    .filter(
+      (i): i is Extract<DesktopItem, { type: "doc" | "folder" }> =>
+        (i.type === "doc" || i.type === "folder") && i.id !== "folder-colours"
+    )
+    .sort((a, b) => (a.type === b.type ? 0 : a.type === "doc" ? -1 : 1));
+  const appItems = desktopItems.filter(
+    (i): i is Extract<typeof i, { type: "app" }> => i.type === "app"
   );
-  const appItems = desktopItems.filter((i) => i.type === "app");
 
   return (
     <>
@@ -62,21 +83,21 @@ export default function Desktop() {
             alt=""
             aria-hidden
             src="/hero/cloud-halftone.png"
-            className="cloud-drift pointer-events-none absolute top-[8%] left-[72%] w-[22%] mix-blend-lighten select-none [will-change:transform]"
+            className="cloud-drift pointer-events-none absolute top-[6%] left-[40%] w-[22%] opacity-60 mix-blend-lighten select-none [will-change:transform]"
             style={{ animation: "cloud-drift-a 9s cubic-bezier(0.455,0.03,0.515,0.955) 0s infinite alternate" }}
           />
           <img
             alt=""
             aria-hidden
             src="/hero/cloud-halftone.png"
-            className="cloud-drift pointer-events-none absolute top-[22%] left-[55%] w-[44%] mix-blend-lighten select-none [will-change:transform]"
+            className="cloud-drift pointer-events-none absolute top-[20%] left-[30%] w-[32%] opacity-50 mix-blend-lighten select-none [will-change:transform]"
             style={{ animation: "cloud-drift-b 13s cubic-bezier(0.455,0.03,0.515,0.955) -3s infinite alternate" }}
           />
           <img
             alt=""
             aria-hidden
             src="/hero/cloud-halftone.png"
-            className="cloud-drift pointer-events-none absolute top-[35%] -left-[6%] w-[38%] mix-blend-lighten select-none [will-change:transform]"
+            className="cloud-drift pointer-events-none absolute top-[12%] left-[48%] w-[20%] opacity-50 mix-blend-lighten select-none [will-change:transform]"
             style={{ animation: "cloud-drift-c 11s cubic-bezier(0.455,0.03,0.515,0.955) -5s infinite alternate" }}
           />
         </div>
@@ -90,7 +111,7 @@ export default function Desktop() {
         </header>
 
         {/* Widgets column — left */}
-        <aside className="absolute left-6 top-12 bottom-28 w-[300px] flex flex-col gap-5 overflow-y-auto pr-1 z-10">
+        <aside className="absolute left-6 top-12 bottom-28 w-[248px] flex flex-col gap-4 overflow-visible z-10" style={{ perspective: 1000 }}>
           {widgetItems.map((item) => {
             if (item.type === "sticky") {
               return (
@@ -100,6 +121,8 @@ export default function Desktop() {
                   highlight={item.highlight}
                   attribution={item.attribution}
                   rotation={item.rotation}
+                  pointerX={pointerX}
+                  pointerY={pointerY}
                 />
               );
             }
@@ -108,7 +131,7 @@ export default function Desktop() {
         </aside>
 
         {/* File / folder grid — right */}
-        <section className="absolute right-6 top-12 bottom-28 w-[480px] grid grid-cols-3 gap-y-6 gap-x-2 content-start overflow-y-auto pr-1 z-10">
+        <section className="no-scrollbar absolute right-6 top-12 bottom-28 w-[456px] grid grid-cols-3 justify-items-center gap-x-3 gap-y-8 content-start overflow-y-auto z-10">
           {fileItems.map((item) => {
             if (item.type === "doc") {
               return (
@@ -142,22 +165,16 @@ export default function Desktop() {
         </section>
 
         {/* Dock — bottom center */}
-        {appItems.length > 0 && (
-          <footer className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20">
-            <div className="flex items-end gap-2 px-3 py-2 rounded-2xl bg-card-bg/65 backdrop-blur-xl border border-card-border shadow-[0_18px_40px_-12px_rgba(0,0,0,0.25)]">
-              {appItems.map((item) => {
-                if (item.type !== "app") return null;
-                return (
-                  <AppIcon
-                    key={item.id}
-                    label={item.label}
-                    href={item.href}
-                  />
-                );
-              })}
-            </div>
-          </footer>
-        )}
+        <Dock
+          apps={appItems}
+          onOpenColours={() =>
+            setActiveWindow({
+              kind: "folder",
+              panelId: "colours",
+              title: "Colours",
+            })
+          }
+        />
       </div>
 
       {/* Window slot */}

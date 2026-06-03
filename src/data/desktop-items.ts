@@ -67,6 +67,8 @@ export const desktopItems: DesktopItem[] = [
   },
 
   // ===== Folder icons =====
+  // Colours is promoted to the dock (Colour Picker app) on desktop, but
+  // still appears as a folder on the dock-less mobile layout.
   {
     type: "folder",
     id: "folder-colours",

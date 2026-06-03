@@ -250,6 +250,54 @@ body {
   to   { transform: translate3d(12%, 0, 0); }
 }
 
+/* Hidden scrollbars — desktop columns scroll without a visible track */
+.no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* macOS-style dock — translucent frosted slab */
+.dock-glass {
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.55),
+    rgba(255, 255, 255, 0.38)
+  );
+  backdrop-filter: blur(28px) saturate(180%);
+  -webkit-backdrop-filter: blur(28px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.6),
+    inset 0 0 0 0.5px rgba(255, 255, 255, 0.3),
+    0 18px 44px -12px rgba(20, 40, 90, 0.32),
+    0 6px 14px -8px rgba(20, 40, 90, 0.25);
+}
+
+/* Brand-blue app tile in the dock — derived from the --accent token, with a
+   top-down white sheen for the glossy squircle depth. */
+.dock-app-tile {
+  background-color: var(--accent);
+  background-image: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.28),
+    rgba(255, 255, 255, 0) 60%
+  );
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.45),
+    0 1px 2px rgba(0, 60, 160, 0.35);
+}
+
+.dock-tooltip {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px) saturate(160%);
+  -webkit-backdrop-filter: blur(12px) saturate(160%);
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  box-shadow: 0 6px 16px -6px rgba(20, 40, 90, 0.3);
+}
+
 @media (prefers-reduced-motion: reduce) {
   .cloud-drift {
     animation: none !important;
