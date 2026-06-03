@@ -56,73 +56,6 @@ export const panelContents: Record<string, PanelContent> = {
     ],
   },
 
-  imagery: {
-    id: "imagery",
-    title: "Imagery",
-    description:
-      "Photography guidelines and assets for the Teacher & School portfolio.",
-    items: [
-      {
-        type: "text",
-        title: "Photography Style",
-        content:
-          "Authentic, warm images of real teachers in real classrooms. Our photography captures the everyday moments of teaching — focus, collaboration, connection, and joy.",
-      },
-      {
-        type: "text",
-        title: "Why We Picked This",
-        content:
-          "Teachers are the heart of every product in the Teacher & School portfolio. Stock photography feels impersonal and generic — exactly the opposite of Kind Utility. Real photography signals that we see teachers as real people, not abstract users. Warm, natural lighting evokes approachability. Candid moments (not staged poses) build trust because they mirror the reality teachers live. This visual honesty is how we make the brand promise tangible: we understand your world because we\u2019ve been there.",
-      },
-      { type: "divider" },
-      {
-        type: "asset-list",
-        title: "Image Library",
-        assets: [
-          {
-            name: "teacher-classroom-01.jpg",
-            thumbnailColor: "#E8D5B7",
-            description: "Teacher helping student at desk",
-            link: "https://unsplash.com/photos/teacher-classroom",
-          },
-          {
-            name: "teacher-collaboration-02.jpg",
-            thumbnailColor: "#C4D9A0",
-            description: "Teachers collaborating in staff room",
-            link: "https://unsplash.com/photos/teacher-collaboration",
-          },
-          {
-            name: "classroom-environment-03.jpg",
-            thumbnailColor: "#A7C7E7",
-            description: "Warm classroom environment",
-            link: "https://unsplash.com/photos/classroom-environment",
-          },
-          {
-            name: "teacher-tech-04.jpg",
-            thumbnailColor: "#D4B8E0",
-            description: "Teacher using technology in class",
-            link: "https://unsplash.com/photos/teacher-tech",
-          },
-          {
-            name: "student-engagement-05.jpg",
-            thumbnailColor: "#F5D0A9",
-            description: "Students engaged in group activity",
-            link: "https://unsplash.com/photos/student-engagement",
-          },
-        ],
-      },
-      { type: "divider" },
-      {
-        type: "guideline",
-        title: "Photography Guidelines",
-        doText:
-          "Real teachers in real classrooms. Natural lighting. Candid moments of teaching, collaboration, and connection. Diverse representation.",
-        dontText:
-          "Overly staged stock photos. Cold, clinical lighting. Generic office settings. Lack of diversity.",
-      },
-    ],
-  },
-
   illustrations: {
     id: "illustrations",
     title: "Illustrations",
@@ -317,13 +250,12 @@ export const panelContents: Record<string, PanelContent> = {
       },
       { type: "divider" },
       {
-        type: "asset-list",
+        type: "tool-list",
         title: "Available Tools",
-        assets: tools.map((tool) => ({
+        tools: tools.map((tool) => ({
           name: tool.name,
-          thumbnailColor: "#E6F0FF",
           description: tool.description,
-          link: tool.href,
+          href: tool.href,
         })),
       },
       { type: "divider" },

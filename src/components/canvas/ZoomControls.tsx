@@ -19,7 +19,7 @@ export default function ZoomControls({
   const percentage = Math.round(zoom * 100);
 
   return (
-    <div className="fixed bottom-4 left-48 z-30 flex items-center gap-1 rounded-xl px-1 py-1 bg-white/85 border border-black/10 backdrop-blur-md">
+    <div className="fixed bottom-4 right-4 z-30 flex items-center gap-1 rounded-xl px-1 py-1 bg-white/85 border border-black/10 backdrop-blur-md">
       <Button
         variant="ghost"
         size="icon"

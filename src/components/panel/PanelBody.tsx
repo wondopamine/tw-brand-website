@@ -3,6 +3,7 @@
 import { useState, useCallback } from "react";
 import type { PanelContentItem } from "@/types/panel";
 import type { AssetEntry } from "@/types/panel";
+import { ExternalLink } from "lucide-react";
 
 interface PanelBodyProps {
   items: PanelContentItem[];
@@ -444,6 +445,44 @@ export default function PanelBody({ items }: PanelBodyProps) {
                       asset={asset}
                       onEnlarge={setEnlargedAsset}
                     />
+                  ))}
+                </div>
+              </div>
+            );
+
+          case "tool-list":
+            return (
+              <div key={index} className="space-y-3">
+                {item.title && (
+                  <h4 className="text-sm font-bold text-text-primary">
+                    {item.title}
+                  </h4>
+                )}
+                <div className="space-y-3">
+                  {item.tools.map((tool) => (
+                    <div
+                      key={tool.name}
+                      className="flex flex-col gap-2 p-4 rounded-lg border border-card-border bg-canvas-bg/50"
+                    >
+                      <div className="flex items-center justify-between gap-3">
+                        <span className="font-display text-base font-semibold text-text-primary">
+                          {tool.name}
+                        </span>
+                        <a
+                          href={tool.href}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="shrink-0 inline-flex items-center gap-1 text-xs font-medium text-accent hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent rounded"
+                          aria-label={`Open ${tool.name} (external link)`}
+                        >
+                          Open
+                          <ExternalLink className="size-3" />
+                        </a>
+                      </div>
+                      <p className="text-[13px] leading-relaxed text-text-secondary">
+                        {tool.description}
+                      </p>
+                    </div>
                   ))}
                 </div>
               </div>

@@ -549,7 +549,7 @@ export default function HeroText({ title, subtitle, stack }: HeroTextProps) {
 
         {/* ===== Controls Bar — inside the outline, top ===== */}
         <motion.div
-          className="relative flex items-center justify-center gap-2 px-5 py-4 flex-wrap"
+          className="relative flex items-center justify-center gap-3 px-5 py-4 flex-wrap"
           style={{ zIndex: 50, pointerEvents: "auto" }}
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
@@ -557,7 +557,7 @@ export default function HeroText({ title, subtitle, stack }: HeroTextProps) {
         >
           {/* Weight selector */}
           <div
-            className="relative flex items-center rounded-md px-2.5 py-1"
+            className="relative flex items-center rounded-md px-3.5 py-2"
             style={{
               background: "var(--card-bg)",
               border: "1px solid var(--card-border)",
@@ -567,7 +567,7 @@ export default function HeroText({ title, subtitle, stack }: HeroTextProps) {
               value={weight}
               onChange={(e) => setWeight(Number(e.target.value))}
               onMouseDown={(e) => e.stopPropagation()}
-              className="appearance-none bg-transparent text-[11px] font-medium pr-4 cursor-pointer outline-none"
+              className="appearance-none bg-transparent text-sm font-medium pr-5 cursor-pointer outline-none"
               style={{ color: "var(--text-primary)", pointerEvents: "auto", position: "relative", zIndex: 10 }}
             >
               {WEIGHTS.map((w) => (
@@ -577,7 +577,7 @@ export default function HeroText({ title, subtitle, stack }: HeroTextProps) {
               ))}
             </select>
             <svg
-              width="10" height="10" viewBox="0 0 10 10" fill="none"
+              width="14" height="14" viewBox="0 0 10 10" fill="none"
               className="absolute right-2 pointer-events-none"
               style={{ color: "var(--text-secondary)" }}
             >
@@ -593,7 +593,7 @@ export default function HeroText({ title, subtitle, stack }: HeroTextProps) {
             <button
               onMouseDown={(e) => e.stopPropagation()}
               onClick={() => setItalic(false)}
-              className="px-2 py-1 text-[11px] font-semibold transition-colors"
+              className="px-3 py-2 text-sm font-semibold transition-colors"
               style={{
                 background: !italic ? "var(--text-primary)" : "var(--card-bg)",
                 color: !italic ? "var(--card-bg)" : "var(--text-secondary)",
@@ -604,7 +604,7 @@ export default function HeroText({ title, subtitle, stack }: HeroTextProps) {
             <button
               onMouseDown={(e) => e.stopPropagation()}
               onClick={() => setItalic(true)}
-              className="px-2 py-1 text-[11px] transition-colors"
+              className="px-3 py-2 text-sm transition-colors"
               style={{
                 background: italic ? "var(--text-primary)" : "var(--card-bg)",
                 color: italic ? "var(--card-bg)" : "var(--text-secondary)",
@@ -625,14 +625,14 @@ export default function HeroText({ title, subtitle, stack }: HeroTextProps) {
                 key={a.value}
                 onMouseDown={(e) => e.stopPropagation()}
                 onClick={() => setAlign(a.value as "left" | "center" | "right")}
-                className="px-1.5 py-1 transition-colors"
+                className="px-2.5 py-2 transition-colors"
                 style={{
                   background: align === a.value ? "var(--text-primary)" : "var(--card-bg)",
                   color: align === a.value ? "var(--card-bg)" : "var(--text-secondary)",
                 }}
                 title={a.label}
               >
-                <svg width="12" height="12" viewBox="0 0 14 14" fill="none">
+                <svg width="16" height="16" viewBox="0 0 14 14" fill="none">
                   {a.icon === "align-left" && (
                     <>
                       <line x1="1" y1="3" x2="13" y2="3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
@@ -684,7 +684,7 @@ export default function HeroText({ title, subtitle, stack }: HeroTextProps) {
               setItalic(false);
               setTextColor("#0064FF");
             }}
-            className="p-1 rounded-md transition-colors hover:opacity-60 cursor-pointer"
+            className="p-2 rounded-md transition-colors hover:opacity-60 cursor-pointer"
             style={{
               background: "var(--card-bg)",
               border: "1px solid var(--card-border)",
@@ -692,7 +692,7 @@ export default function HeroText({ title, subtitle, stack }: HeroTextProps) {
             }}
             title="Reset"
           >
-            <svg width="12" height="12" viewBox="0 0 14 14" fill="none">
+            <svg width="16" height="16" viewBox="0 0 14 14" fill="none">
               <path d="M2 7a5 5 0 1 1 1 3" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" />
               <path d="M2 3v4h4" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
