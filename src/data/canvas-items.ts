@@ -15,7 +15,7 @@ export const canvasItems: CanvasItem[] = [
     position: { x: CX - 460, y: CY - 260 },
     size: { width: 920, height: 520 },
     title: "Teacher",
-    subtitle: "Workspace\nBrand\nGuidelines",
+    subtitle: "& School\nBrand\nOperating System",
     zIndex: 0,
     mobileOrder: 0,
   },
@@ -37,13 +37,13 @@ export const canvasItems: CanvasItem[] = [
     mobileOrder: 1,
   },
 
-  // 2. About TW Brand Guidelines — top-center
+  // 2. About this Brand OS — top-center
   {
     id: "card-about",
     type: "brand-card",
     position: { x: CX - 180, y: CY - 520 },
     size: { width: 360, height: 220 },
-    title: "About TW Brand Guidelines",
+    title: "About this Brand OS",
     subtitle: "What this document is — and what it isn't.",
     modalId: "about-guidelines",
     rotation: 1,
