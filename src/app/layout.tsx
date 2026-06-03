@@ -21,9 +21,9 @@ const plusJakarta = Plus_Jakarta_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "Teacher Workspace — Brand Guidelines",
+  title: "Teacher & School — Brand Operating System",
   description:
-    "Brand guidelines and design system for Teacher Workspace by TransformX. Kind Utility at the intersection of high utility and high warmth.",
+    "The Teacher & School portfolio's brand operating system. Governance and tools for product builders working on Teacher Workspace and the rest of the T&S portfolio. Kind Utility at the intersection of high utility and high warmth.",
 };
 
 export default function RootLayout({

@@ -10,7 +10,7 @@ export default function Home() {
       {/* Top-left navigation hint */}
       <div className="fixed top-4 left-6 z-10">
         <span className="font-body text-xs text-text-secondary">
-          Homepage - Sign in page
+          Homepage
         </span>
       </div>
 
@@ -33,12 +33,12 @@ export default function Home() {
           }}
         >
           <h1 className="font-display text-3xl md:text-4xl font-semibold tracking-tight text-text-primary">
-            Teacher Workspace
+            Teacher &amp; School
           </h1>
 
           <div className="flex justify-center mt-4">
             <span className="inline-block px-4 py-1.5 text-sm font-medium rounded-lg text-accent border border-accent/20">
-              Brand Guidelines
+              Brand Operating System
             </span>
           </div>
         </motion.div>
@@ -109,10 +109,11 @@ export default function Home() {
               </p>
 
               <p className="text-[15px] leading-relaxed text-text-secondary">
-                Teacher Workspace is utility-first at its core, human-first at
-                the surface. Teachers move through tasks quickly and confidently
-                &mdash; supported by a design that stays out of the way and
-                simply works.
+                The Teacher &amp; School portfolio is utility-first at its core,
+                human-first at the surface. Every product we build for teachers
+                &mdash; Teacher Workspace as the flagship, alongside the
+                supporting products in the portfolio &mdash; moves teachers
+                through their day with less friction and more confidence.
               </p>
 
               <p className="text-[15px] leading-relaxed text-text-secondary">
@@ -137,7 +138,7 @@ export default function Home() {
               <Button
                 size="cta"
                 variant="default"
-                render={<Link href="/canvas">Open Brand Workspace</Link>}
+                render={<Link href="/canvas">Open the Brand Canvas</Link>}
               />
             </div>
           </div>
