@@ -7,13 +7,6 @@ import { Button } from "@/components/ui/button";
 export default function Home() {
   return (
     <div className="min-h-screen">
-      {/* Top-left navigation hint */}
-      <div className="fixed top-4 left-6 z-10">
-        <span className="font-body text-xs text-text-secondary">
-          Homepage
-        </span>
-      </div>
-
       <motion.div
         className="min-h-full flex flex-col items-center py-12 sm:py-16 px-4 sm:px-6"
         initial={{ opacity: 0 }}
@@ -33,12 +26,12 @@ export default function Home() {
           }}
         >
           <h1 className="font-display text-3xl md:text-4xl font-semibold tracking-tight text-text-primary">
-            Teacher &amp; School
+            Brand Operating System
           </h1>
 
           <div className="flex justify-center mt-4">
             <span className="inline-block px-4 py-1.5 text-sm font-medium rounded-lg text-accent border border-accent/20">
-              Brand Operating System
+              for Teacher &amp; School portfolio
             </span>
           </div>
         </motion.div>
@@ -138,6 +131,7 @@ export default function Home() {
               <Button
                 size="cta"
                 variant="default"
+                nativeButton={false}
                 render={<Link href="/canvas">Open the Brand Canvas</Link>}
               />
             </div>
