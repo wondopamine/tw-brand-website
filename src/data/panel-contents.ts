@@ -5,11 +5,11 @@ export const panelContents: Record<string, PanelContent> = {
     id: "colours",
     title: "Colours",
     description:
-      "The TW colour system anchored in a single primary blue. Click any swatch to copy its HEX value.",
+      "The Teacher & School colour system anchored in a single primary blue. Click any swatch to copy its HEX value.",
     items: [
       {
         type: "text",
-        title: "TW Accent — #0064FF",
+        title: "Teacher & School Blue — #0064FF",
         content:
           "Our primary brand colour. A confident, approachable blue that balances professionalism with warmth.",
       },
@@ -17,14 +17,14 @@ export const panelContents: Record<string, PanelContent> = {
         type: "text",
         title: "Why We Picked This",
         content:
-          "Blue signals trust, reliability, and calm — exactly what teachers need from a daily tool. TW Accent (#0064FF) is inspired by MOE Singapore\u2019s institutional blue, grounding Teacher Workspace in a colour teachers already associate with education. We shifted the hue slightly brighter to feel more modern and energetic, aligning with the Kind Utility philosophy: familiar enough to feel safe, polished enough to feel premium. It works across light and dark contexts, meets WCAG AA contrast on white, and scales cleanly into a full shade ramp for UI states.",
+          "Blue signals trust, reliability, and calm — exactly what teachers need from a daily tool. Teacher & School Blue (#0064FF) draws on the colour Singapore teachers already associate with education, grounding the portfolio in something familiar. It\u2019s anchored on Teacher Workspace as the flagship product and carries across every other product in the portfolio. We shifted the hue slightly brighter to feel more modern and energetic, aligning with the Kind Utility philosophy: familiar enough to feel safe, polished enough to feel premium. It works across light and dark contexts, meets WCAG AA contrast on white, and scales cleanly into a full shade ramp for UI states.",
       },
       { type: "divider" },
       {
         type: "color-swatch",
         title: "Primary",
         colors: [
-          { name: "TW Accent", hex: "#0064FF", isPrimary: true },
+          { name: "Teacher & School Blue", hex: "#0064FF", isPrimary: true },
         ],
       },
       { type: "divider" },
@@ -50,7 +50,7 @@ export const panelContents: Record<string, PanelContent> = {
         type: "text",
         title: "Usage",
         content:
-          "Use TW Accent (#0064FF) as the primary brand colour across UI, marketing, and communications. The blue shade ramp provides supporting tones for backgrounds, borders, hover states, and text emphasis. Refer to FlowDS for the full design system palette.",
+          "Use Teacher & School Blue (#0064FF) as the primary brand colour across every product in the portfolio — UI, marketing, and communications. The blue shade ramp provides supporting tones for backgrounds, borders, hover states, and text emphasis. Refer to FlowDS for the full design system palette.",
       },
     ],
   },
@@ -59,7 +59,7 @@ export const panelContents: Record<string, PanelContent> = {
     id: "imagery",
     title: "Imagery",
     description:
-      "Photography guidelines and assets for Teacher Workspace.",
+      "Photography guidelines and assets for the Teacher & School portfolio.",
     items: [
       {
         type: "text",
@@ -71,7 +71,7 @@ export const panelContents: Record<string, PanelContent> = {
         type: "text",
         title: "Why We Picked This",
         content:
-          "Teachers are the heart of Teacher Workspace. Stock photography feels impersonal and generic — exactly the opposite of Kind Utility. Real photography signals that we see teachers as real people, not abstract users. Warm, natural lighting evokes approachability. Candid moments (not staged poses) build trust because they mirror the reality teachers live. This visual honesty is how we make the brand promise tangible: we understand your world because we\u2019ve been there.",
+          "Teachers are the heart of every product in the Teacher & School portfolio. Stock photography feels impersonal and generic — exactly the opposite of Kind Utility. Real photography signals that we see teachers as real people, not abstract users. Warm, natural lighting evokes approachability. Candid moments (not staged poses) build trust because they mirror the reality teachers live. This visual honesty is how we make the brand promise tangible: we understand your world because we\u2019ve been there.",
       },
       { type: "divider" },
       {
@@ -126,7 +126,7 @@ export const panelContents: Record<string, PanelContent> = {
     id: "illustrations",
     title: "Illustrations",
     description:
-      "Illustration style and assets for Teacher Workspace.",
+      "Illustration style and assets for the Teacher & School portfolio.",
     items: [
       {
         type: "text",
@@ -138,7 +138,7 @@ export const panelContents: Record<string, PanelContent> = {
         type: "text",
         title: "Why We Picked This",
         content:
-          "Illustrations fill the gap where photography can\u2019t reach — explaining abstract concepts, adding moments of delight, and softening the interface. A hand-drawn, slightly imperfect style reinforces Kind Utility: it signals that a real person made this with care, not a machine. The rounded, soft aesthetic lowers cognitive load and reduces intimidation, making complex features feel approachable. We anchor the palette in TW blue to maintain brand consistency while using warm accent colours to add life. The result is an illustration system that feels like a kind colleague sketching something out on a whiteboard to help you understand.",
+          "Illustrations fill the gap where photography can\u2019t reach — explaining abstract concepts, adding moments of delight, and softening the interface. A hand-drawn, slightly imperfect style reinforces Kind Utility: it signals that a real person made this with care, not a machine. The rounded, soft aesthetic lowers cognitive load and reduces intimidation, making complex features feel approachable. We anchor the palette in Teacher & School Blue to maintain brand consistency across the portfolio while using warm accent colours to add life. The result is an illustration system that feels like a kind colleague sketching something out on a whiteboard to help you understand.",
       },
       { type: "divider" },
       {
@@ -182,7 +182,7 @@ export const panelContents: Record<string, PanelContent> = {
         type: "guideline",
         title: "Illustration Guidelines",
         doText:
-          "Warm color palette anchored in TW blue. Human figures with natural proportions. Soft edges and rounded forms. Subtle textures and hand-drawn quality.",
+          "Warm color palette anchored in Teacher & School Blue. Human figures with natural proportions. Soft edges and rounded forms. Subtle textures and hand-drawn quality.",
         dontText:
           "Overly corporate or flat illustrations. Cartoonish proportions. Sharp, aggressive angles. Neon or harsh colors.",
       },
@@ -193,7 +193,7 @@ export const panelContents: Record<string, PanelContent> = {
     id: "typography",
     title: "Typography",
     description:
-      "The typographic system for Teacher Workspace — two fonts, clearly defined roles.",
+      "The typographic system for the Teacher & School portfolio — two fonts, clearly defined roles.",
     items: [
       {
         type: "text",
