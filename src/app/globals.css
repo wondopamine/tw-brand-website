@@ -22,10 +22,6 @@
   --overlay-bg: rgba(0, 0, 0, 0.5);
   --folder-icon-bg: #0064FF;
   --folder-icon-front: #3385FF;
-  --minimap-bg: rgba(0, 0, 0, 0.04);
-  --minimap-border: rgba(0, 0, 0, 0.08);
-  --minimap-viewport: rgba(0, 100, 255, 0.2);
-  --minimap-viewport-border: rgba(0, 100, 255, 0.5);
   /* shadcn semantic tokens — mapped to TW brand */
   --background: var(--canvas-bg);
   --foreground: var(--text-primary);
@@ -123,136 +119,11 @@ body {
   cursor: default;
 }
 
-/* Subtle static dot grid on viewport */
+/* Subtle static dot grid — wallpaper for the OS desktop */
 .canvas-grid {
   background-color: var(--canvas-bg);
-  cursor: default;
-}
-
-/* Static line grid — disabled to keep canvas clean */
-.canvas-grid-lines {
-  position: relative;
-}
-
-/* ===== CANVAS INNER — stamp cursor ===== */
-.canvas-inner {
-  position: relative;
-  cursor: none;
-}
-
-/* Stamp imprint animation — appears on click, fades after 3s */
-@keyframes stamp-appear {
-  0%   { opacity: 0; transform: translate(-50%, -50%) rotate(var(--stamp-rot)) scale(1.15); }
-  8%   { opacity: 0.5; transform: translate(-50%, -50%) rotate(var(--stamp-rot)) scale(0.97); }
-  15%  { opacity: 0.35; transform: translate(-50%, -50%) rotate(var(--stamp-rot)) scale(1); }
-  70%  { opacity: 0.3; transform: translate(-50%, -50%) rotate(var(--stamp-rot)) scale(1); }
-  100% { opacity: 0; transform: translate(-50%, -50%) rotate(var(--stamp-rot)) scale(1); }
-}
-
-/* Subtle blue glow at cursor position */
-.canvas-inner::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(
-    circle var(--cursor-glow-radius, 250px) at var(--cursor-x, -1000px) var(--cursor-y, -1000px),
-    rgba(0, 100, 255, 0.035),
-    transparent var(--cursor-glow-radius, 250px)
-  );
-  pointer-events: none;
-  z-index: 0;
-  opacity: 0;
-  transition: opacity 0.4s ease;
-}
-
-.canvas-inner.illuminated::after {
-  opacity: 1;
-}
-
-/* ===== GLOW CARD (Stripe-style subtle blob-tracking border glow) ===== */
-.glow-card-outer {
-  --glow-x: 50%;
-  --glow-y: 50%;
-  position: relative;
-  overflow: hidden;
-  background: var(--card-border);
-  border-radius: 16px;
-  padding: 1px;
-  cursor: pointer;
-  transition: padding 0.3s ease;
-}
-
-/* Gradient border on hover — radial gradient radiates from cursor position.
-   #0266FF (TW blue) is strongest near the cursor and fades naturally outward. */
-.glow-card-hovered {
-  padding: 2px;
-  background:
-    radial-gradient(
-      400px circle at var(--glow-x) var(--glow-y),
-      #0266FF 0%,
-      rgba(2, 102, 255, 0.4) 25%,
-      rgba(2, 102, 255, 0.1) 50%,
-      var(--card-border) 80%
-    );
-}
-
-/* The blob — a blurred circle that tracks the cursor behind the card surface.
-   Sits between the outer background and the inner card,
-   creating a subtle glowing border where the cursor is. */
-.glow-blob {
-  position: absolute;
-  z-index: 1;
-  top: 0;
-  left: 0;
-  width: 300px;
-  height: 300px;
-  border-radius: 50%;
-  background: rgba(2, 102, 255, 0.35);
-  filter: blur(60px);
-  opacity: 0;
-  transition: opacity 0.4s ease;
-  pointer-events: none;
-  transform: translate(-150px, -150px);
-}
-
-.glow-card-outer:hover .glow-blob {
-  opacity: 1;
-}
-
-.glow-card-inner {
-  position: relative;
-  z-index: 2;
-  background: var(--card-bg);
-  border-radius: 15px;
-  height: 100%;
-}
-
-/* ===== HERO BADGE / TAG ===== */
-.hero-badge {
-  display: inline-block;
-  padding: 12px 36px;
-  font-size: 28px;
-  font-weight: 500;
-  letter-spacing: 0.02em;
-  color: var(--accent);
-  background: var(--accent-light);
-  border: 1px solid rgba(0, 100, 255, 0.15);
-  border-radius: 999px;
-  user-select: none;
-}
-
-/* Half-sized hero badge for canvas view */
-.hero-badge-sm {
-  display: inline-block;
-  padding: 6px 18px;
-  font-size: 14px;
-  font-weight: 500;
-  letter-spacing: 0.02em;
-  color: var(--accent);
-  background: var(--accent-light);
-  border: 1px solid rgba(0, 100, 255, 0.15);
-  border-radius: 999px;
-  user-select: none;
+  background-image: radial-gradient(circle at 1px 1px, var(--canvas-grid) 1px, transparent 0);
+  background-size: 24px 24px;
 }
 
 /* ===== TYPOGRAPHY PLAYGROUND SLIDERS ===== */
@@ -293,21 +164,6 @@ body {
   cursor: pointer;
 }
 
-/* ===== CANVAS LOADING SPINNER ===== */
-.canvas-spinner {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  border: 3px solid var(--card-border);
-  border-top-color: var(--accent);
-  animation: canvas-spin 0.8s linear infinite;
-}
-
-@keyframes canvas-spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
 
 /* Scrollbar styling */
 ::-webkit-scrollbar {
