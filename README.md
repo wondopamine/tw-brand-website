@@ -6,7 +6,7 @@
 
 ## What this is
 
-- A 2-page site: a manifesto landing page and a 2D pannable canvas of brand surfaces.
+- A 2-page site: a manifesto landing page and a **fixed-viewport OS-style desktop** of brand surfaces (icons, widgets, windows).
 - Source of truth for the T&S portfolio's visual + verbal identity.
 - A jumping-off point to **tangible on-brand tools** (icon generator, etc.) — that's the "operating system" part of the framing.
 - Audience: product builders — primarily designers and PMs. Leadership and MOE stakeholders may visit; not the writing target.
@@ -66,20 +66,29 @@ The repo follows a three-tier component model:
 | Tier | What it is | Examples |
 |------|-----------|----------|
 | **shadcn/ui (Base UI)** | Library primitives generated via `npx shadcn add`. Restyled to T&S brand tokens. | `Button`, `Card`, `Dialog` — in `src/components/ui/` |
+| **Desktop OS shell** | T&S-specific element vocabulary: 5 element types + Window primitive. | `Desktop`, `MobileDesktop`, `DesktopItem`, `Window`, icons (`FolderIcon`/`DocIcon`/`AppIcon`), widgets (`StickyWidget`/`IllustrationWidget`) — in `src/components/desktop/` |
 | **T&S icons** | lucide-react for generic icons, hand-rolled SVGs for brand marks. | `src/components/icons/index.ts` re-exports lucide + `FolderMark`, `IllustrationStack` |
-| **Bespoke** | Components that have no library analogue and would lose visual identity in migration. | Canvas pan/zoom, stickers, stamp cursor, minimap, `GlowCard`, `EdgeVignette`, typography playground |
+| **Bespoke** | Components that have no library analogue. | `HeroText` typography playground |
+
+### The desktop interaction model
+
+`/canvas` renders a fixed-viewport OS-style desktop (no pan, no zoom). Five element types:
+
+- **Folder icon** — grouped resources (Colours, Illustrations, Typography, Use Cases). Click → opens panel in a window.
+- **App icon** — external tool launcher (Icon Generator). Click → opens in new browser tab.
+- **Doc icon** — one-pager content (Manifesto, Voice & Tone, Brand Principles, Product Design Principles, About this Brand OS, Why Aesthetics matters, Typography Playground). Click → opens in a window.
+- **Sticky widget** — always-visible passive content (the 3 teacher quotes). No click.
+- **Illustration widget** — inline swipeable illustration carousel. Browse without leaving the desktop.
+
+All windows use a single `Window` primitive (shadcn Dialog + title bar + close X). Mobile (<1024px) renders an iOS-home-screen-style icon grid + stacked widgets below.
 
 ### What's deliberately bespoke (and why)
 
-- **Canvas system** (`src/components/canvas/CanvasViewport`, `CanvasLayout`, `useCanvasPan` hook) — 2D pannable workspace with zoom. No shadcn analogue.
-- **`GlowCard`** — cursor-tracking blob border, a signature effect.
-- **`CanvasStamp`** — interactive ink-stamp cursor; brand-specific delight detail.
-- **`CanvasSticker`, `Minimap`, `EdgeVignette`** — brand-specific canvas chrome.
-- **`FolderMark`** — two-tone Teacher & School Blue folder shape using `--folder-icon-bg` / `--folder-icon-front` tokens.
-- **`IllustrationStack`** — three angled accent cards as the illustration-reel entry preview.
-- **`HeroText`** typography playground — color picker, weight selector, alignment triggers, range slider; all bespoke chrome with no library equivalent.
-- **`PanelBody`** content-block renderers (color-swatch, asset-list, guideline, divider) — variant-conditional logic where shadcn primitives don't fit.
-- **`QuoteCard` preview** — deliberately card-less raw editorial typography. Wrapping in `<Card>` would destroy the editorial moment.
+- **`HeroText`** typography playground (`src/components/items/HeroText.tsx`) — color picker, weight selector, alignment triggers, range slider; no shadcn equivalent for this kind of typography sandbox. Reachable as the "Typography Playground" doc icon on the desktop.
+- **`FolderMark`** (`src/components/icons/FolderMark.tsx`) — two-tone Teacher & School Blue folder shape using `--folder-icon-bg` / `--folder-icon-front` tokens.
+- **`IllustrationStack`** (`src/components/icons/IllustrationStack.tsx`) — three angled accent cards mark. Currently unused on the desktop (the previous canvas's illustration reel was replaced by the inline `IllustrationWidget`); kept as a brand asset.
+- **`PanelBody`** content-block renderers (`src/components/panel/PanelBody.tsx`) — color-swatch, asset-list, tool-list, guideline, divider, text, image. Variant-conditional logic that shadcn primitives don't cover. Renders inside `Window` for folder content.
+- **`DocContent`** (`src/components/desktop/DocContent.tsx`) — section renderer for doc content (heading, paragraph, list, quote, divider, highlight-box, two-column, quadrant). Renders inside `Window` for doc content.
 
 ### Design tokens
 
@@ -93,7 +102,8 @@ CSS custom properties in `src/app/globals.css` are the single source of truth:
 ## Plans on file
 
 - `docs/plans/2026-06-02-001-refactor-shadcn-base-ui-migration-plan.md` — completed (shadcn/Base UI primitives shipped)
-- `docs/plans/2026-06-03-001-feat-ts-portfolio-brand-os-plan.md` — completed (portfolio reframe; this PR)
+- `docs/plans/2026-06-03-001-feat-ts-portfolio-brand-os-plan.md` — completed (portfolio reframe; PR #9)
+- `docs/plans/2026-06-03-002-refactor-os-desktop-interaction-model-plan.md` — completed (canvas → OS desktop refactor)
 
 ## Skill routing
 
