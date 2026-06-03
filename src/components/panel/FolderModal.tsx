@@ -20,7 +20,7 @@ export default function FolderModal({ content, onClose }: FolderModalProps) {
 
   return (
     <Dialog open={isOpen} onOpenChange={(o) => !o && onClose()}>
-      <DialogContent className="w-full max-w-[680px] sm:max-w-[680px] p-0 bg-card-bg border border-card-border rounded-2xl shadow-[0_25px_60px_-12px_rgba(0,0,0,0.2)] gap-0 ring-0 overflow-hidden">
+      <DialogContent className="w-full max-w-[680px] sm:max-w-[680px] max-h-[90vh] p-0 bg-card-bg border border-card-border rounded-2xl shadow-[0_25px_60px_-12px_rgba(0,0,0,0.2)] gap-0 ring-0 overflow-y-auto">
         {content && (
           <>
             <DialogHeader className="px-10 pt-10 pb-2 shrink-0 gap-3">
