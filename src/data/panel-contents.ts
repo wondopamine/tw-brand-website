@@ -1,4 +1,5 @@
 import type { PanelContent } from "@/types/panel";
+import { tools } from "@/data/portfolio";
 
 export const panelContents: Record<string, PanelContent> = {
   colours: {
@@ -298,6 +299,39 @@ export const panelContents: Record<string, PanelContent> = {
         title: "More Use Cases (Coming Soon)",
         content:
           "Additional use cases including email templates, notification copy, error message patterns, empty state design, and onboarding flows will be documented here.",
+      },
+    ],
+  },
+
+  tools: {
+    id: "tools",
+    title: "Tools & Resources",
+    description:
+      "Tangible, on-brand tools that product builders in the T&S portfolio can pick up and use. This is the 'operating system' half of the Brand OS — not docs about brand, but actual working artifacts. Pick them up; use them; contribute back.",
+    items: [
+      {
+        type: "text",
+        title: "Why this exists",
+        content:
+          "A brand isn't real until builders can produce on-brand artifacts without re-reading the guidelines. The tools below codify the brand into working software so the design system stays consistent across every product in the portfolio, by default.",
+      },
+      { type: "divider" },
+      {
+        type: "asset-list",
+        title: "Available Tools",
+        assets: tools.map((tool) => ({
+          name: tool.name,
+          thumbnailColor: "#E6F0FF",
+          description: tool.description,
+          link: tool.href,
+        })),
+      },
+      { type: "divider" },
+      {
+        type: "text",
+        title: "Contributing",
+        content:
+          "Found something missing? Built an on-brand tool that should live here? Open an issue or PR on the repo. The list grows with the portfolio.",
       },
     ],
   },

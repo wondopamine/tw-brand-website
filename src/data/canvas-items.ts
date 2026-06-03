@@ -161,7 +161,7 @@ export const canvasItems: CanvasItem[] = [
     highlight: "the future is clearly starting to boot up",
     attribution: "A teacher",
     rotation: -1,
-    mobileOrder: 15,
+    mobileOrder: 16,
   },
   // Quote 3 — bottom-center, between image card and folders row
   {
@@ -173,7 +173,7 @@ export const canvasItems: CanvasItem[] = [
     highlight: "understands what my day actually looks like",
     attribution: "High school teacher",
     rotation: 1,
-    mobileOrder: 16,
+    mobileOrder: 17,
   },
 
   // ===== 5 FOLDERS — centered row below cards =====
@@ -221,5 +221,16 @@ export const canvasItems: CanvasItem[] = [
     label: "USE CASES",
     panelId: "use-cases",
     mobileOrder: 14,
+  },
+  // 6th folder — Tools & Resources. The "operating system" half of the
+  // Brand OS framing: links to tangible on-brand tools, not just docs.
+  {
+    id: "folder-tools",
+    type: "folder",
+    position: { x: CX + 690, y: CY + 680 },
+    size: { width: 140, height: 160 },
+    label: "TOOLS",
+    panelId: "tools",
+    mobileOrder: 15,
   },
 ];
