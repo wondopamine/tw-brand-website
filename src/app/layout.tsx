@@ -1,8 +1,11 @@
 import type { Metadata } from "next";
-import { Inter, Plus_Jakarta_Sans } from "next/font/google";
+import { Inter, Plus_Jakarta_Sans, Geist } from "next/font/google";
 import "./globals.css";
 import Script from 'next/script'
 import { DirectEdit } from 'made-refine'
+import { cn } from "@/lib/utils";
+
+const geist = Geist({subsets:['latin'],variable:'--font-sans'});
 
 const inter = Inter({
   variable: "--font-inter",
@@ -18,9 +21,9 @@ const plusJakarta = Plus_Jakarta_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "Teacher Workspace — Brand Guidelines",
+  title: "Teacher & School — Brand Operating System",
   description:
-    "Brand guidelines and design system for Teacher Workspace by TransformX. Kind Utility at the intersection of high utility and high warmth.",
+    "The Teacher & School portfolio's brand operating system. Governance and tools for product builders working on Teacher Workspace and the rest of the T&S portfolio. Kind Utility at the intersection of high utility and high warmth.",
 };
 
 export default function RootLayout({
@@ -29,7 +32,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className={cn("font-sans", geist.variable)}>
       <body className={`${inter.variable} ${plusJakarta.variable} antialiased`}>
         {children}
         {process.env.NODE_ENV === 'development' && <DirectEdit />}

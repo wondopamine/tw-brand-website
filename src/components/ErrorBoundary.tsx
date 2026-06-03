@@ -1,6 +1,7 @@
 "use client";
 
 import { Component, type ReactNode } from "react";
+import { Button } from "@/components/ui/button";
 
 interface Props {
   children: ReactNode;
@@ -27,28 +28,15 @@ export default class ErrorBoundary extends Component<Props, State> {
         this.props.fallback ?? (
           <div className="min-h-screen flex items-center justify-center">
             <div className="text-center space-y-4">
-              <h1
-                className="text-2xl font-semibold"
-                style={{
-                  fontFamily: "var(--font-display, 'Plus Jakarta Sans', sans-serif)",
-                  color: "var(--text-primary)",
-                }}
-              >
+              <h1 className="font-display text-2xl font-semibold text-text-primary">
                 Something went wrong
               </h1>
-              <p
-                className="text-sm"
-                style={{ color: "var(--text-secondary)" }}
-              >
+              <p className="text-sm text-text-secondary">
                 The canvas failed to load. Try refreshing the page.
               </p>
-              <button
-                onClick={() => window.location.reload()}
-                className="px-4 py-2 text-sm font-medium text-white rounded-lg"
-                style={{ backgroundColor: "var(--accent)" }}
-              >
+              <Button onClick={() => window.location.reload()}>
                 Refresh
-              </button>
+              </Button>
             </div>
           </div>
         )

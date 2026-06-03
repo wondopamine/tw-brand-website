@@ -11,7 +11,8 @@ export type PanelContentItem =
   | PanelGuidelineItem
   | PanelDividerItem
   | PanelColorSwatchItem
-  | PanelAssetListItem;
+  | PanelAssetListItem
+  | PanelToolListItem;
 
 export interface PanelTextItem {
   type: "text";
@@ -61,4 +62,17 @@ export interface AssetEntry {
   thumbnailColor?: string;
   link?: string;
   description?: string;
+}
+
+export interface PanelToolListItem {
+  type: "tool-list";
+  title?: string;
+  tools: ToolListEntry[];
+}
+
+export interface ToolListEntry {
+  name: string;
+  description: string;
+  /** Outbound URL */
+  href: string;
 }

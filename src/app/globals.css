@@ -1,4 +1,8 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
 
 /* ===== THEME: Light (default) ===== */
 :root {
@@ -18,12 +22,39 @@
   --overlay-bg: rgba(0, 0, 0, 0.5);
   --folder-icon-bg: #0064FF;
   --folder-icon-front: #3385FF;
-  --minimap-bg: rgba(0, 0, 0, 0.04);
-  --minimap-border: rgba(0, 0, 0, 0.08);
-  --minimap-viewport: rgba(0, 100, 255, 0.2);
-  --minimap-viewport-border: rgba(0, 100, 255, 0.5);
+  /* shadcn semantic tokens — mapped to TW brand */
+  --background: var(--canvas-bg);
+  --foreground: var(--text-primary);
+  --card: var(--card-bg);
+  --card-foreground: var(--text-primary);
+  --popover: var(--card-bg);
+  --popover-foreground: var(--text-primary);
+  --primary: var(--accent);
+  --primary-foreground: #ffffff;
+  --secondary: oklch(0.97 0 0);
+  --secondary-foreground: var(--text-primary);
+  --muted: oklch(0.97 0 0);
+  --muted-foreground: var(--text-secondary);
+  --accent-foreground: #ffffff;
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: var(--card-border);
+  --input: var(--card-border);
+  --ring: var(--accent);
+  --chart-1: oklch(0.87 0 0);
+  --chart-2: oklch(0.556 0 0);
+  --chart-3: oklch(0.439 0 0);
+  --chart-4: oklch(0.371 0 0);
+  --chart-5: oklch(0.269 0 0);
+  --radius: 0.625rem;
+  --sidebar: oklch(0.985 0 0);
+  --sidebar-foreground: oklch(0.145 0 0);
+  --sidebar-primary: oklch(0.205 0 0);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.97 0 0);
+  --sidebar-accent-foreground: oklch(0.205 0 0);
+  --sidebar-border: oklch(0.922 0 0);
+  --sidebar-ring: oklch(0.708 0 0);
 }
-
 
 @theme inline {
   --color-canvas-bg: var(--canvas-bg);
@@ -32,12 +63,52 @@
   --color-card-border: var(--card-border);
   --color-text-primary: var(--text-primary);
   --color-text-secondary: var(--text-secondary);
+  --color-text-slate: var(--text-slate);
   --color-accent: var(--accent);
   --color-accent-light: var(--accent-light);
   --color-accent-hover: var(--accent-hover);
   --color-quote-highlight: var(--quote-highlight);
   --font-display: var(--font-plus-jakarta);
   --font-body: var(--font-inter);
+  --font-heading: var(--font-sans);
+  --font-sans: var(--font-sans);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --color-foreground: var(--foreground);
+  --color-background: var(--background);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
 }
 
 /* ===== BASE STYLES ===== */
@@ -48,144 +119,11 @@ body {
   cursor: default;
 }
 
-/* Subtle static dot grid on viewport */
+/* Subtle static dot grid — wallpaper for the OS desktop */
 .canvas-grid {
   background-color: var(--canvas-bg);
-  cursor: default;
-}
-
-/* Static line grid — disabled to keep canvas clean */
-.canvas-grid-lines {
-  position: relative;
-}
-
-/* Card base styles — border handled by GlowCard wrapper */
-.canvas-card {
-  background-color: var(--card-bg);
-  border-radius: 16px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
-}
-
-/* ===== CANVAS INNER — stamp cursor ===== */
-.canvas-inner {
-  position: relative;
-  cursor: none;
-}
-
-/* Stamp imprint animation — appears on click, fades after 3s */
-@keyframes stamp-appear {
-  0%   { opacity: 0; transform: translate(-50%, -50%) rotate(var(--stamp-rot)) scale(1.15); }
-  8%   { opacity: 0.5; transform: translate(-50%, -50%) rotate(var(--stamp-rot)) scale(0.97); }
-  15%  { opacity: 0.35; transform: translate(-50%, -50%) rotate(var(--stamp-rot)) scale(1); }
-  70%  { opacity: 0.3; transform: translate(-50%, -50%) rotate(var(--stamp-rot)) scale(1); }
-  100% { opacity: 0; transform: translate(-50%, -50%) rotate(var(--stamp-rot)) scale(1); }
-}
-
-
-/* Subtle blue glow at cursor position */
-.canvas-inner::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(
-    circle var(--cursor-glow-radius, 250px) at var(--cursor-x, -1000px) var(--cursor-y, -1000px),
-    rgba(0, 100, 255, 0.035),
-    transparent var(--cursor-glow-radius, 250px)
-  );
-  pointer-events: none;
-  z-index: 0;
-  opacity: 0;
-  transition: opacity 0.4s ease;
-}
-
-.canvas-inner.illuminated::after {
-  opacity: 1;
-}
-
-/* ===== GLOW CARD (Stripe-style subtle blob-tracking border glow) ===== */
-.glow-card-outer {
-  --glow-x: 50%;
-  --glow-y: 50%;
-  position: relative;
-  overflow: hidden;
-  background: var(--card-border);
-  border-radius: 16px;
-  padding: 1px;
-  cursor: pointer;
-  transition: padding 0.3s ease;
-}
-
-/* Gradient border on hover — radial gradient radiates from cursor position.
-   #0266FF (TW blue) is strongest near the cursor and fades naturally outward. */
-.glow-card-hovered {
-  padding: 2px;
-  background:
-    radial-gradient(
-      400px circle at var(--glow-x) var(--glow-y),
-      #0266FF 0%,
-      rgba(2, 102, 255, 0.4) 25%,
-      rgba(2, 102, 255, 0.1) 50%,
-      var(--card-border) 80%
-    );
-}
-
-/* The blob — a blurred circle that tracks the cursor behind the card surface.
-   Sits between the outer background and the inner card,
-   creating a subtle glowing border where the cursor is. */
-.glow-blob {
-  position: absolute;
-  z-index: 1;
-  top: 0;
-  left: 0;
-  width: 300px;
-  height: 300px;
-  border-radius: 50%;
-  background: rgba(2, 102, 255, 0.35);
-  filter: blur(60px);
-  opacity: 0;
-  transition: opacity 0.4s ease;
-  pointer-events: none;
-  transform: translate(-150px, -150px);
-}
-
-.glow-card-outer:hover .glow-blob {
-  opacity: 1;
-}
-
-.glow-card-inner {
-  position: relative;
-  z-index: 2;
-  background: var(--card-bg);
-  border-radius: 15px;
-  height: 100%;
-}
-
-/* ===== HERO BADGE / TAG ===== */
-.hero-badge {
-  display: inline-block;
-  padding: 12px 36px;
-  font-size: 28px;
-  font-weight: 500;
-  letter-spacing: 0.02em;
-  color: var(--accent);
-  background: var(--accent-light);
-  border: 1px solid rgba(0, 100, 255, 0.15);
-  border-radius: 999px;
-  user-select: none;
-}
-
-/* Half-sized hero badge for canvas view */
-.hero-badge-sm {
-  display: inline-block;
-  padding: 6px 18px;
-  font-size: 14px;
-  font-weight: 500;
-  letter-spacing: 0.02em;
-  color: var(--accent);
-  background: var(--accent-light);
-  border: 1px solid rgba(0, 100, 255, 0.15);
-  border-radius: 999px;
-  user-select: none;
+  background-image: radial-gradient(circle at 1px 1px, var(--canvas-grid) 1px, transparent 0);
+  background-size: 24px 24px;
 }
 
 /* ===== TYPOGRAPHY PLAYGROUND SLIDERS ===== */
@@ -226,21 +164,6 @@ body {
   cursor: pointer;
 }
 
-/* ===== CANVAS LOADING SPINNER ===== */
-.canvas-spinner {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  border: 3px solid var(--card-border);
-  border-top-color: var(--accent);
-  animation: canvas-spin 0.8s linear infinite;
-}
-
-@keyframes canvas-spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
 
 /* Scrollbar styling */
 ::-webkit-scrollbar {
@@ -258,4 +181,77 @@ body {
 
 ::-webkit-scrollbar-thumb:hover {
   background: var(--text-secondary);
+}
+
+.dark {
+  --background: oklch(0.145 0 0);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.205 0 0);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.205 0 0);
+  --popover-foreground: oklch(0.985 0 0);
+  --primary: oklch(0.922 0 0);
+  --primary-foreground: oklch(0.205 0 0);
+  --secondary: oklch(0.269 0 0);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.269 0 0);
+  --muted-foreground: oklch(0.708 0 0);
+  --accent: oklch(0.269 0 0);
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.556 0 0);
+  --chart-1: oklch(0.87 0 0);
+  --chart-2: oklch(0.556 0 0);
+  --chart-3: oklch(0.439 0 0);
+  --chart-4: oklch(0.371 0 0);
+  --chart-5: oklch(0.269 0 0);
+  --sidebar: oklch(0.205 0 0);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-primary: oklch(0.488 0.243 264.376);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.269 0 0);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: oklch(0.556 0 0);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+  html {
+    @apply font-sans;
+  }
+}
+
+/* Desktop sky background — borrowed from String-sg/marketing-teacher-workspace */
+.hero-sky-bg {
+  background-image: url("/hero/hero-bg.webp");
+  background-size: cover;
+  background-position: top center;
+  background-repeat: no-repeat;
+}
+
+@keyframes cloud-drift-a {
+  from { transform: translate3d(-8%, 0, 0); }
+  to   { transform: translate3d(8%, 0, 0); }
+}
+@keyframes cloud-drift-b {
+  from { transform: translate3d(5%, 0, 0); }
+  to   { transform: translate3d(-5%, 0, 0); }
+}
+@keyframes cloud-drift-c {
+  from { transform: translate3d(-12%, 0, 0); }
+  to   { transform: translate3d(12%, 0, 0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cloud-drift {
+    animation: none !important;
+  }
 }

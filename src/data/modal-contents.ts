@@ -1,26 +1,6 @@
-export interface ModalSection {
-  type: "heading" | "paragraph" | "list" | "quote" | "divider" | "highlight-box" | "two-column" | "quadrant";
-  title?: string;
-  content?: string;
-  items?: string[];
-  columns?: { title: string; items: string[] }[];
-  quadrantLabels?: {
-    topLeft: string;
-    topRight: string;
-    bottomLeft: string;
-    bottomRight: string;
-    xAxis: string;
-    yAxis: string;
-  };
-  variant?: "accent" | "warning" | "success" | "neutral";
-}
+import type { ModalContent } from "@/types/modal";
 
-export interface ModalContent {
-  id: string;
-  title: string;
-  subtitle?: string;
-  sections: ModalSection[];
-}
+export type { ModalContent, ModalSection } from "@/types/modal";
 
 export const modalContents: Record<string, ModalContent> = {
   aesthetics: {
@@ -72,14 +52,14 @@ export const modalContents: Record<string, ModalContent> = {
       {
         type: "paragraph",
         content:
-          "Every pixel matters. From the border-radius on our buttons to the easing curves on our animations, each design decision should reinforce the feeling that Teacher Workspace is a premium, trustworthy tool built by people who understand and respect the teaching profession.",
+          "Every pixel matters. From the border-radius on our buttons to the easing curves on our animations, each design decision should reinforce the feeling that every product in the Teacher & School portfolio is a premium, trustworthy tool built by people who understand and respect the teaching profession.",
       },
     ],
   },
 
   "about-guidelines": {
     id: "about-guidelines",
-    title: "About TW Brand Guidelines",
+    title: "About this Brand OS",
     subtitle: "Scope and purpose of this document",
     sections: [
       {
@@ -89,10 +69,10 @@ export const modalContents: Record<string, ModalContent> = {
       {
         type: "list",
         items: [
-          "Defining the visual and verbal identity of Teacher Workspace",
+          "Defining the visual and verbal identity of the Teacher & School portfolio",
           "Establishing consistent design principles across all touchpoints",
           "Providing actionable guidelines for brand expression",
-          "Aligning the team on what makes TW feel like TW",
+          "Aligning every product team on what makes T&S feel like T&S",
           "Serving as a living reference for designers, developers, and content creators",
         ],
       },
@@ -116,7 +96,7 @@ export const modalContents: Record<string, ModalContent> = {
         type: "highlight-box",
         title: "A Living Document",
         content:
-          "Brand guidelines evolve with the product. This document captures our current understanding and will be updated as Teacher Workspace grows and matures. If something feels off or outdated, speak up.",
+          "A brand operating system evolves with the products it serves. This document captures our current understanding and will be updated as the T&S portfolio grows and matures. If something feels off or outdated, speak up.",
         variant: "neutral",
       },
     ],
@@ -140,7 +120,7 @@ export const modalContents: Record<string, ModalContent> = {
       {
         type: "paragraph",
         content:
-          "Teacher Workspace is utility-first at its core, human-first at the surface. Teachers move through tasks quickly and confidently \u2014 supported by a design that stays out of the way and simply works.",
+          "The Teacher & School portfolio is utility-first at its core, human-first at the surface. Every product we build for teachers \u2014 Teacher Workspace as the flagship, alongside the supporting products in the portfolio \u2014 moves teachers through their day with less friction and more confidence.",
       },
       {
         type: "paragraph",
@@ -193,7 +173,7 @@ export const modalContents: Record<string, ModalContent> = {
       {
         type: "paragraph",
         content:
-          "Teacher Workspace sits at the intersection of high utility and high warmth. We call this Kind Utility \u2014 tools that are powerful yet feel personal, efficient yet humane.",
+          "Every product in the Teacher & School portfolio sits at the intersection of high utility and high warmth. We call this Kind Utility \u2014 tools that are powerful yet feel personal, efficient yet humane.",
       },
       {
         type: "quadrant",
@@ -259,7 +239,7 @@ export const modalContents: Record<string, ModalContent> = {
       {
         type: "paragraph",
         content:
-          "Every design decision at Teacher Workspace begins with a simple question: does this serve teachers? We don\u2019t design for administrators, investors, or trends. We design for the person standing in front of a classroom.",
+          "Every design decision in the Teacher & School portfolio begins with a simple question: does this serve teachers? We don\u2019t design for administrators, investors, or trends. We design for the person standing in front of a classroom.",
       },
       { type: "divider" },
       {
@@ -463,7 +443,7 @@ export const modalContents: Record<string, ModalContent> = {
         type: "highlight-box",
         title: "03 \u2014 Calm Guidance",
         content:
-          "Teacher Workspace should guide without overwhelming. Like a calm, knowledgeable colleague, we surface the right information at the right time. Progressive disclosure is our default pattern \u2014 show less, reveal more on demand.",
+          "Every T&S product should guide without overwhelming. Like a calm, knowledgeable colleague, we surface the right information at the right time. Progressive disclosure is our default pattern \u2014 show less, reveal more on demand.",
         variant: "accent",
       },
       {
@@ -498,7 +478,7 @@ export const modalContents: Record<string, ModalContent> = {
         type: "highlight-box",
         title: "04 \u2014 Light Weight",
         content:
-          "Both in feel and in load. Teacher Workspace should feel fast, responsive, and unburdened. This applies to perceived performance, visual density, cognitive load, and emotional weight. Every added element must justify its existence.",
+          "Both in feel and in load. Every T&S product should feel fast, responsive, and unburdened. This applies to perceived performance, visual density, cognitive load, and emotional weight. Every added element must justify its existence.",
         variant: "accent",
       },
       {
@@ -534,7 +514,7 @@ export const modalContents: Record<string, ModalContent> = {
   "design-principles": {
     id: "design-principles",
     title: "Product Design Principles",
-    subtitle: "Seven principles that guide every product design decision at Teacher Workspace",
+    subtitle: "Seven principles that guide every product design decision in the Teacher & School portfolio",
     sections: [
       {
         type: "paragraph",
@@ -551,7 +531,7 @@ export const modalContents: Record<string, ModalContent> = {
       {
         type: "paragraph",
         content:
-          "Teacher Workspace exists to remove friction from teaching. Every design decision should be evaluated against a simple question: does this help a teacher do their job with less effort and more confidence?",
+          "The Teacher & School portfolio exists to remove friction from teaching. Every design decision should be evaluated against a simple question: does this help a teacher do their job with less effort and more confidence?",
       },
       {
         type: "paragraph",
