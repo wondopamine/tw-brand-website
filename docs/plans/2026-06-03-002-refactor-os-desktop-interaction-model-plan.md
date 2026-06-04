@@ -1,11 +1,17 @@
 ---
 title: "refactor: Replace canvas with OS-style desktop interaction model"
 type: refactor
-status: active
+status: completed
 date: 2026-06-03
 ---
 
 # refactor: Replace canvas with OS-style desktop interaction model
+
+> **Post-implementation amendments (2026-06-04).** Shipped in PR #10 + polish commit `ed1a69d`. Three deliberate deviations from this plan during the polish pass:
+>
+> 1. **Dock shipped after all.** The plan deferred a dock/taskbar ("Reserved as a future enhancement"). The polish pass added a frosted macOS-style dock with cursor magnification, housing Home, Colour Picker, and Icon Generator. Colours is dock-only on desktop; it remains a folder on mobile.
+> 2. **Sticky widgets are not purely passive.** The plan specified always-visible *passive* stickies. Shipped version adds a cursor-tilt 3D effect (reduced-motion gated via a reactive MotionValue; off on mobile). Content remains always-visible with no click.
+> 3. **Illustration widget auto-advances.** The plan defaulted to user-driven swipe ("revisit only if illustrations feel too static" — they did). Shipped version is a full-bleed Photos-style widget that auto-crossfades.
 
 ## Overview
 

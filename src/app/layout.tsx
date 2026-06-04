@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Inter, Plus_Jakarta_Sans, Geist } from "next/font/google";
 import "./globals.css";
-import Script from 'next/script'
 import { DirectEdit } from 'made-refine'
 import { cn } from "@/lib/utils";
 

@@ -473,6 +473,19 @@ export default function HeroText({ title, subtitle, stack }: HeroTextProps) {
   const [lineCount, setLineCount] = useState<number>(TYPE_PRESETS[DEFAULT_PRESET].lineCount);
   const [textColor, setTextColor] = useState("#0064FF");
 
+  const handlePresetSelect = useCallback((index: number) => {
+    const preset = TYPE_PRESETS[index];
+    setActivePreset(index);
+    setFontSize(preset.fontSize);
+    setWeight(preset.weight);
+    setSpacing(preset.spacing);
+    setLineCount(preset.lineCount);
+  }, []);
+
+  const stopProp = useCallback((e: React.MouseEvent | React.TouchEvent) => {
+    e.stopPropagation();
+  }, []);
+
   if (stack) {
     const lines = [title, ...(subtitle ? subtitle.split("\n") : [])];
     return (
@@ -496,19 +509,6 @@ export default function HeroText({ title, subtitle, stack }: HeroTextProps) {
       </div>
     );
   }
-
-  const handlePresetSelect = useCallback((index: number) => {
-    const preset = TYPE_PRESETS[index];
-    setActivePreset(index);
-    setFontSize(preset.fontSize);
-    setWeight(preset.weight);
-    setSpacing(preset.spacing);
-    setLineCount(preset.lineCount);
-  }, []);
-
-  const stopProp = useCallback((e: React.MouseEvent | React.TouchEvent) => {
-    e.stopPropagation();
-  }, []);
 
   // Build preview lines: split title + subtitle by newlines
   const allSourceLines: string[] = [title];

@@ -24,6 +24,9 @@
 .DS_Store
 *.pem
 
+# local review artifacts
+/.context/
+
 # debug
 npm-debug.log*
 yarn-debug.log*
