@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { desktopItems } from "@/data/desktop-items";
 import { modalContents } from "@/data/modal-contents";
 import { panelContents } from "@/data/panel-contents";
@@ -8,7 +9,7 @@ import type { ActiveWindow } from "./Desktop";
 import FolderIcon from "./icons/FolderIcon";
 import DocIcon from "./icons/DocIcon";
 import AppIcon from "./icons/AppIcon";
-import StickyWidget from "./widgets/StickyWidget";
+import StickyStack from "./widgets/StickyStack";
 import IllustrationWidget from "./widgets/IllustrationWidget";
 import { Window } from "./Window";
 import DocContent from "./DocContent";
@@ -54,12 +55,18 @@ export default function MobileDesktop({
       <div className="canvas-grid min-h-screen px-4 py-6 space-y-8">
         {/* Header */}
         <header className="text-center pt-2">
-          <h1 className="font-display text-xl font-bold text-text-primary">
-            Teacher &amp; School
-          </h1>
-          <p className="text-xs text-text-secondary mt-1">
-            Brand Operating System
-          </p>
+          <Link
+            href="/"
+            aria-label="Back to the Teacher & School landing page"
+            className="inline-block rounded-md focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--accent)]"
+          >
+            <h1 className="font-display text-xl font-bold text-text-primary">
+              Teacher &amp; School
+            </h1>
+            <p className="text-xs text-text-secondary mt-1">
+              Brand Operating System
+            </p>
+          </Link>
         </header>
 
         {/* Icon grid — 3 cols */}
@@ -100,18 +107,10 @@ export default function MobileDesktop({
           ))}
         </section>
 
-        {/* Sticky widgets */}
+        {/* Sticky widgets — stacked deck, tap to shuffle */}
         {stickies.length > 0 && (
-          <section className="space-y-4 flex flex-col items-center">
-            {stickies.map((s) => (
-              <StickyWidget
-                key={s.id}
-                quote={s.quote}
-                highlight={s.highlight}
-                attribution={s.attribution}
-                rotation={s.rotation}
-              />
-            ))}
+          <section className="flex flex-col items-center">
+            <StickyStack notes={stickies} />
           </section>
         )}
 

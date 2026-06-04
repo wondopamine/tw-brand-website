@@ -9,7 +9,7 @@ import {
   AnimatePresence,
   type MotionValue,
 } from "motion/react";
-import { ExternalLink, Sparkles, House } from "lucide-react";
+import { ExternalLink, Sparkles } from "lucide-react";
 import type { DesktopItem } from "@/types/desktop";
 
 interface DockProps {
@@ -23,7 +23,7 @@ const INFLUENCE = 130; // cursor distance over which magnification falls off (px
 
 /**
  * macOS-style dock: a translucent frosted slab with cursor-proximity
- * magnification, hover tooltips, and a separated "Home" system slot.
+ * magnification and hover tooltips.
  *
  * The slab height is fixed; magnified icons grow upward and overflow
  * above the top edge (the signature dock feel), tracked via a shared
@@ -40,20 +40,6 @@ export default function Dock({ apps, onOpenColours }: DockProps) {
         style={{ height: BASE + 12 }}
         className="dock-glass flex items-end gap-3 px-3 pb-1.5 rounded-[22px] [overflow:visible]"
       >
-        {/* System slot — Home (Finder-equivalent) */}
-        <DockTile mouseX={mouseX} label="Home" href="/">
-          <div className="dock-app-tile flex h-full w-full items-center justify-center rounded-[26%]">
-            <House className="size-[46%] text-white" strokeWidth={1.75} />
-          </div>
-        </DockTile>
-
-        {/* Separator */}
-        <div
-          aria-hidden
-          className="mb-1 h-[38px] w-px self-end"
-          style={{ background: "rgba(20,30,50,0.12)" }}
-        />
-
         {/* Colour Picker app (opens the Colours panel) */}
         <DockTile mouseX={mouseX} label="Colour Picker" onClick={onOpenColours}>
           <div className="relative flex h-full w-full items-center justify-center rounded-[26%] bg-white shadow-[inset_0_1px_0_rgba(255,255,255,0.6),0_1px_2px_rgba(20,40,90,0.25)]">

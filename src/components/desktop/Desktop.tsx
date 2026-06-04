@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Link from "next/link";
 import { useMotionValue } from "motion/react";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { desktopItems } from "@/data/desktop-items";
@@ -15,7 +16,7 @@ import HeroText from "@/components/items/HeroText";
 import FolderIcon from "./icons/FolderIcon";
 import DocIcon from "./icons/DocIcon";
 import Dock from "./Dock";
-import StickyWidget from "./widgets/StickyWidget";
+import StickyStack from "./widgets/StickyStack";
 import IllustrationWidget from "./widgets/IllustrationWidget";
 import { FolderMark } from "@/components/icons";
 
@@ -103,31 +104,34 @@ export default function Desktop() {
         </div>
 
         {/* Menu bar — top */}
-        <header className="absolute top-0 left-0 right-0 h-7 px-4 flex items-center gap-2 bg-card-bg/70 backdrop-blur-md border-b border-card-border z-20">
-          <FolderMark width={16} height={13} />
-          <span className="font-display text-[12px] font-semibold text-text-primary tracking-tight">
-            Teacher &amp; School Brand OS
-          </span>
+        <header className="absolute top-0 left-0 right-0 h-7 px-4 flex items-center bg-card-bg/70 backdrop-blur-md border-b border-card-border z-20">
+          <Link
+            href="/"
+            aria-label="Back to the Teacher & School landing page"
+            className="flex items-center gap-2 -mx-2 px-2 h-full rounded-sm transition-colors hover:bg-black/[0.05] focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-[var(--accent)]"
+          >
+            <FolderMark width={16} height={13} />
+            <span className="font-display text-[12px] font-semibold text-text-primary tracking-tight">
+              Teacher &amp; School Brand OS
+            </span>
+          </Link>
         </header>
 
         {/* Widgets column — left */}
         <aside className="absolute left-6 top-12 bottom-28 w-[248px] flex flex-col gap-4 overflow-visible z-10" style={{ perspective: 1000 }}>
-          {widgetItems.map((item) => {
-            if (item.type === "sticky") {
-              return (
-                <StickyWidget
-                  key={item.id}
-                  quote={item.quote}
-                  highlight={item.highlight}
-                  attribution={item.attribution}
-                  rotation={item.rotation}
-                  pointerX={pointerX}
-                  pointerY={pointerY}
-                />
-              );
-            }
-            return <IllustrationWidget key={item.id} slides={item.slides} />;
-          })}
+          <StickyStack
+            notes={widgetItems.filter(
+              (i): i is Extract<DesktopItem, { type: "sticky" }> =>
+                i.type === "sticky"
+            )}
+            pointerX={pointerX}
+            pointerY={pointerY}
+          />
+          {widgetItems
+            .filter((i) => i.type === "illustration-widget")
+            .map((item) => (
+              <IllustrationWidget key={item.id} slides={item.slides} />
+            ))}
         </aside>
 
         {/* File / folder grid — right */}
