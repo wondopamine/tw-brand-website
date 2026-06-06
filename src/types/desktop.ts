@@ -33,12 +33,18 @@ export interface ExternalAppDesktopItem extends BaseDesktopItem {
   appId?: never;
 }
 
+/**
+ * Known in-OS app ids. Closed union so the renderWindowContent dispatch in
+ * Desktop/MobileDesktop is compile-checked when a new app is registered.
+ */
+export type OsAppId = "typography";
+
 /** In-OS app — opens an app window (e.g. the Typography app). */
 export interface OsAppDesktopItem extends BaseDesktopItem {
   type: "app";
   label: string;
   /** App lookup key handled by the desktop's window renderer. */
-  appId: string;
+  appId: OsAppId;
   href?: never;
 }
 

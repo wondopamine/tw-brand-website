@@ -17,10 +17,13 @@ export default function TypographyApp() {
   const heroRef = useRef<HTMLDivElement>(null);
 
   // Weight rows load their font + weight into the preview and bring it
-  // into view (the window content area is the scroll container).
+  // into view (the window content area is the scroll container). The scroll
+  // waits a frame so it measures the hero after React commits the restyle.
   const handleTryWeight = useCallback((fontId: FontId, weight: number) => {
     previewRef.current?.tryWeight(fontId, weight);
-    heroRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    requestAnimationFrame(() => {
+      heroRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
   }, []);
 
   return (

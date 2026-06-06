@@ -11,6 +11,7 @@ import {
 } from "motion/react";
 import { ExternalLink, Sparkles } from "lucide-react";
 import type { ExternalAppDesktopItem } from "@/types/desktop";
+import AaGlyph from "./icons/AaGlyph";
 
 interface DockProps {
   apps: ExternalAppDesktopItem[];
@@ -59,20 +60,7 @@ export default function Dock({ apps, onOpenColours, onOpenTypography }: DockProp
         {/* Typography app (Geist-style font showcase window) */}
         <DockTile mouseX={mouseX} label="Typography" onClick={onOpenTypography}>
           <div className="flex h-full w-full items-center justify-center rounded-[26%] bg-white shadow-[inset_0_1px_0_rgba(255,255,255,0.6),0_1px_2px_rgba(20,40,90,0.25)]">
-            {/* SVG text scales with the magnifying tile, unlike a fixed font-size */}
-            <svg viewBox="0 0 24 24" className="size-[64%] text-accent" aria-hidden>
-              <text
-                x="12"
-                y="17"
-                textAnchor="middle"
-                fontFamily="var(--font-display, 'Plus Jakarta Sans', sans-serif)"
-                fontWeight="800"
-                fontSize="13"
-                fill="currentColor"
-              >
-                Aa
-              </text>
-            </svg>
+            <AaGlyph className="size-[64%] text-accent" />
           </div>
         </DockTile>
 

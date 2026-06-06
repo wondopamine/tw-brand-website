@@ -5,7 +5,11 @@ import Link from "next/link";
 import { useMotionValue } from "motion/react";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { desktopItems } from "@/data/desktop-items";
-import type { DesktopItem, ExternalAppDesktopItem } from "@/types/desktop";
+import type {
+  DesktopItem,
+  ExternalAppDesktopItem,
+  OsAppId,
+} from "@/types/desktop";
 import { modalContents } from "@/data/modal-contents";
 import { panelContents } from "@/data/panel-contents";
 import MobileDesktop from "./MobileDesktop";
@@ -23,7 +27,7 @@ import { FolderMark } from "@/components/icons";
 export type ActiveWindow =
   | { kind: "doc"; contentId: string; title: string }
   | { kind: "folder"; panelId: string; title: string }
-  | { kind: "app"; appId: string; title: string }
+  | { kind: "app"; appId: OsAppId; title: string }
   | null;
 
 /**

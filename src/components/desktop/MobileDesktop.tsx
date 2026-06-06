@@ -9,6 +9,7 @@ import type { ActiveWindow } from "./Desktop";
 import FolderIcon from "./icons/FolderIcon";
 import DocIcon from "./icons/DocIcon";
 import AppIcon from "./icons/AppIcon";
+import AaGlyph from "./icons/AaGlyph";
 import StickyStack from "./widgets/StickyStack";
 import IllustrationWidget from "./widgets/IllustrationWidget";
 import { Window } from "./Window";
@@ -107,7 +108,7 @@ export default function MobileDesktop({
                 ) : (
                   <AppIcon
                     label={item.label}
-                    icon={<AaGlyph />}
+                    icon={<AaGlyph className="size-10 text-white" />}
                     onClick={() =>
                       onOpen({
                         kind: "app",
@@ -190,24 +191,5 @@ function renderWindowContent(active: NonNullable<ActiveWindow>) {
       )}
       <PanelBody items={panel.items} />
     </>
-  );
-}
-
-/** "Aa" tile glyph for the Typography app icon (matches the dock tile). */
-function AaGlyph() {
-  return (
-    <svg viewBox="0 0 24 24" className="size-10 text-white" aria-hidden>
-      <text
-        x="12"
-        y="17"
-        textAnchor="middle"
-        fontFamily="var(--font-display, 'Plus Jakarta Sans', sans-serif)"
-        fontWeight="800"
-        fontSize="13"
-        fill="currentColor"
-      >
-        Aa
-      </text>
-    </svg>
   );
 }

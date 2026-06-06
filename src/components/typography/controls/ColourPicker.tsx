@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 /* ------------------------------------------------------------------ */
 /*  Brand colour palette — Figma design system style                   */
@@ -37,12 +37,37 @@ export default function ColourPicker({
   onSelect: (color: string) => void;
 }) {
   const [isOpen, setIsOpen] = useState(false);
+  const rootRef = useRef<HTMLDivElement>(null);
+
+  // Dismiss on outside click; capture-phase Escape closes only the dropdown
+  // (stopPropagation keeps it from also dismissing the parent dialog).
+  useEffect(() => {
+    if (!isOpen) return;
+    const onPointerDown = (e: PointerEvent) => {
+      if (!rootRef.current?.contains(e.target as Node)) setIsOpen(false);
+    };
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        e.stopPropagation();
+        setIsOpen(false);
+      }
+    };
+    document.addEventListener("pointerdown", onPointerDown);
+    document.addEventListener("keydown", onKeyDown, true);
+    return () => {
+      document.removeEventListener("pointerdown", onPointerDown);
+      document.removeEventListener("keydown", onKeyDown, true);
+    };
+  }, [isOpen]);
 
   return (
-    <div className="relative" style={{ pointerEvents: "auto" }}>
+    <div ref={rootRef} className="relative" style={{ pointerEvents: "auto" }}>
       {/* Trigger — current colour swatch */}
       <button
         type="button"
+        aria-haspopup="true"
+        aria-expanded={isOpen}
+        aria-label={`Text colour: ${selectedColor}`}
         onClick={() => setIsOpen(!isOpen)}
         className="flex items-center gap-1.5 rounded-md px-2 py-1 transition-colors hover:opacity-80 cursor-pointer"
         style={{
@@ -142,7 +167,8 @@ function SwatchSection({
               key={c.value}
               type="button"
               onClick={() => onSelect(c.value)}
-              className="relative cursor-pointer"
+              aria-label={`${c.label} — ${c.value}`}
+              className="relative cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
               style={{
                 width: 24,
                 height: 24,

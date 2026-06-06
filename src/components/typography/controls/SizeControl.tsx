@@ -7,11 +7,7 @@ export interface SizeStop {
   value: number;
 }
 
-/**
- * Snap slider over a discrete set of size stops.
- * Generalized from the former HeroText SnapSlider (preset-bound) to
- * accept arbitrary stops.
- */
+/** Snap slider over a discrete set of size stops, with arrow-key support. */
 export default function SizeControl({
   stops,
   index,
@@ -40,10 +36,27 @@ export default function SizeControl({
       e.stopPropagation();
       e.preventDefault();
       isDragging.current = true;
-      (e.target as HTMLElement).setPointerCapture(e.pointerId);
+      // Capture on the ref-stable track, not e.target — tick-mark children
+      // re-render mid-drag and would strand the capture.
+      trackRef.current?.setPointerCapture(e.pointerId);
       onChange(getIndexFromEvent(e.clientX));
     },
     [onChange, getIndexFromEvent]
+  );
+
+  const handleKeyDown = useCallback(
+    (e: React.KeyboardEvent) => {
+      const delta =
+        e.key === "ArrowRight" || e.key === "ArrowUp"
+          ? 1
+          : e.key === "ArrowLeft" || e.key === "ArrowDown"
+            ? -1
+            : 0;
+      if (delta === 0) return;
+      e.preventDefault();
+      onChange(Math.max(0, Math.min(total - 1, index + delta)));
+    },
+    [onChange, index, total]
   );
 
   const handlePointerMove = useCallback(
@@ -73,12 +86,20 @@ export default function SizeControl({
 
       <div
         ref={trackRef}
-        className="relative flex items-center cursor-pointer"
+        role="slider"
+        tabIndex={0}
+        aria-label="Font size"
+        aria-valuemin={0}
+        aria-valuemax={total - 1}
+        aria-valuenow={index}
+        aria-valuetext={`${current.label} — ${current.value}px`}
+        className="relative flex items-center cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent rounded"
         style={{ width: 120, height: 20, touchAction: "none" }}
         onPointerDown={handlePointerDown}
         onPointerMove={handlePointerMove}
         onPointerUp={handlePointerUp}
         onPointerCancel={handlePointerUp}
+        onKeyDown={handleKeyDown}
       >
         {/* Track */}
         <div
@@ -99,11 +120,11 @@ export default function SizeControl({
           }}
         />
         {/* Tick marks */}
-        {stops.map((_, i) => {
+        {stops.map((stop, i) => {
           const pct = total > 1 ? (i / (total - 1)) * 100 : 0;
           return (
             <div
-              key={i}
+              key={stop.value}
               className="absolute"
               style={{
                 left: `${pct}%`, top: "50%",

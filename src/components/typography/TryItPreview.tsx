@@ -89,14 +89,20 @@ const TryItPreview = forwardRef<TryItPreviewHandle>(function TryItPreview(
   const handlePaste = useCallback((e: React.ClipboardEvent<HTMLDivElement>) => {
     e.preventDefault();
     const text = e.clipboardData.getData("text/plain");
-    document.execCommand("insertText", false, text);
+    const sel = window.getSelection();
+    if (!sel || sel.rangeCount === 0) return;
+    const range = sel.getRangeAt(0);
+    range.deleteContents();
+    range.insertNode(document.createTextNode(text));
+    sel.collapseToEnd();
   }, []);
 
   // contentEditable keeps a stray <br> when emptied, defeating :empty.
-  // Clear it so the CSS placeholder can appear.
+  // Clear it so the CSS placeholder can appear. (textContent, not a trim of
+  // innerText — trimming would eat deliberately typed leading spaces.)
   const handleInput = useCallback(() => {
     const node = editorRef.current;
-    if (node && node.innerText.trim() === "") node.innerHTML = "";
+    if (node && node.textContent === "") node.innerHTML = "";
   }, []);
 
   const handleReset = useCallback(() => {
@@ -128,6 +134,7 @@ const TryItPreview = forwardRef<TryItPreviewHandle>(function TryItPreview(
             color: "var(--text-secondary)",
           }}
           title="Reset"
+          aria-label="Reset playground"
         >
           <svg width="16" height="16" viewBox="0 0 14 14" fill="none">
             <path d="M2 7a5 5 0 1 1 1 3" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" />

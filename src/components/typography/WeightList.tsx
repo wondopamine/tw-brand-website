@@ -66,6 +66,7 @@ export default function WeightList({
                   {SAMPLE}
                 </span>
                 <span
+                  aria-hidden
                   className="shrink-0 text-[11px] font-medium opacity-0 transition-opacity group-hover:opacity-100"
                   style={{ color: "var(--accent)" }}
                 >
