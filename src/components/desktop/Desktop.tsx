@@ -194,17 +194,14 @@ export default function Desktop() {
       {/* Window slot */}
       {activeWindow && (
         <Window open={true} onClose={closeWindow} title={activeWindow.title}>
-          {renderWindowContent(activeWindow, setActiveWindow)}
+          {renderWindowContent(activeWindow)}
         </Window>
       )}
     </>
   );
 }
 
-function renderWindowContent(
-  active: NonNullable<ActiveWindow>,
-  onOpen: (window: ActiveWindow) => void
-) {
+function renderWindowContent(active: NonNullable<ActiveWindow>) {
   if (active.kind === "app") {
     if (active.appId === "typography") {
       return <TypographyApp />;
@@ -249,19 +246,7 @@ function renderWindowContent(
           {panel.description}
         </p>
       )}
-      <PanelBody
-        items={panel.items}
-        // Close the current window first, then open the target one fresh —
-        // swapping a Base UI dialog's children in place triggers its
-        // dismiss logic and the window vanishes instead.
-        onLaunch={(windowId, title) => {
-          onOpen(null);
-          setTimeout(
-            () => onOpen({ kind: "doc", contentId: windowId, title }),
-            150
-          );
-        }}
-      />
+      <PanelBody items={panel.items} />
     </div>
   );
 }

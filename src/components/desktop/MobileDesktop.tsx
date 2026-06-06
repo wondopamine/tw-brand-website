@@ -141,17 +141,14 @@ export default function MobileDesktop({
       {/* Window slot — same primitive as desktop */}
       {activeWindow && (
         <Window open={true} onClose={onClose} title={activeWindow.title}>
-          {renderWindowContent(activeWindow, onOpen)}
+          {renderWindowContent(activeWindow)}
         </Window>
       )}
     </>
   );
 }
 
-function renderWindowContent(
-  active: NonNullable<ActiveWindow>,
-  onOpen: (window: ActiveWindow) => void
-) {
+function renderWindowContent(active: NonNullable<ActiveWindow>) {
   if (active.kind === "app") {
     if (active.appId === "typography") {
       return <TypographyApp />;
@@ -191,17 +188,7 @@ function renderWindowContent(
           {panel.description}
         </p>
       )}
-      <PanelBody
-        items={panel.items}
-        // Close-then-reopen — see Desktop.tsx renderWindowContent.
-        onLaunch={(windowId, title) => {
-          onOpen(null);
-          setTimeout(
-            () => onOpen({ kind: "doc", contentId: windowId, title }),
-            150
-          );
-        }}
-      />
+      <PanelBody items={panel.items} />
     </>
   );
 }

@@ -10,7 +10,7 @@ interface WindowProps {
   title: string;
   /** Optional subtitle / description below the title */
   subtitle?: string;
-  /** Custom Tailwind class on the popup (e.g., wider max-w for the playground) */
+  /** Custom Tailwind class on the popup (e.g., width overrides) */
   className?: string;
   children: ReactNode;
 }
