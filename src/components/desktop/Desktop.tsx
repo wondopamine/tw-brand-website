@@ -5,14 +5,14 @@ import Link from "next/link";
 import { useMotionValue } from "motion/react";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { desktopItems } from "@/data/desktop-items";
-import type { DesktopItem } from "@/types/desktop";
+import type { DesktopItem, ExternalAppDesktopItem } from "@/types/desktop";
 import { modalContents } from "@/data/modal-contents";
 import { panelContents } from "@/data/panel-contents";
 import MobileDesktop from "./MobileDesktop";
 import { Window } from "./Window";
 import DocContent from "./DocContent";
 import PanelBody from "@/components/panel/PanelBody";
-import HeroText from "@/components/items/HeroText";
+import TypographyApp from "@/components/typography/TypographyApp";
 import FolderIcon from "./icons/FolderIcon";
 import DocIcon from "./icons/DocIcon";
 import Dock from "./Dock";
@@ -23,6 +23,7 @@ import { FolderMark } from "@/components/icons";
 export type ActiveWindow =
   | { kind: "doc"; contentId: string; title: string }
   | { kind: "folder"; panelId: string; title: string }
+  | { kind: "app"; appId: string; title: string }
   | null;
 
 /**
@@ -70,8 +71,10 @@ export default function Desktop() {
         (i.type === "doc" || i.type === "folder") && i.id !== "folder-colours"
     )
     .sort((a, b) => (a.type === b.type ? 0 : a.type === "doc" ? -1 : 1));
+  // External apps only — in-OS apps (Typography) have built-in dock tiles
+  // on desktop and live in the mobile grid instead.
   const appItems = desktopItems.filter(
-    (i): i is Extract<typeof i, { type: "app" }> => i.type === "app"
+    (i): i is ExternalAppDesktopItem => i.type === "app" && i.href !== undefined
   );
 
   return (
@@ -178,11 +181,11 @@ export default function Desktop() {
               title: "Colours",
             })
           }
-          onOpenPlayground={() =>
+          onOpenTypography={() =>
             setActiveWindow({
-              kind: "doc",
-              contentId: "playground",
-              title: "Typography Playground",
+              kind: "app",
+              appId: "typography",
+              title: "Typography",
             })
           }
         />
@@ -202,20 +205,18 @@ function renderWindowContent(
   active: NonNullable<ActiveWindow>,
   onOpen: (window: ActiveWindow) => void
 ) {
-  if (active.kind === "doc") {
-    if (active.contentId === "playground") {
-      // Interactive playground (non-stack mode): controls + live preview.
-      // HeroText sizes itself with h-full, so give it a definite height
-      // inside the window's auto-sized scroll area.
-      return (
-        <div className="h-[62vh] min-h-[520px]">
-          <HeroText
-            title="Teacher"
-            subtitle={"& School Brand\nOperating System"}
-          />
-        </div>
-      );
+  if (active.kind === "app") {
+    if (active.appId === "typography") {
+      return <TypographyApp />;
     }
+    return (
+      <p className="text-sm text-text-secondary">
+        Missing app content for &quot;{active.appId}&quot;.
+      </p>
+    );
+  }
+
+  if (active.kind === "doc") {
     const content = modalContents[active.contentId];
     if (!content) {
       return (

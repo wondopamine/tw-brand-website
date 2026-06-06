@@ -14,6 +14,7 @@ import IllustrationWidget from "./widgets/IllustrationWidget";
 import { Window } from "./Window";
 import DocContent from "./DocContent";
 import PanelBody from "@/components/panel/PanelBody";
+import TypographyApp from "@/components/typography/TypographyApp";
 
 interface MobileDesktopProps {
   activeWindow: ActiveWindow;
@@ -100,9 +101,22 @@ export default function MobileDesktop({
                   }
                 />
               )}
-              {item.type === "app" && (
-                <AppIcon label={item.label} href={item.href} />
-              )}
+              {item.type === "app" &&
+                (item.href !== undefined ? (
+                  <AppIcon label={item.label} href={item.href} />
+                ) : (
+                  <AppIcon
+                    label={item.label}
+                    icon={<AaGlyph />}
+                    onClick={() =>
+                      onOpen({
+                        kind: "app",
+                        appId: item.appId,
+                        title: item.label,
+                      })
+                    }
+                  />
+                ))}
             </div>
           ))}
         </section>
@@ -138,20 +152,18 @@ function renderWindowContent(
   active: NonNullable<ActiveWindow>,
   onOpen: (window: ActiveWindow) => void
 ) {
-  if (active.kind === "doc") {
-    if (active.contentId === "playground") {
-      return (
-        <div className="text-center py-8 space-y-4">
-          <p className="text-sm text-text-secondary">
-            The Typography Playground is best experienced on desktop.
-          </p>
-          <p className="text-xs text-text-secondary opacity-70">
-            It needs more horizontal room to render the type scale comfortably.
-            Open this site on a laptop to play with the controls.
-          </p>
-        </div>
-      );
+  if (active.kind === "app") {
+    if (active.appId === "typography") {
+      return <TypographyApp />;
     }
+    return (
+      <p className="text-sm text-text-secondary">
+        Missing app content for &quot;{active.appId}&quot;.
+      </p>
+    );
+  }
+
+  if (active.kind === "doc") {
     const content = modalContents[active.contentId];
     if (!content) {
       return (
@@ -191,5 +203,24 @@ function renderWindowContent(
         }}
       />
     </>
+  );
+}
+
+/** "Aa" tile glyph for the Typography app icon (matches the dock tile). */
+function AaGlyph() {
+  return (
+    <svg viewBox="0 0 24 24" className="size-10 text-white" aria-hidden>
+      <text
+        x="12"
+        y="17"
+        textAnchor="middle"
+        fontFamily="var(--font-display, 'Plus Jakarta Sans', sans-serif)"
+        fontWeight="800"
+        fontSize="13"
+        fill="currentColor"
+      >
+        Aa
+      </text>
+    </svg>
   );
 }
