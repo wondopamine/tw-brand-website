@@ -189,6 +189,15 @@ export const panelContents: Record<string, PanelContent> = {
         dontText:
           "Mix display and body fonts inappropriately. Use decorative or script fonts. Set body text below 14px. Use all-caps for more than short labels.",
       },
+      { type: "divider" },
+      {
+        type: "launcher",
+        title: "Typography Playground",
+        description:
+          "Try the type scale, weights, alignment, and colours live. Also available from the dock.",
+        buttonLabel: "Open Playground",
+        windowId: "playground",
+      },
     ],
   },
 

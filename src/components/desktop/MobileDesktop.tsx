@@ -27,7 +27,7 @@ interface MobileDesktopProps {
  * stacked vertically below, illustration widget at the bottom.
  *
  * Windows open in full-screen-ish dialogs on mobile via the shared
- * Window primitive (max-w-[680px] caps width on slightly wider tablets).
+ * Window primitive (max-w-[960px] caps width on slightly wider tablets).
  */
 export default function MobileDesktop({
   activeWindow,
@@ -126,24 +126,18 @@ export default function MobileDesktop({
 
       {/* Window slot — same primitive as desktop */}
       {activeWindow && (
-        <Window
-          open={true}
-          onClose={onClose}
-          title={activeWindow.title}
-          className={
-            activeWindow.kind === "doc" && activeWindow.contentId === "playground"
-              ? "max-w-[680px] sm:max-w-[680px]"
-              : ""
-          }
-        >
-          {renderWindowContent(activeWindow)}
+        <Window open={true} onClose={onClose} title={activeWindow.title}>
+          {renderWindowContent(activeWindow, onOpen)}
         </Window>
       )}
     </>
   );
 }
 
-function renderWindowContent(active: NonNullable<ActiveWindow>) {
+function renderWindowContent(
+  active: NonNullable<ActiveWindow>,
+  onOpen: (window: ActiveWindow) => void
+) {
   if (active.kind === "doc") {
     if (active.contentId === "playground") {
       return (
@@ -185,7 +179,17 @@ function renderWindowContent(active: NonNullable<ActiveWindow>) {
           {panel.description}
         </p>
       )}
-      <PanelBody items={panel.items} />
+      <PanelBody
+        items={panel.items}
+        // Close-then-reopen — see Desktop.tsx renderWindowContent.
+        onLaunch={(windowId, title) => {
+          onOpen(null);
+          setTimeout(
+            () => onOpen({ kind: "doc", contentId: windowId, title }),
+            150
+          );
+        }}
+      />
     </>
   );
 }

@@ -12,7 +12,8 @@ export type PanelContentItem =
   | PanelDividerItem
   | PanelColorSwatchItem
   | PanelAssetListItem
-  | PanelToolListItem;
+  | PanelToolListItem
+  | PanelLauncherItem;
 
 export interface PanelTextItem {
   type: "text";
@@ -75,4 +76,14 @@ export interface ToolListEntry {
   description: string;
   /** Outbound URL */
   href: string;
+}
+
+/** Card that opens another in-OS window (e.g. the Typography Playground). */
+export interface PanelLauncherItem {
+  type: "launcher";
+  title: string;
+  description: string;
+  buttonLabel: string;
+  /** Doc contentId of the window to open */
+  windowId: string;
 }

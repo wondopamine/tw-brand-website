@@ -7,6 +7,8 @@ import { ExternalLink } from "lucide-react";
 
 interface PanelBodyProps {
   items: PanelContentItem[];
+  /** Opens another in-OS window (used by "launcher" items). */
+  onLaunch?: (windowId: string, title: string) => void;
 }
 
 function CopyFeedback({
@@ -287,7 +289,7 @@ function ColorSwatchGroup({
   );
 }
 
-export default function PanelBody({ items }: PanelBodyProps) {
+export default function PanelBody({ items, onLaunch }: PanelBodyProps) {
   const [enlargedAsset, setEnlargedAsset] = useState<AssetEntry | null>(null);
 
   if (enlargedAsset) {
@@ -485,6 +487,30 @@ export default function PanelBody({ items }: PanelBodyProps) {
                     </div>
                   ))}
                 </div>
+              </div>
+            );
+
+          case "launcher":
+            return (
+              <div
+                key={index}
+                className="flex flex-col gap-2 p-4 rounded-lg border border-card-border bg-canvas-bg/50"
+              >
+                <div className="flex items-center justify-between gap-3">
+                  <span className="font-display text-base font-semibold text-text-primary">
+                    {item.title}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => onLaunch?.(item.windowId, item.title)}
+                    className="shrink-0 inline-flex items-center gap-1 text-xs font-medium text-accent hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent rounded cursor-pointer"
+                  >
+                    {item.buttonLabel}
+                  </button>
+                </div>
+                <p className="text-[13px] leading-relaxed text-text-secondary">
+                  {item.description}
+                </p>
               </div>
             );
 

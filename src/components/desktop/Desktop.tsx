@@ -178,37 +178,42 @@ export default function Desktop() {
               title: "Colours",
             })
           }
+          onOpenPlayground={() =>
+            setActiveWindow({
+              kind: "doc",
+              contentId: "playground",
+              title: "Typography Playground",
+            })
+          }
         />
       </div>
 
       {/* Window slot */}
       {activeWindow && (
-        <Window
-          open={true}
-          onClose={closeWindow}
-          title={activeWindow.title}
-          className={
-            activeWindow.kind === "doc" && activeWindow.contentId === "playground"
-              ? "max-w-[960px] sm:max-w-[960px]"
-              : ""
-          }
-        >
-          {renderWindowContent(activeWindow)}
+        <Window open={true} onClose={closeWindow} title={activeWindow.title}>
+          {renderWindowContent(activeWindow, setActiveWindow)}
         </Window>
       )}
     </>
   );
 }
 
-function renderWindowContent(active: NonNullable<ActiveWindow>) {
+function renderWindowContent(
+  active: NonNullable<ActiveWindow>,
+  onOpen: (window: ActiveWindow) => void
+) {
   if (active.kind === "doc") {
     if (active.contentId === "playground") {
+      // Interactive playground (non-stack mode): controls + live preview.
+      // HeroText sizes itself with h-full, so give it a definite height
+      // inside the window's auto-sized scroll area.
       return (
-        <HeroText
-          title="Teacher"
-          subtitle="& School Brand Operating System"
-          stack
-        />
+        <div className="h-[62vh] min-h-[520px]">
+          <HeroText
+            title="Teacher"
+            subtitle={"& School Brand\nOperating System"}
+          />
+        </div>
       );
     }
     const content = modalContents[active.contentId];
@@ -219,7 +224,12 @@ function renderWindowContent(active: NonNullable<ActiveWindow>) {
         </p>
       );
     }
-    return <DocContent content={content} />;
+    // Centered measure keeps prose readable inside the wide window.
+    return (
+      <div className="mx-auto w-full max-w-[720px]">
+        <DocContent content={content} />
+      </div>
+    );
   }
 
   // folder
@@ -232,13 +242,25 @@ function renderWindowContent(active: NonNullable<ActiveWindow>) {
     );
   }
   return (
-    <>
+    <div className="mx-auto w-full max-w-[720px]">
       {panel.description && (
         <p className="text-[14px] text-text-secondary leading-relaxed mb-5">
           {panel.description}
         </p>
       )}
-      <PanelBody items={panel.items} />
-    </>
+      <PanelBody
+        items={panel.items}
+        // Close the current window first, then open the target one fresh —
+        // swapping a Base UI dialog's children in place triggers its
+        // dismiss logic and the window vanishes instead.
+        onLaunch={(windowId, title) => {
+          onOpen(null);
+          setTimeout(
+            () => onOpen({ kind: "doc", contentId: windowId, title }),
+            150
+          );
+        }}
+      />
+    </div>
   );
 }

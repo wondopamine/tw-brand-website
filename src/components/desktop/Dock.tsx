@@ -15,6 +15,7 @@ import type { DesktopItem } from "@/types/desktop";
 interface DockProps {
   apps: Extract<DesktopItem, { type: "app" }>[];
   onOpenColours: () => void;
+  onOpenPlayground: () => void;
 }
 
 const BASE = 50; // resting tile size (px)
@@ -29,7 +30,7 @@ const INFLUENCE = 130; // cursor distance over which magnification falls off (px
  * above the top edge (the signature dock feel), tracked via a shared
  * pointer-X MotionValue mapped to each tile's distance from the cursor.
  */
-export default function Dock({ apps, onOpenColours }: DockProps) {
+export default function Dock({ apps, onOpenColours, onOpenPlayground }: DockProps) {
   const mouseX = useMotionValue(Infinity);
 
   return (
@@ -52,6 +53,30 @@ export default function Dock({ apps, onOpenColours }: DockProps) {
               }}
             />
             <span className="absolute size-[22%] rounded-full bg-white shadow-[0_0_0_1px_rgba(0,0,0,0.06)]" />
+          </div>
+        </DockTile>
+
+        {/* Typography Playground app (opens the type playground window) */}
+        <DockTile
+          mouseX={mouseX}
+          label="Typography Playground"
+          onClick={onOpenPlayground}
+        >
+          <div className="flex h-full w-full items-center justify-center rounded-[26%] bg-white shadow-[inset_0_1px_0_rgba(255,255,255,0.6),0_1px_2px_rgba(20,40,90,0.25)]">
+            {/* SVG text scales with the magnifying tile, unlike a fixed font-size */}
+            <svg viewBox="0 0 24 24" className="size-[64%] text-accent" aria-hidden>
+              <text
+                x="12"
+                y="17"
+                textAnchor="middle"
+                fontFamily="var(--font-display, 'Plus Jakarta Sans', sans-serif)"
+                fontWeight="800"
+                fontSize="13"
+                fill="currentColor"
+              >
+                Aa
+              </text>
+            </svg>
           </div>
         </DockTile>
 
