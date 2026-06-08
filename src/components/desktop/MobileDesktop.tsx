@@ -2,18 +2,16 @@
 
 import Link from "next/link";
 import { desktopItems } from "@/data/desktop-items";
-import { modalContents } from "@/data/modal-contents";
-import { panelContents } from "@/data/panel-contents";
 import type { DesktopItem } from "@/types/desktop";
 import type { ActiveWindow } from "./Desktop";
 import FolderIcon from "./icons/FolderIcon";
 import DocIcon from "./icons/DocIcon";
 import AppIcon from "./icons/AppIcon";
+import AaGlyph from "./icons/AaGlyph";
 import StickyStack from "./widgets/StickyStack";
 import IllustrationWidget from "./widgets/IllustrationWidget";
 import { Window } from "./Window";
-import DocContent from "./DocContent";
-import PanelBody from "@/components/panel/PanelBody";
+import WindowContent from "./WindowContent";
 
 interface MobileDesktopProps {
   activeWindow: ActiveWindow;
@@ -27,7 +25,7 @@ interface MobileDesktopProps {
  * stacked vertically below, illustration widget at the bottom.
  *
  * Windows open in full-screen-ish dialogs on mobile via the shared
- * Window primitive (max-w-[680px] caps width on slightly wider tablets).
+ * Window primitive (max-w-[960px] caps width on slightly wider tablets).
  */
 export default function MobileDesktop({
   activeWindow,
@@ -100,9 +98,22 @@ export default function MobileDesktop({
                   }
                 />
               )}
-              {item.type === "app" && (
-                <AppIcon label={item.label} href={item.href} />
-              )}
+              {item.type === "app" &&
+                (item.href !== undefined ? (
+                  <AppIcon label={item.label} href={item.href} />
+                ) : (
+                  <AppIcon
+                    label={item.label}
+                    icon={<AaGlyph className="size-10 text-white" />}
+                    onClick={() =>
+                      onOpen({
+                        kind: "app",
+                        appId: item.appId,
+                        title: item.label,
+                      })
+                    }
+                  />
+                ))}
             </div>
           ))}
         </section>
@@ -126,66 +137,11 @@ export default function MobileDesktop({
 
       {/* Window slot — same primitive as desktop */}
       {activeWindow && (
-        <Window
-          open={true}
-          onClose={onClose}
-          title={activeWindow.title}
-          className={
-            activeWindow.kind === "doc" && activeWindow.contentId === "playground"
-              ? "max-w-[680px] sm:max-w-[680px]"
-              : ""
-          }
-        >
-          {renderWindowContent(activeWindow)}
+        <Window open={true} onClose={onClose} title={activeWindow.title}>
+          {/* Mobile windows are already narrow — no extra measure wrapper. */}
+          <WindowContent active={activeWindow} />
         </Window>
       )}
-    </>
-  );
-}
-
-function renderWindowContent(active: NonNullable<ActiveWindow>) {
-  if (active.kind === "doc") {
-    if (active.contentId === "playground") {
-      return (
-        <div className="text-center py-8 space-y-4">
-          <p className="text-sm text-text-secondary">
-            The Typography Playground is best experienced on desktop.
-          </p>
-          <p className="text-xs text-text-secondary opacity-70">
-            It needs more horizontal room to render the type scale comfortably.
-            Open this site on a laptop to play with the controls.
-          </p>
-        </div>
-      );
-    }
-    const content = modalContents[active.contentId];
-    if (!content) {
-      return (
-        <p className="text-sm text-text-secondary">
-          Missing doc content for &quot;{active.contentId}&quot;.
-        </p>
-      );
-    }
-    return <DocContent content={content} />;
-  }
-
-  // folder
-  const panel = panelContents[active.panelId];
-  if (!panel) {
-    return (
-      <p className="text-sm text-text-secondary">
-        Missing panel content for &quot;{active.panelId}&quot;.
-      </p>
-    );
-  }
-  return (
-    <>
-      {panel.description && (
-        <p className="text-[14px] text-text-secondary leading-relaxed mb-5">
-          {panel.description}
-        </p>
-      )}
-      <PanelBody items={panel.items} />
     </>
   );
 }

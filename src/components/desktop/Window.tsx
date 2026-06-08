@@ -10,7 +10,7 @@ interface WindowProps {
   title: string;
   /** Optional subtitle / description below the title */
   subtitle?: string;
-  /** Custom Tailwind class on the popup (e.g., wider max-w for the playground) */
+  /** Custom Tailwind class on the popup (e.g., width overrides) */
   className?: string;
   children: ReactNode;
 }
@@ -50,7 +50,7 @@ export function Window({
         className={`p-0 bg-card-bg border border-card-border shadow-[0_25px_60px_-12px_rgba(0,0,0,0.2)] gap-0 ring-0 overflow-hidden flex flex-col ${
           maximized
             ? "w-[96vw] max-w-[96vw] sm:max-w-[96vw] h-[92vh] max-h-[92vh] rounded-lg"
-            : `w-full max-w-[680px] sm:max-w-[680px] max-h-[90vh] rounded-xl ${className ?? ""}`
+            : `w-full max-w-[960px] sm:max-w-[960px] max-h-[90vh] rounded-xl ${className ?? ""}`
         }`}
       >
         {/* macOS-style title bar */}

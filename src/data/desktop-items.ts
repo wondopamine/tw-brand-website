@@ -35,19 +35,11 @@ export const desktopItems: DesktopItem[] = [
   },
   {
     type: "doc",
-    id: "doc-design-principles",
-    label: "Product Design Principles",
-    contentId: "design-principles",
-    position: { x: 18, y: 30 },
-    mobileOrder: 4,
-  },
-  {
-    type: "doc",
     id: "doc-voice-tone",
     label: "Voice & Tone",
     contentId: "voice-tone",
     position: { x: 6, y: 50 },
-    mobileOrder: 5,
+    mobileOrder: 4,
   },
   {
     type: "doc",
@@ -55,15 +47,7 @@ export const desktopItems: DesktopItem[] = [
     label: "Why Aesthetics matters",
     contentId: "aesthetics",
     position: { x: 18, y: 50 },
-    mobileOrder: 6,
-  },
-  {
-    type: "doc",
-    id: "doc-typography-playground",
-    label: "Typography Playground",
-    contentId: "playground",
-    position: { x: 6, y: 70 },
-    mobileOrder: 7,
+    mobileOrder: 5,
   },
 
   // ===== Folder icons =====
@@ -85,11 +69,13 @@ export const desktopItems: DesktopItem[] = [
     position: { x: 32, y: 30 },
     mobileOrder: 9,
   },
+  // Typography is an in-OS app: built-in dock tile on desktop, app icon
+  // on the dock-less mobile layout (mirrors the Colours-in-dock pattern).
   {
-    type: "folder",
-    id: "folder-typography",
+    type: "app",
+    id: "app-typography",
     label: "Typography",
-    panelId: "typography",
+    appId: "typography",
     position: { x: 32, y: 50 },
     mobileOrder: 10,
   },

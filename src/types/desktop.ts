@@ -4,7 +4,7 @@
  * (see plan 2026-06-03-002):
  *
  *   folder              — grouped resources (Colours, Illustrations, ...)
- *   app                 — external app launcher (opens href in new tab)
+ *   app                 — launcher: external (href, new tab) or in-OS (appId, window)
  *   doc                 — one-pager content (opens in a window overlay)
  *   sticky              — always-visible passive content (quotes)
  *   illustration-widget — inline swipeable illustration carousel
@@ -25,19 +25,35 @@ export interface FolderDesktopItem extends BaseDesktopItem {
   panelId: string;
 }
 
-export interface AppDesktopItem extends BaseDesktopItem {
+/** External app launcher — opens href in a new tab. */
+export interface ExternalAppDesktopItem extends BaseDesktopItem {
   type: "app";
   label: string;
   href: string;
+  appId?: never;
 }
+
+/**
+ * Known in-OS app ids. Closed union so the renderWindowContent dispatch in
+ * Desktop/MobileDesktop is compile-checked when a new app is registered.
+ */
+export type OsAppId = "typography";
+
+/** In-OS app — opens an app window (e.g. the Typography app). */
+export interface OsAppDesktopItem extends BaseDesktopItem {
+  type: "app";
+  label: string;
+  /** App lookup key handled by the desktop's window renderer. */
+  appId: OsAppId;
+  href?: never;
+}
+
+export type AppDesktopItem = ExternalAppDesktopItem | OsAppDesktopItem;
 
 export interface DocDesktopItem extends BaseDesktopItem {
   type: "doc";
   label: string;
-  /**
-   * Content lookup. Either a modalId from src/data/modal-contents.ts,
-   * or the special value "playground" which renders HeroText inside the window.
-   */
+  /** Content lookup key in src/data/modal-contents.ts */
   contentId: string;
 }
 

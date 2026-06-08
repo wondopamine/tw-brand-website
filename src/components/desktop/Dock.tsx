@@ -10,11 +10,13 @@ import {
   type MotionValue,
 } from "motion/react";
 import { ExternalLink, Sparkles } from "lucide-react";
-import type { DesktopItem } from "@/types/desktop";
+import type { ExternalAppDesktopItem } from "@/types/desktop";
+import AaGlyph from "./icons/AaGlyph";
 
 interface DockProps {
-  apps: Extract<DesktopItem, { type: "app" }>[];
+  apps: ExternalAppDesktopItem[];
   onOpenColours: () => void;
+  onOpenTypography: () => void;
 }
 
 const BASE = 50; // resting tile size (px)
@@ -29,7 +31,7 @@ const INFLUENCE = 130; // cursor distance over which magnification falls off (px
  * above the top edge (the signature dock feel), tracked via a shared
  * pointer-X MotionValue mapped to each tile's distance from the cursor.
  */
-export default function Dock({ apps, onOpenColours }: DockProps) {
+export default function Dock({ apps, onOpenColours, onOpenTypography }: DockProps) {
   const mouseX = useMotionValue(Infinity);
 
   return (
@@ -52,6 +54,13 @@ export default function Dock({ apps, onOpenColours }: DockProps) {
               }}
             />
             <span className="absolute size-[22%] rounded-full bg-white shadow-[0_0_0_1px_rgba(0,0,0,0.06)]" />
+          </div>
+        </DockTile>
+
+        {/* Typography app (Geist-style font showcase window) */}
+        <DockTile mouseX={mouseX} label="Typography" onClick={onOpenTypography}>
+          <div className="flex h-full w-full items-center justify-center rounded-[26%] bg-white shadow-[inset_0_1px_0_rgba(255,255,255,0.6),0_1px_2px_rgba(20,40,90,0.25)]">
+            <AaGlyph className="size-[64%] text-accent" />
           </div>
         </DockTile>
 

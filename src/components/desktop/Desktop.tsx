@@ -5,14 +5,14 @@ import Link from "next/link";
 import { useMotionValue } from "motion/react";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { desktopItems } from "@/data/desktop-items";
-import type { DesktopItem } from "@/types/desktop";
-import { modalContents } from "@/data/modal-contents";
-import { panelContents } from "@/data/panel-contents";
+import type {
+  DesktopItem,
+  ExternalAppDesktopItem,
+  OsAppId,
+} from "@/types/desktop";
 import MobileDesktop from "./MobileDesktop";
 import { Window } from "./Window";
-import DocContent from "./DocContent";
-import PanelBody from "@/components/panel/PanelBody";
-import HeroText from "@/components/items/HeroText";
+import WindowContent from "./WindowContent";
 import FolderIcon from "./icons/FolderIcon";
 import DocIcon from "./icons/DocIcon";
 import Dock from "./Dock";
@@ -23,6 +23,7 @@ import { FolderMark } from "@/components/icons";
 export type ActiveWindow =
   | { kind: "doc"; contentId: string; title: string }
   | { kind: "folder"; panelId: string; title: string }
+  | { kind: "app"; appId: OsAppId; title: string }
   | null;
 
 /**
@@ -70,8 +71,10 @@ export default function Desktop() {
         (i.type === "doc" || i.type === "folder") && i.id !== "folder-colours"
     )
     .sort((a, b) => (a.type === b.type ? 0 : a.type === "doc" ? -1 : 1));
+  // External apps only — in-OS apps (Typography) have built-in dock tiles
+  // on desktop and live in the mobile grid instead.
   const appItems = desktopItems.filter(
-    (i): i is Extract<typeof i, { type: "app" }> => i.type === "app"
+    (i): i is ExternalAppDesktopItem => i.type === "app" && i.href !== undefined
   );
 
   return (
@@ -178,67 +181,23 @@ export default function Desktop() {
               title: "Colours",
             })
           }
+          onOpenTypography={() =>
+            setActiveWindow({
+              kind: "app",
+              appId: "typography",
+              title: "Typography",
+            })
+          }
         />
       </div>
 
       {/* Window slot */}
       {activeWindow && (
-        <Window
-          open={true}
-          onClose={closeWindow}
-          title={activeWindow.title}
-          className={
-            activeWindow.kind === "doc" && activeWindow.contentId === "playground"
-              ? "max-w-[960px] sm:max-w-[960px]"
-              : ""
-          }
-        >
-          {renderWindowContent(activeWindow)}
+        <Window open={true} onClose={closeWindow} title={activeWindow.title}>
+          {/* Wide desktop windows constrain prose to a readable measure. */}
+          <WindowContent active={activeWindow} measure />
         </Window>
       )}
-    </>
-  );
-}
-
-function renderWindowContent(active: NonNullable<ActiveWindow>) {
-  if (active.kind === "doc") {
-    if (active.contentId === "playground") {
-      return (
-        <HeroText
-          title="Teacher"
-          subtitle="& School Brand Operating System"
-          stack
-        />
-      );
-    }
-    const content = modalContents[active.contentId];
-    if (!content) {
-      return (
-        <p className="text-sm text-text-secondary">
-          Missing doc content for &quot;{active.contentId}&quot;.
-        </p>
-      );
-    }
-    return <DocContent content={content} />;
-  }
-
-  // folder
-  const panel = panelContents[active.panelId];
-  if (!panel) {
-    return (
-      <p className="text-sm text-text-secondary">
-        Missing panel content for &quot;{active.panelId}&quot;.
-      </p>
-    );
-  }
-  return (
-    <>
-      {panel.description && (
-        <p className="text-[14px] text-text-secondary leading-relaxed mb-5">
-          {panel.description}
-        </p>
-      )}
-      <PanelBody items={panel.items} />
     </>
   );
 }
