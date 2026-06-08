@@ -10,13 +10,9 @@ import type {
   ExternalAppDesktopItem,
   OsAppId,
 } from "@/types/desktop";
-import { modalContents } from "@/data/modal-contents";
-import { panelContents } from "@/data/panel-contents";
 import MobileDesktop from "./MobileDesktop";
 import { Window } from "./Window";
-import DocContent from "./DocContent";
-import PanelBody from "@/components/panel/PanelBody";
-import TypographyApp from "@/components/typography/TypographyApp";
+import WindowContent from "./WindowContent";
 import FolderIcon from "./icons/FolderIcon";
 import DocIcon from "./icons/DocIcon";
 import Dock from "./Dock";
@@ -198,59 +194,10 @@ export default function Desktop() {
       {/* Window slot */}
       {activeWindow && (
         <Window open={true} onClose={closeWindow} title={activeWindow.title}>
-          {renderWindowContent(activeWindow)}
+          {/* Wide desktop windows constrain prose to a readable measure. */}
+          <WindowContent active={activeWindow} measure />
         </Window>
       )}
     </>
-  );
-}
-
-function renderWindowContent(active: NonNullable<ActiveWindow>) {
-  if (active.kind === "app") {
-    if (active.appId === "typography") {
-      return <TypographyApp />;
-    }
-    return (
-      <p className="text-sm text-text-secondary">
-        Missing app content for &quot;{active.appId}&quot;.
-      </p>
-    );
-  }
-
-  if (active.kind === "doc") {
-    const content = modalContents[active.contentId];
-    if (!content) {
-      return (
-        <p className="text-sm text-text-secondary">
-          Missing doc content for &quot;{active.contentId}&quot;.
-        </p>
-      );
-    }
-    // Centered measure keeps prose readable inside the wide window.
-    return (
-      <div className="mx-auto w-full max-w-[720px]">
-        <DocContent content={content} />
-      </div>
-    );
-  }
-
-  // folder
-  const panel = panelContents[active.panelId];
-  if (!panel) {
-    return (
-      <p className="text-sm text-text-secondary">
-        Missing panel content for &quot;{active.panelId}&quot;.
-      </p>
-    );
-  }
-  return (
-    <div className="mx-auto w-full max-w-[720px]">
-      {panel.description && (
-        <p className="text-[14px] text-text-secondary leading-relaxed mb-5">
-          {panel.description}
-        </p>
-      )}
-      <PanelBody items={panel.items} />
-    </div>
   );
 }

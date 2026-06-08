@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useRef } from "react";
+import { useCallback, useRef, useState } from "react";
 
 export interface SizeStop {
   label: string;
@@ -19,6 +19,9 @@ export default function SizeControl({
 }) {
   const trackRef = useRef<HTMLDivElement>(null);
   const isDragging = useRef(false);
+  // Mirrored in state so the thumb can drop its CSS transition while dragging
+  // (otherwise it eases toward each new position and trails the cursor).
+  const [dragging, setDragging] = useState(false);
   const total = stops.length;
 
   const getIndexFromEvent = useCallback(
@@ -36,6 +39,7 @@ export default function SizeControl({
       e.stopPropagation();
       e.preventDefault();
       isDragging.current = true;
+      setDragging(true);
       // Capture on the ref-stable track, not e.target — tick-mark children
       // re-render mid-drag and would strand the capture.
       trackRef.current?.setPointerCapture(e.pointerId);
@@ -70,6 +74,7 @@ export default function SizeControl({
 
   const handlePointerUp = useCallback(() => {
     isDragging.current = false;
+    setDragging(false);
   }, []);
 
   const thumbPercent = total > 1 ? (index / (total - 1)) * 100 : 0;
@@ -146,7 +151,7 @@ export default function SizeControl({
             background: "var(--accent)",
             boxShadow: "0 1px 3px rgba(0,0,0,0.15)",
             border: "2px solid white",
-            transition: "left 0.1s ease",
+            transition: dragging ? "none" : "left 0.1s ease",
             cursor: "grab",
           }}
         />

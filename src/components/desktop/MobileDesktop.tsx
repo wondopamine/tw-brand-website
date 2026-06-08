@@ -2,8 +2,6 @@
 
 import Link from "next/link";
 import { desktopItems } from "@/data/desktop-items";
-import { modalContents } from "@/data/modal-contents";
-import { panelContents } from "@/data/panel-contents";
 import type { DesktopItem } from "@/types/desktop";
 import type { ActiveWindow } from "./Desktop";
 import FolderIcon from "./icons/FolderIcon";
@@ -13,9 +11,7 @@ import AaGlyph from "./icons/AaGlyph";
 import StickyStack from "./widgets/StickyStack";
 import IllustrationWidget from "./widgets/IllustrationWidget";
 import { Window } from "./Window";
-import DocContent from "./DocContent";
-import PanelBody from "@/components/panel/PanelBody";
-import TypographyApp from "@/components/typography/TypographyApp";
+import WindowContent from "./WindowContent";
 
 interface MobileDesktopProps {
   activeWindow: ActiveWindow;
@@ -142,54 +138,10 @@ export default function MobileDesktop({
       {/* Window slot — same primitive as desktop */}
       {activeWindow && (
         <Window open={true} onClose={onClose} title={activeWindow.title}>
-          {renderWindowContent(activeWindow)}
+          {/* Mobile windows are already narrow — no extra measure wrapper. */}
+          <WindowContent active={activeWindow} />
         </Window>
       )}
-    </>
-  );
-}
-
-function renderWindowContent(active: NonNullable<ActiveWindow>) {
-  if (active.kind === "app") {
-    if (active.appId === "typography") {
-      return <TypographyApp />;
-    }
-    return (
-      <p className="text-sm text-text-secondary">
-        Missing app content for &quot;{active.appId}&quot;.
-      </p>
-    );
-  }
-
-  if (active.kind === "doc") {
-    const content = modalContents[active.contentId];
-    if (!content) {
-      return (
-        <p className="text-sm text-text-secondary">
-          Missing doc content for &quot;{active.contentId}&quot;.
-        </p>
-      );
-    }
-    return <DocContent content={content} />;
-  }
-
-  // folder
-  const panel = panelContents[active.panelId];
-  if (!panel) {
-    return (
-      <p className="text-sm text-text-secondary">
-        Missing panel content for &quot;{active.panelId}&quot;.
-      </p>
-    );
-  }
-  return (
-    <>
-      {panel.description && (
-        <p className="text-[14px] text-text-secondary leading-relaxed mb-5">
-          {panel.description}
-        </p>
-      )}
-      <PanelBody items={panel.items} />
     </>
   );
 }
